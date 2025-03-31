@@ -6,9 +6,23 @@ function Login(){
    const [password,setPassword]=useState<string>("")
    const [loading,setLoading]=useState<boolean>(false)
    const [error,setError]=useState<boolean>(false)
+   const login=()=>{
+        try{
+            setLoading(true)
+            alert("Working on it ")
+            setPassword("")
+            setUserName("")
+        }catch(error){
+            console.log("Error",error)
+            setError(true)
+        }finally{
+            setLoading(false)
+        }
+   }
     return (
         <section className='relative min-h-screen flex items-center justify-center p-4'>
-            <form className="flex flex-col gap-2  border shadow-md  rounded-md  px-3 py-12">
+            <form  onSubmit={login}
+            className="flex flex-col gap-2  border shadow-md  rounded-md  px-3 py-12">
                  <h1 className="text-xl font-semibold text-center font-mono">Login</h1>
                 <div className="flex flex-row gap-2">
               <label className="font-mono font-medium m-2">UserName
@@ -22,7 +36,8 @@ function Login(){
                 className="ml-1 border px-3 py-1 rounded-md   w-64  placeholder:text-sm "/>
               </label>
              </div>
-              <button className="bg-black rounded-md font-serif text-white py-1">
+              <button  type="submit"
+               className="bg-black rounded-md font-serif text-white py-1">
                 {loading ? (  
               <p className=" flex items-center  justify-center gap-2"> 
                 Login
@@ -36,6 +51,9 @@ function Login(){
              <Link to='/register' className='font-semibold hover:text-blue-600 underline ml-1'>Register</Link>
               </div>
             </form>
+            <div>
+                {error && <p>{error}</p>}
+              </div>
         </section>
         
     )
