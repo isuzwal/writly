@@ -1,14 +1,18 @@
 import { Link } from "react-router";
-import { TiThMenu } from "react-icons/ti";
+// import { TiThMenu } from "react-icons/ti";
 import { useContext, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { UserContext } from "../UserAuth/User";
 import { FaUserCircle } from "react-icons/fa";
 import { useEffect } from "react";
+import CoverImage from "../assets/download.jpeg"
+import ProfiledImage from "../assets/discord.jpeg"
+import { IoIosSettings } from "react-icons/io";
+
 function Nava(){
     const [IsOpen,setIsOpen]=useState<boolean>(false)
     const [searching,setSearching]=useState<string>("")
-
+    const [darksection,setDarksection]=useState<boolean>(false)
     // checking that User did't return undefine so.
     const context=useContext(UserContext)
     if(!context){
@@ -26,27 +30,39 @@ function Nava(){
     const ToogleMunebar=()=>{
         setIsOpen(prev=>!prev)
     }
+    // Convert the First Letter to Uppercase
+    function Uppercase(text:string){
+      if(text?.charAt(0)===text.charAt(0).toUpperCase()){
+        return text;
+      }else{
+        const upperletter=user?.charAt(0).toUpperCase()+text.slice(1)
+        return upperletter;
+      }
+    }
+    //for the theme section
+    const themetoggle=()=>{
+      setDarksection(pervtheme=>!pervtheme)
+    }
     return(
-       <section className=" border-2">
-        <div className="px-3" >
+       <section className="py-2 ">
+        <div className=" border-b border-b-gray-600 py-1 text-white" >
             <div className=" px-1 flex relative items-center justify-between ">
-              <div className="flex items-center  px-3 py-1 gap-4 ">
-                <Link to ="/" className="md:text-2xl  text-[16px] font-semibold font-serif  whitespace-nowrap flex-shrink-0 ">Post-Pen</Link>
-                 <div className="flex items-center relative px-2 md:w-64 ">
-                 <input type="search"  value={searching} onChange={(e)=>setSearching(e.target.value)} placeholder="Search.."   
-                 className="border rounded-lg px-3 py-1 focus:outline-none font-serif bg-gray-200 placeholder:text-[15px] w-full "/>
+                <Link to ="/" className="md:text-2xl  text-[16px] font-semibold font-dm  whitespace-nowrap flex-shrink-0 ">Post</Link>
+                 <div className="flex items-center relative px-2 md:w-96 ">
+                 <input type="search"  value={searching} onChange={(e)=>setSearching(e.target.value)} placeholder="Search.."    
+                 className=" rounded-lg px-3 focus:outline-none font-serif bg-profile py-1.5  placeholder:text-[15px] w-full "/>
                  {searching.length === 0  && (
-                  <CiSearch  size={22} color="black" className="absolute right-3  "/>
+                  <CiSearch  size={22} color="white" className="absolute right-3  "/>
                   )}
-                  </div>
+                  
               </div>
-                 <div className="round hidden md:flex px-3">
-                   <div className="flex  items-center justify-center gap-5 ">
+                 <div className="rounded-sm  hidden md:flex px-1">
+                   <div className="bg-profile text-white flex w-full  rounded-md  px-5 py-1.5 gap-2 items-center  cursor-pointer  ">
                   {user? (
-                     <div className="border-2 flex rounded-md  gap-2 items-center px-4 cursor-pointer  py-1.5">
-                       <FaUserCircle size={20}/>
-                       <span className="font-mono text-sm">{user}</span>
-                     </div>
+                    <div className="flex items-center  gap-2 ">
+                      <img src={ProfiledImage} className="object-cover w-8 h-8   rounded-lg"  />    
+                      <span className="font-mono  font-medium text-[18px]">{user}</span>
+                      </div>
                   ):(
                   <>
                   <Link to="/login" className="text-[16px] font-semibold">Login</Link>
@@ -55,15 +71,46 @@ function Nava(){
                   )}
                    </div>
                  </div>
-                 <div className="items-center md:hidden" >
-                   <button onClick={ToogleMunebar}><TiThMenu size={20}/></button>
+                 <div className="items-center md:hidden  p-1 rounded-full " >
+                   <button onClick={ToogleMunebar} className="flex items-center">
+                  <div className="flex items-center  gap-2 ">
+                      <img src={ProfiledImage} className="object-cover w-8 h-8  rounded-lg"  />    
+                      </div>
+                    </button>
                  </div>
                  {IsOpen && (
-                      <div className="md:hidden absolute bg-white shadow-lg right-0 top-12 w-40 rounded-lg py-3 transition-all duration-300 ease-in-out">
+                      <div className="md:hidden absolute  shadow-lg right-2  top-9 w-1/2   rounded-lg py-3 transition-all duration-300 ease-in-out">
                         {user?(
-                           <div className="border-2 flex rounded-md  gap-2 items-center px-4 cursor-pointer  py-1.5">
-                           <FaUserCircle size={20}/>
-                           <span className="font-mono text-sm">{user}</span>
+                          <div className="bg-profile flex  flex-col rounded-md h-[400px]  gap-2  px-2 cursor-pointer relative  py-1.5">
+                            <div className="flex  relative flex-col items-center  gap-2   px-2  py-3 rounded-md">
+                             <div className=" w-full h-20  rounded">
+                             <img src={CoverImage} className="object-cover w-full h-full  rounded "  />    
+                              </div>
+                              <div className=" absolute  z-30 rounded-r-2xl left-2 ">
+                              <img src={ProfiledImage} className="  rounded-r-2xl object-cover w-20 h-full  "  />  
+                              </div>
+                            </div>
+                              {/*Account Part */}
+                              <div className="flex flex-col gap-2 ">
+                              <div className="flex text-white w-full  items-center border border-gray-800 font-dm font-semibold text-xl  hover:bg-gray-700 gap-2 px-2 py-1.5 rounded-lg">
+                               <span className="font-dm text-[19px]">{Uppercase(user)}</span>
+                              </div>
+                             <Link to="/profile" className="flex text-white items-center border  border-gray-800 font-dm font-semibold text-xl  hover:bg-gray-700 gap-2 px-2 py-1.5 rounded-lg ">
+                             <FaUserCircle  size={28} color="gray"/>Profile</Link>
+                             <div className="flex text-white items-center border  border-gray-800 font-dm font-semibold text-xl  hover:bg-gray-700 gap-2 px-2 py-1.5 rounded-lg">
+                             <button onClick={themetoggle}>
+                                <h2 className="flex items-center gap-2"><IoIosSettings  size={22}/>Custom</h2>
+                              {darksection && (
+                                <div className="flex flex-col">
+                                   <span>Dark</span>
+                                   <span>Light</span>
+                                </div>
+                              )}
+                             </button>
+                             </div>
+                              
+                          
+                            </div>
                          </div>  
                         ):(
                          <div className="flex flex-col h-full items-center  mt-3  gap-3 px-3 ">
