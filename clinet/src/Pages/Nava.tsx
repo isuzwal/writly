@@ -8,12 +8,18 @@ import { useEffect } from "react";
 import CoverImage from "../assets/download.jpeg"
 import ProfiledImage from "../assets/discord.jpeg"
 import { IoIosSettings } from "react-icons/io";
-
+import { ThemeContex } from "../Theme/Theme";
+import { themeoptions } from "../Theme/Theme";
+import { Theme } from "../Theme/Theme";
 function Nava(){
     const [IsOpen,setIsOpen]=useState<boolean>(false)
     const [searching,setSearching]=useState<string>("")
     const [darksection,setDarksection]=useState<boolean>(false)
+    //  const [selectedOptions,setOptions]=useState<string>("")
     // checking that User did't return undefine so.
+  
+    const { theme, changeTheme } = useContext(ThemeContex);
+
     const context=useContext(UserContext)
     if(!context){
       throw new Error
@@ -40,9 +46,12 @@ function Nava(){
       }
     }
     //for the theme section
-    const themetoggle=()=>{
-      setDarksection(pervtheme=>!pervtheme)
+    const themesection=()=>{
+      setDarksection(pervstate=>!pervstate)
     }
+    // for theme
+   
+   
     return(
        <section className="py-2 ">
         <div className=" border-b border-b-gray-600 py-1 text-white" >
@@ -98,18 +107,26 @@ function Nava(){
                              <Link to="/profile" className="flex text-white items-center border  border-gray-800 font-dm font-semibold text-xl  hover:bg-gray-700 gap-2 px-2 py-1.5 rounded-lg ">
                              <FaUserCircle  size={28} color="gray"/>Profile</Link>
                              <div className="flex text-white items-center border  border-gray-800 font-dm font-semibold text-xl  hover:bg-gray-700 gap-2 px-2 py-1.5 rounded-lg">
-                             <button onClick={themetoggle}>
-                                <h2 className="flex items-center gap-2"><IoIosSettings  size={22}/>Custom</h2>
+                              <button onClick={themesection}>
+                                <h2 className="flex items-center text-[18px] gap-1"><IoIosSettings  size={20}/>Custom</h2>
+                                </button>
                               {darksection && (
-                                <div className="flex flex-col">
-                                   <span>Dark</span>
-                                   <span>Light</span>
+                                <div className="flex flex-col rounded-md px-2  text-black  transition-all duration-200">
+                                   <select className=" px-2 text-white text-[16px] rounded-md cursor-pointer bg-profile border"
+                                  value={theme}  onChange={(e) => {
+                                     const newTheme=changeTheme(e.target.value as Theme)
+                                     console.log("Theme changed to:", newTheme);   }} >
+                                    
+                                    
+                                  {themeoptions.map((option) => (
+                                <option key={option} value={option}>
+                                  {option.charAt(0).toUpperCase() + option.slice(1)} 
+                              </option>
+                               ))}
+                            </select>
                                 </div>
                               )}
-                             </button>
-                             </div>
-                              
-                          
+                              </div>
                             </div>
                          </div>  
                         ):(
