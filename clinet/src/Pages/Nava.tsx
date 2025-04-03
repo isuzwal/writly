@@ -1,5 +1,4 @@
 import { Link } from "react-router";
-// import { TiThMenu } from "react-icons/ti";
 import { useContext, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { UserContext } from "../UserAuth/User";
@@ -11,13 +10,15 @@ import { IoIosSettings } from "react-icons/io";
 import { ThemeContex } from "../Theme/Theme";
 import { themeoptions } from "../Theme/Theme";
 import { Theme } from "../Theme/Theme";
+import { MdOutlineSecurity } from "react-icons/md";
+import { IoIosLogOut } from "react-icons/io";
 function Nava(){
     const [IsOpen,setIsOpen]=useState<boolean>(false)
     const [searching,setSearching]=useState<string>("")
     const [darksection,setDarksection]=useState<boolean>(false)
-    //  const [selectedOptions,setOptions]=useState<string>("")
+   
     // checking that User did't return undefine so.
-  
+
     const { theme, changeTheme } = useContext(ThemeContex);
  
     const context=useContext(UserContext)
@@ -59,7 +60,7 @@ function Nava(){
    
     return(
        <section className={` ${themeStyles[theme as keyof typeof themeStyles]}`}>
-        <div className=" border-b border-b-gray-600 py-1" >
+        <div className=" border-b border-b-gray-600 py-2" >
             <div className=" px-1 flex relative items-center justify-between ">
                 <Link to ="/" className="md:text-2xl  text-[16px] font-semibold font-dm  whitespace-nowrap flex-shrink-0 ">Post</Link>
                  <div className="flex items-center relative px-2 md:w-96 ">
@@ -80,12 +81,12 @@ function Nava(){
                       <span className="font-mono  font-medium text-[18px]">{user}</span>
                         </div>
                       {IsOpen && (
-                       <div className={`absolute  w-72 top-10 mt-2 h-[400px] right-0  shadow-lg rounded-md z-50  ${themeStyles[theme as keyof typeof themeStyles]}`}>
-                              <div className="flex flex-col gap-2 p-3">
+                       <div className={`absolute  w-72 top-[49px]  h-[320px] right-0  shadow-lg rounded-b-lg z-50  ${themeStyles[theme as keyof typeof themeStyles]}`}>
+                              <div className="flex flex-col gap-4 p-3">
                               <div className="flex  w-full  items-center border  font-dm font-semibold text-xl  hover:bg-gray-700 gap-2 px-2 py-1.5 rounded-lg">
                                <span className="font-dm text-[19px]">{Uppercase(user)}</span>
                               </div>
-                              <Link to="/profile" className="flex  items-center border   font-dm font-semibold text-xl  hover:bg-gray-700 gap-2 px-2 py-1.5 rounded-lg ">
+                              <Link to="/account/profile" className="flex  items-center border   font-dm font-semibold text-xl  hover:bg-gray-700 gap-2 px-2 py-1.5 rounded-lg ">
                              <FaUserCircle  size={28} color="gray"/>Profile</Link>
                              <div className="flex flex-row justify-between  items-center border  border-slat-800 font-dm font-semibold text-xl  hover:bg-gray-700 gap-2 px-2 py-1.5 rounded-lg">
                               <button onClick={themesection}>
@@ -106,15 +107,21 @@ function Nava(){
                                 </div>
                               )}
                               </div>
+                              <Link to="account/security" className="flex  items-center border   font-dm font-semibold text-xl  hover:bg-gray-700 gap-2 px-2 py-1.5 rounded-lg ">
+                              <MdOutlineSecurity  size={28} color="gray"/>Security</Link>
+                              <Link to="/account/logout" className="flex  items-center border   font-dm font-semibold text-xl  hover:bg-gray-700 gap-2 px-2 py-1.5 rounded-lg ">
+                              <IoIosLogOut  size={28} color="red"/>Logout</Link>
                               </div>
                        </div>
                       )}
                       </div>
                   ):(
-                  <>
-                  <Link to="/login" className="text-[16px] font-semibold">Login</Link>
-                  <Link to="/register" className="text-[16px] font-semibold">Register</Link>
-                  </>
+                    <div className="flex flex-row   items-center    gap-3 px-3 ">
+                   <Link to="/login" className=" text-center text-[16px] font-semibold bg-gray-700 px-6
+                    text-white py-1 rounded-md hover:bg-gray-900 transition-all duration-200">Login</Link>
+                   <Link to="/register"  className=" text-center text-[16px] font-semibold bg-blue-600 px-6 
+                    text-white py-1 rounded-md hover:bg-blue-700 transition-all duration-200">Register</Link>
+                  </div>
                   )}
                    </div>
                  </div>
@@ -122,13 +129,14 @@ function Nava(){
                    <button onClick={ToogleMunebar} className="flex items-center">
                      <div className="flex items-center  gap-2 ">
                       <img src={ProfiledImage} className="object-cover w-8 h-8  rounded-lg"  />    
+                     
                       </div>
                     </button>
                  </div>
                  {IsOpen && (
-                      <div className={`  ${themeStyles[theme as keyof typeof themeStyles]} md:hidden absolute  shadow-lg right-2  top-12 w-1/2   rounded-lg py-3 transition-all duration-300 ease-in-out`}>
+                      <div className={`  ${themeStyles[theme as keyof typeof themeStyles]} md:hidden absolute  shadow-lg right-0  top-[49px] w-64  rounded-b-lg py-3 transition-all duration-300 ease-in-out`}>
                         {user?(
-                          <div className=" flex  flex-col rounded-md h-[400px]  gap-2  px-2 cursor-pointer relative  py-1.5">
+                          <div className=" flex  flex-col rounded-md h-[390px]  gap-2  px-2 cursor-pointer relative  py-1.5">
                             <div className="flex  relative flex-col items-center  gap-2   px-2  py-3 rounded-md">
                              <div className=" w-full h-20  rounded">
                              <img src={CoverImage} className="object-cover w-full h-full  rounded "  />    
@@ -142,15 +150,15 @@ function Nava(){
                               <div className="flex  w-full  items-center border font-dm font-semibold text-xl  hover:bg-gray-700 gap-2 px-2 py-1.5 rounded-lg">
                                <span className="font-dm text-[19px]">{Uppercase(user)}</span>
                               </div>
-                             <Link to="/profile" className="flex  items-center border   font-dm font-semibold text-xl  hover:bg-gray-700 gap-2 px-2 py-1.5 rounded-lg ">
+                             <Link to="/account/profile" className="flex  items-center border   font-dm font-semibold text-xl  hover:bg-gray-700 gap-2 px-2 py-1.5 rounded-lg ">
                              <FaUserCircle  size={28} color="gray"/>Profile</Link>
-                             <div className="flex flex-row justify-between  items-center border  font-dm font-semibold text-xl  hover:bg-gray-700 gap-2 px-2 py-1.5 rounded-lg">
+                             <div className="flex flex-col  md:flex-row justify-between  border  font-dm font-semibold text-xl  hover:bg-gray-700 gap-2 px-2 py-1.5 rounded-lg">
                               <button onClick={themesection}>
                                 <h2 className="flex items-center text-[18px] gap-1"><IoIosSettings  size={20}/>Custom</h2>
                                 </button>
                               {darksection && (
-                                <div className="flex flex-col rounded-md px-2   transition-all duration-200">
-                                   <select className=" px-2 text-[16px] rounded-md cursor-pointer bg-transparent border"
+                                // <div className="flex  bg-pink-400 flex-col rounded-md px-2   transition-all duration-200">
+                                   <select className=" px-2 text-[16px]  w-24 rounded-md cursor-pointer bg-transparent border"
                                     value={theme}  onChange={(e) => {
                                     changeTheme(e.target.value as Theme)
                                   }} >
@@ -160,9 +168,13 @@ function Nava(){
                               </option>
                                ))}
                             </select>
-                                </div>
+                                // {/* </div> */}
                               )}
                               </div>
+                              <Link to="/account/security" className="flex  items-center border   font-dm font-semibold text-xl  hover:bg-gray-700 gap-2 px-2 py-1.5 rounded-lg ">
+                              <MdOutlineSecurity  size={28} color="gray"/>Security</Link>
+                              <Link to="/account/logout" className="flex  items-center border   font-dm font-semibold text-xl  hover:bg-gray-700 gap-2 px-2 py-1.5 rounded-lg ">
+                              <IoIosLogOut  size={28} color="red"/>Logout</Link>
                             </div>
                          </div>  
                         ):(
