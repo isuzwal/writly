@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useState } from "react"
+import { ReactNode, createContext, useState ,useEffect} from "react"
 
 const Default_Them:string='system'
 
@@ -18,9 +18,17 @@ const initalstate:Initalstate={
 interface ContextProps{
     children:ReactNode
 }
+
 const ThemeContex=createContext(initalstate);
 export const ThemeProvider=({children}:ContextProps)=>{
-    const [theme ,setTheme]=useState<Theme>(Default_Them)
+    const [theme ,setTheme]=useState<Theme>(()=>{
+        const savedTheme=localStorage.getItem("theme") as Theme
+         return savedTheme || Default_Them
+        })
+    useEffect(() => {
+        localStorage.setItem("theme", theme);
+      }, [theme]);
+    
 
     const value={
         theme,
