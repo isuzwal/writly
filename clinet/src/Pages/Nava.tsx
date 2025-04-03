@@ -19,7 +19,7 @@ function Nava(){
     // checking that User did't return undefine so.
   
     const { theme, changeTheme } = useContext(ThemeContex);
-
+ 
     const context=useContext(UserContext)
     if(!context){
       throw new Error
@@ -50,11 +50,16 @@ function Nava(){
       setDarksection(pervstate=>!pervstate)
     }
     // for theme
-   
+    const themeStyles = {
+      dark: "bg-black text-white  ",
+      light: "bg-white text-black   ",
+      system: "bg-gray-800 text-white ", 
+    };
+    
    
     return(
-       <section className="py-2 ">
-        <div className=" border-b border-b-gray-600 py-1 text-white" >
+       <section className={` ${themeStyles[theme as keyof typeof themeStyles]}`}>
+        <div className=" border-b border-b-gray-600 py-1" >
             <div className=" px-1 flex relative items-center justify-between ">
                 <Link to ="/" className="md:text-2xl  text-[16px] font-semibold font-dm  whitespace-nowrap flex-shrink-0 ">Post</Link>
                  <div className="flex items-center relative px-2 md:w-96 ">
@@ -62,15 +67,48 @@ function Nava(){
                  className=" rounded-lg px-3 focus:outline-none font-serif bg-profile py-1.5  placeholder:text-[15px] w-full "/>
                  {searching.length === 0  && (
                   <CiSearch  size={22} color="white" className="absolute right-3  "/>
-                  )}
-                  
+                  )}    
               </div>
-                 <div className="rounded-sm  hidden md:flex px-1">
-                   <div className="bg-profile text-white flex w-full  rounded-md  px-5 py-1.5 gap-2 items-center  cursor-pointer  ">
+                 <div className={`rounded-lg px-6  hidden md:flex shadow-md   ${themeStyles[theme as keyof typeof themeStyles]}`}>
+                   <div className="flex w-full    rounded-md">
                   {user? (
-                    <div className="flex items-center  gap-2 ">
-                      <img src={ProfiledImage} className="object-cover w-8 h-8   rounded-lg"  />    
+                      <div
+                      className="flex gap-2 justify-between ">
+                        <div  onClick={ToogleMunebar}
+                        className={` flex gap-2 justify-between    px-4 py-1.5 cursor-pointer rounded-lg   ${themeStyles[theme as keyof typeof themeStyles]}`}>
+                      <img src={ProfiledImage} className="object-cover w-7 h-7   rounded-lg"  />    
                       <span className="font-mono  font-medium text-[18px]">{user}</span>
+                        </div>
+                      {IsOpen && (
+                       <div className={`absolute  w-72 top-10 mt-2 h-[400px] right-0  shadow-lg rounded-md z-50  ${themeStyles[theme as keyof typeof themeStyles]}`}>
+                              <div className="flex flex-col gap-2 p-3">
+                              <div className="flex  w-full  items-center border  font-dm font-semibold text-xl  hover:bg-gray-700 gap-2 px-2 py-1.5 rounded-lg">
+                               <span className="font-dm text-[19px]">{Uppercase(user)}</span>
+                              </div>
+                              <Link to="/profile" className="flex  items-center border   font-dm font-semibold text-xl  hover:bg-gray-700 gap-2 px-2 py-1.5 rounded-lg ">
+                             <FaUserCircle  size={28} color="gray"/>Profile</Link>
+                             <div className="flex flex-row justify-between  items-center border  border-slat-800 font-dm font-semibold text-xl  hover:bg-gray-700 gap-2 px-2 py-1.5 rounded-lg">
+                              <button onClick={themesection}>
+                                <h2 className="flex items-center text-[18px] gap-1"><IoIosSettings  size={20}/>Custom</h2>
+                                </button>
+                              {darksection && (
+                                <div className="flex flex-col rounded-md px-2  transition-all duration-200">
+                                   <select className=" px-2 text-[16px] bg-transparent  rounded-md cursor-pointer  border"
+                                    value={theme}  onChange={(e) => {
+                                    changeTheme(e.target.value as Theme)
+                                  }} >
+                                  {themeoptions.map((option) => (
+                                <option key={option} value={option} className="bg-transparent">
+                                  {option.charAt(0).toUpperCase() + option.slice(1)} 
+                              </option>
+                               ))}
+                            </select>
+                                </div>
+                              )}
+                              </div>
+                              </div>
+                       </div>
+                      )}
                       </div>
                   ):(
                   <>
@@ -82,15 +120,15 @@ function Nava(){
                  </div>
                  <div className="items-center md:hidden  p-1 rounded-full " >
                    <button onClick={ToogleMunebar} className="flex items-center">
-                  <div className="flex items-center  gap-2 ">
+                     <div className="flex items-center  gap-2 ">
                       <img src={ProfiledImage} className="object-cover w-8 h-8  rounded-lg"  />    
                       </div>
                     </button>
                  </div>
                  {IsOpen && (
-                      <div className="md:hidden absolute  shadow-lg right-2  top-9 w-1/2   rounded-lg py-3 transition-all duration-300 ease-in-out">
+                      <div className={`  ${themeStyles[theme as keyof typeof themeStyles]} md:hidden absolute  shadow-lg right-2  top-12 w-1/2   rounded-lg py-3 transition-all duration-300 ease-in-out`}>
                         {user?(
-                          <div className="bg-profile flex  flex-col rounded-md h-[400px]  gap-2  px-2 cursor-pointer relative  py-1.5">
+                          <div className=" flex  flex-col rounded-md h-[400px]  gap-2  px-2 cursor-pointer relative  py-1.5">
                             <div className="flex  relative flex-col items-center  gap-2   px-2  py-3 rounded-md">
                              <div className=" w-full h-20  rounded">
                              <img src={CoverImage} className="object-cover w-full h-full  rounded "  />    
@@ -101,23 +139,21 @@ function Nava(){
                             </div>
                               {/*Account Part */}
                               <div className="flex flex-col gap-2 ">
-                              <div className="flex text-white w-full  items-center border border-gray-800 font-dm font-semibold text-xl  hover:bg-gray-700 gap-2 px-2 py-1.5 rounded-lg">
+                              <div className="flex  w-full  items-center border font-dm font-semibold text-xl  hover:bg-gray-700 gap-2 px-2 py-1.5 rounded-lg">
                                <span className="font-dm text-[19px]">{Uppercase(user)}</span>
                               </div>
-                             <Link to="/profile" className="flex text-white items-center border  border-gray-800 font-dm font-semibold text-xl  hover:bg-gray-700 gap-2 px-2 py-1.5 rounded-lg ">
+                             <Link to="/profile" className="flex  items-center border   font-dm font-semibold text-xl  hover:bg-gray-700 gap-2 px-2 py-1.5 rounded-lg ">
                              <FaUserCircle  size={28} color="gray"/>Profile</Link>
-                             <div className="flex text-white items-center border  border-gray-800 font-dm font-semibold text-xl  hover:bg-gray-700 gap-2 px-2 py-1.5 rounded-lg">
+                             <div className="flex flex-row justify-between  items-center border  font-dm font-semibold text-xl  hover:bg-gray-700 gap-2 px-2 py-1.5 rounded-lg">
                               <button onClick={themesection}>
                                 <h2 className="flex items-center text-[18px] gap-1"><IoIosSettings  size={20}/>Custom</h2>
                                 </button>
                               {darksection && (
-                                <div className="flex flex-col rounded-md px-2  text-black  transition-all duration-200">
-                                   <select className=" px-2 text-white text-[16px] rounded-md cursor-pointer bg-profile border"
-                                  value={theme}  onChange={(e) => {
-                                     const newTheme=changeTheme(e.target.value as Theme)
-                                     console.log("Theme changed to:", newTheme);   }} >
-                                    
-                                    
+                                <div className="flex flex-col rounded-md px-2   transition-all duration-200">
+                                   <select className=" px-2 text-[16px] rounded-md cursor-pointer bg-transparent border"
+                                    value={theme}  onChange={(e) => {
+                                    changeTheme(e.target.value as Theme)
+                                  }} >
                                   {themeoptions.map((option) => (
                                 <option key={option} value={option}>
                                   {option.charAt(0).toUpperCase() + option.slice(1)} 

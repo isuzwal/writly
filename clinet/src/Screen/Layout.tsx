@@ -1,12 +1,12 @@
 import { Outlet } from "react-router"
-
+import Nava from "../Pages/Nava";
+import Section from "../Screen/Section";
 function Layout(){
     return(
-  <div className="min-h-screen  w-full ">
-  <div>
+    <Section>
+      <Nava />
       <Outlet />
-  </div>
-</div>
+    </Section>
     )
 }
 export default Layout;

@@ -5,7 +5,7 @@ const Default_Them:string='system'
 export const themeoptions:string[]=["light","dark","system"] as const
 
 
- export type Theme=(typeof themeoptions)[number]
+export type Theme=(typeof themeoptions)[number]
 
 type Initalstate={
     theme:Theme
