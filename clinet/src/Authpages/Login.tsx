@@ -20,9 +20,9 @@ function Login(){
         }
    }
     return (
-        <section className='relative min-h-screen flex items-center justify-center p-4'>
+        <section className='relative  flex items-center justify-center h-screen   p-4'>
             <form  onSubmit={login}
-            className="flex flex-col gap-2  border shadow-md  rounded-md  px-3 py-12">
+            className="flex flex-col gap-2  border  rounded-md  px-3 py-12">
                  <h1 className="text-xl font-semibold text-center font-mono">Login</h1>
                 <div className="flex flex-row gap-2">
               <label className="font-mono font-medium m-2">UserName
