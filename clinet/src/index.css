@@ -8,3 +8,12 @@ input[type="search"]::-webkit-search-cancel-button {
  /* #root {
     background-color: rgb(14, 18, 23);
 } */
+/* Hide scrollbar for Chrome, Safari, and Edge */
+.scroll-hidden::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for Firefox */
+.scroll-hidden {
+  scrollbar-width: none;
+}
