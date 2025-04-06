@@ -45,24 +45,24 @@ function Register(){
     return (
         <section className='relative min-h-screen flex items-center justify-center p-4'>
         <form onSubmit={register}
-        className="flex flex-col gap-2  border shadow-md  rounded-md  px-3 py-12">
+        className="flex flex-col gap-3  border   rounded-md   max-w-md px-6 py-12">
              <h1 className="text-xl font-semibold text-center font-mono">Register</h1>
-            <div className="flex flex-row gap-2">
-          <label className="font-mono font-medium m-2">UserName
-            <input type="text" value={userName} onChange={(e)=>setUserName(e.target.value)}
-           className="ml-1 border px-3 py-1 rounded-md w-64 placeholder:text-sm" />
+            <div className="flex flex-col  text-start">
+          <label className="font-mono font-medium ">UserName
+            <input type="text" value={userName} onChange={(e)=>setUserName(e.target.value)} placeholder="Enter your username"
+           className=" w-full  border px-3 py-1 rounded-md  placeholder:text-sm" />
           </label>
          </div>
-         <div className="flex flex-row gap-5">
-          <label className="font-mono font-medium m-2">Email
-            <input type="email" value={email} onChange={(e)=>setEmail(e.target.value)}
-           className="ml-5  border px-3 py-1 rounded-md w-64 placeholder:text-sm" />
+         <div className="flex flex-col ">
+          <label className="font-mono font-medium ">Email
+            <input type="email" value={email} onChange={(e)=>setEmail(e.target.value)} placeholder="Enter your Email"
+           className="  border px-3 py-1 rounded-md w-full  placeholder:text-sm" />
           </label>
           </div>
-         <div className="flex flex-row gap-2">
-          <label className="font-mono font-medium m-2">Password
-            <input type="password" value={password} onChange={(e)=>setPassword(e.target.value)} 
-            className="ml-1 border px-3 py-1 rounded-md   w-64  placeholder:text-sm "/>
+         <div className="flex flex-col gap-2">
+          <label className="font-mono font-medium ">Password
+            <input type="password" value={password} onChange={(e)=>setPassword(e.target.value)} placeholder="Enter your password"
+            className=" border px-3 py-1 rounded-md  w-full  placeholder:text-sm "/>
           </label>
          </div>
           <button  type="submit" className="bg-black rounded-md font-serif text-white py-1">
@@ -78,10 +78,10 @@ function Register(){
           Already have an account? 
          <Link to='/login' className='font-semibold hover:text-blue-600 underline ml-1'>Login</Link>
           </div>
-        </form>
         <div>
                 {error && <p>{error}</p>}
               </div>
+        </form>
     </section>
     )
 }
