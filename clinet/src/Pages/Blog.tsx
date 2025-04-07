@@ -1,9 +1,9 @@
-import { useContext  } from "react";
+import { useContext, useState  } from "react";
 import ProfiledImage from "../assets/discord.jpeg"
 import { UserContext } from "../UserAuth/User";
 import { SlLike } from "react-icons/sl";
 import { AiOutlineDislike } from "react-icons/ai";
-import { FaRegComment } from "react-icons/fa";
+import {  FaRegComment } from "react-icons/fa";
 import { CiBookmarkPlus } from "react-icons/ci";
 import { Outlet } from "react-router";
 import { useLocation } from "react-router";
@@ -12,9 +12,10 @@ import { FaXTwitter } from "react-icons/fa6";
 import { FaGithub } from "react-icons/fa";
 import { CgWebsite } from "react-icons/cg";
 const Blog=()=>{
-
+  const [IsCommnet,setComment]=useState<boolean>(false)
   const location=useLocation()
   const nestedlocation=location.pathname !== "/blog";
+  console.log("Route name",nestedlocation)
   const context=useContext(UserContext)
   if(!context){
     throw new Error
@@ -37,10 +38,12 @@ const Blog=()=>{
   
   const linkslist=localStorage.getItem("Links")||"[]"
   const newlink:SocialLink[]=JSON.parse(linkslist) as SocialLink[]
-
   const localDate=new Date().toLocaleDateString();
   
-  
+  //->opening the Comment Section
+   const commentOpen=()=>{
+    setComment((prevstate)=>!prevstate)
+   }
     return (
         <section className="min-h-screen ">
   <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr_1fr] px-5 py-2">
@@ -159,15 +162,25 @@ const Blog=()=>{
                 <AiOutlineDislike size={19} className="mt-1"  />
                 <h3 className="font-semibold mt-1 ">0</h3>
                 </span>
-                <span className="flex items-center text-sm gap-1 cursor-pointer">
-                <FaRegComment  size={19}/>
-                 <h3 className="font-semibold ">200</h3>
-                </span>
-                </div>
+                <span onClick={commentOpen}
+                 className="flex items-center text-sm gap-1 cursor-pointer">
+                   <FaRegComment  size={19}/>
+                   <h3 className="font-semibold ">200</h3>
+                   </span>
+                   </div>
                 <span className="flex text-sm cursor-pointer ">
                 <CiBookmarkPlus  size={20}/>
                 </span>
-              </div>
+                </div>
+                 
+                  {IsCommnet&& (
+                    <div className="bg-pink-500 h-32 w-full rounded-md border-2 ">
+                      <h1>Hello</h1>
+                    </div>
+
+                  )}
+                
+              
             </div>
           
           
