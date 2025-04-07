@@ -22,6 +22,10 @@ const Blog=()=>{
      return upperletter
     }
   }
+
+  const linkslist=localStorage.getItem("Links")||"{}"
+  const newlink=JSON.parse(linkslist)
+  console.log(newlink)
   // const todaydate=new Date()
   // const isoString=new Date().toISOString()
   const localDate=new Date().toLocaleDateString();
@@ -47,13 +51,13 @@ const Blog=()=>{
           </div>
           </div>
           {/*Post Section*/}
-          <div className="px-6 py-2  col-span-3 md:col-span-1 w-full flex-col    justify-center overflow-y-auto h-[calc(100vh-1rem)] scroll-hidden">
+          <div className=" col-span-3 md:col-span-1 w-full flex flex-col justify-start md:h-[calc(100vh-1rem)] overflow-y-auto scroll-hidden">
             <div className="flex flex-wrap md:flex-row gap-3  md:justify-start justify-center py-3 px-4  ">
               <h1 className="bg-black px-4  flex rounded-md text-white text-[14px] items-center">Latest</h1>
               <h1 className="bg-slate-100 px-4  flex rounded-md  text-[14px] items-center">Popular</h1>
               <h1 className="bg-slate-100 px-4  flex rounded-md  text-[14px] items-center">Follwing</h1>
             </div>
-            <div className="flex flex-col w-64 sm:w-full md:w-full  border-2 px-2 py-2  m-3 gap-2 shadow-sm rounded-md ">
+            <div className="flex flex-col border-2 px-2 py-2  m-3 gap-2 shadow-sm rounded-md ">
               <div className="flex flex-row p-1 items-center gap-2">
                 <img src={ProfiledImage} className="object-cover rounded-full w-9 h-9" />
                 <div className="flex flex-col text-gray-800 font-dm font-semibold">
@@ -91,7 +95,7 @@ const Blog=()=>{
               </div>
             </div>
             {/**Will be Remove it  */}
-            <div className="flex flex-col   w-64 sm:w-full md:w-full  border-2 px-2  m-3 gap-2 shadow-sm rounded-md ">
+            <div className="flex flex-col     border-2 px-2  m-3 gap-2 shadow-sm rounded-md ">
               <div className="flex flex-row p-1 items-center gap-2">
                 <img src={ProfiledImage} className="object-cover rounded-full w-9 h-9" />
                 <div className="flex flex-col text-gray-800 font-dm font-semibold">
@@ -128,7 +132,7 @@ const Blog=()=>{
               </div>
             </div>
              {/* *Will be Remove it  */}
-             <div className="flex flex-col   w-64 sm:w-full md:w-full m-3 gap-2 border-2 px-2  shadow-sm rounded-md ">
+             <div className="flex flex-col   m-3 gap-2 border-2 px-2  shadow-sm rounded-md ">
               <div className="flex flex-row p-1 items-center gap-2">
                 <img src={ProfiledImage} className="object-cover rounded-full w-9 h-9" />
                 <div className="flex flex-col text-gray-800 font-dm font-semibold">

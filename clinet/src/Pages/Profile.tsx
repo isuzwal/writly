@@ -1,29 +1,52 @@
 import { useState } from "react";
 import DiscordImg from "../assets/discord.jpeg"
 import coverImage from "../assets/download.jpeg"
+// import SocilaLinks from "../Links/Links";
+
 
 const Profile=()=>{
     const [ProfileImage,setProfileImage]=useState<string>("")
     const [CoverImage,setCoverImage]=useState<string>("")
     const [Newusername,setUserName]=useState<string>("")
     const [Bio,setBio]=useState<string>("")
-    // const [githubLink,setGitHubLink]=useState<string>("")
-    // const [twitterLink,settwitterLink]=useState<string>("")
-    // const [websiteLink,setwebsiteLink]=useState<string>("")
+    const [githubLink,setGitHubLink]=useState<string>("")
+    const [twitterLink,settwitterLink]=useState<string>("")
+    const [websiteLink,setwebsiteLink]=useState<string>("")
+    const [links,setlinks]=useState<{ 
+        twitter?: string; 
+        github?:  string; 
+        website?: string
+    }[]>([{}])
     console.log(()=>{
         setProfileImage(ProfileImage)
         setCoverImage(CoverImage)
     }
     )
+    // function for the grtall Link
+    const getallLink=()=>{
+           const alllinks=[
+             {twitter:twitterLink},
+             {github:githubLink},
+             {website:websiteLink},
+           ]
+           localStorage.setItem("Links",JSON.stringify(alllinks))
+            setlinks(alllinks)   
+    } 
+    const itemList=[
+    { label: "Twitter", value: twitterLink, setValue: settwitterLink, placeholder: "Twitter link" },
+    { label: "GitHub", value: githubLink, setValue: setGitHubLink, placeholder: "GitHub link" },
+    { label: "Portfolio", value: websiteLink, setValue: setwebsiteLink, placeholder: "Portfolio link" },  
+    ]  
     return (
         <section className="py-8 text-center border-2 ">
          <div className="items-center flex  justify-center ">
-            <div className="  w-[710px]  md:w-[900px]  ">
+
+            <form className="  w-[710px]  md:w-[900px]  ">
                 <h1 className="text-3xl  p-1  text-start px-8 font-semibold font-dm">Profile</h1>
                  <div className="border-b-2  border-gray-950"></div>
                  <div className="p-2  ">
-                    <h2 className="text-start font-bold text-md">Profile Picture</h2>
-                    <p  className="text-start">Upload a picture to make your profile stand out 
+                    <h2 className="text-start font-bold text-md  text-[12px]  sm:text-[16px] md:text-[18px]">Profile Picture</h2>
+                    <p  className="text-start text-[12px] sm:text-[14px] md:text-[18px] font-medium">Upload a picture to make your profile stand out 
                         and let people recognize your comments and contributions easily!</p>
                  </div>
                  <div className="relative rounded-xl px-2  h-32 ">
@@ -46,32 +69,44 @@ const Profile=()=>{
                  </div>
                 </div>
             </div>
-            <div className="border mt-4  p-2 ">
-            <div className=" border px-3 flex flex-col gap-3  text-start  ">
+            <div className=" mt-4 border-2  rounded-md p-3">
+            <div className=" px-3 py-1 flex flex-col gap-3  text-start  ">
+             <div className="flex gap-2">
              <h2 className="  font-dm text-xl font-bold">Account Infromation</h2>
+               {links.map((urls,index)=>(
+                <div key={index} className="">
+                 <a href={urls.github} />
+                  {urls.github}
+                  {urls.twitter}
+                  {urls.website}
+                </div>
+               ))}
+            </div>
                <input type="text" value={Newusername || "Guest"}  onChange={(e)=>setUserName(e.target.value)}
-               placeholder="Username"  className="md:w-1/2  sm:w-96  rounded-lg  outline-none font-dm  hover:bg-gray-500  w-full  bg-gray-200 font-medium px-2 py-1"/>
+               placeholder="Username"  className="md:w-1/2  sm:w-96  rounded-lg  outline-none font-dm    w-full  bg-gray-200 font-medium px-2 py-1"/>
                <h3 className="font-dm font-bold">Bio</h3>
                <textarea rows={3} value={Bio || "Guest"}  onChange={(e)=>setBio(e.target.value)}
-               placeholder="Username"  className="md:w-1/2  sm:w-96 w-full  rounded-lg  outline-none font-dm  hover:bg-gray-500  bg-gray-200 font-medium px-2 py-1"/>
-               <div className="border-2">
-               <h1 className="text-xl  p-1  text-start px-3 font-semibold font-dm">Profile Social Links</h1>
-               <p  className="text-start px-3 font-dm font-semibold text-gray-700 text-[16px] ">Add your social media profiles so others 
-                can connect with you and you can grow your network!</p>
+               placeholder="Username"  className="md:w-1/2  sm:w-96 w-full  rounded-lg  outline-none font-dm    bg-gray-200 font-medium px-2 py-1"/>
+               <div className="shadow-md rounded-md px-3 py-1">
+                  <h1 className="text-xl  p-1  text-start px-3 font-bold font-dm text-[12px]   sm:text-[16px] md:text-[22px] ">Profile Social Links</h1>
+                   <p  className="text-start px-3 font-dm  -slate-200  text-[12px]  sm:text-[16px] md:text-[18px] ">Add your social media profiles so others 
+                   can connect with you and you can grow your network!</p>
+                   <div className="border-2 py-4 flex flex-col w-full  sm:w-[480px] md:w-[520px] gap-4 px-4 rounded-md">
+                       {itemList.map((value,index)=>(
+                        <div  key={index} className="flex items-center gap-4">
+                        <label className="font-dm text-gray-700 font-medium min-w[80px]">{value.label}</label>
+                        <input type="text"    placeholder={value.placeholder} value={value.value} onChange={(e)=>value.setValue(e.target.value)}
+                          className="flex-1 p-2 rounded-md border-2 outline-none" />
+                        </div>
+                       ))}
+                  </div>
                </div>
-               <div className="boder-2 flex flex-col w-1/2 gap-2">
-               
-             
-                  
-                
-               
-               
-              </div>
                </div>
             </div>    
-            </div>
+            </form>
+
         </div>
-        
+      <button onClick={getallLink}>SAVR THE LINKS</button>
         </section>
     )
 }

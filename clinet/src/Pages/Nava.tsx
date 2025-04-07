@@ -83,14 +83,14 @@ function Nava(){
                       <span className="font-mono  font-medium text-[18px]">{user}</span>
                         </div>
                       {IsOpen && (
-                       <div className={`absolute  w-72 top-[49px]  h-[320px] right-0  shadow-lg rounded-b-lg z-50  ${themeStyles[theme as keyof typeof themeStyles]}`}>
+                       <div className={`absolute  w-72 top-[49px]  h-[320px] right-0   bg-slate-100 shadow-lg rounded-b-lg z-50  ${themeStyles[theme as keyof typeof themeStyles]}`}>
                               <div className="flex flex-col gap-4 p-3">
-                              <div className="flex  w-full  items-center border  font-dm font-semibold text-xl  hover:bg-gray-700 gap-2 px-2 py-1.5 rounded-lg">
+                              <div className="flex  w-full  items-center border hover:bg-slate-300 font-dm font-semibold text-xl  gap-2 px-2 py-1.5 rounded-lg">
                                <span className="font-dm text-[19px]">{Uppercase(user)}</span>
                               </div>
-                              <Link to="/account/profile" className="flex  items-center border   font-dm font-semibold text-xl  hover:bg-gray-700 gap-2 px-2 py-1.5 rounded-lg ">
+                              <Link to="/account/profile" className="flex  items-center border  hover:bg-slate-300 font-dm font-semibold text-xl  gap-2 px-2 py-1.5 rounded-lg ">
                              <FaUserCircle  size={28} color="gray"/>Profile</Link>
-                             <div className="flex flex-row justify-between  items-center border  border-slat-800 font-dm font-semibold text-xl  hover:bg-gray-700 gap-2 px-2 py-1.5 rounded-lg">
+                             <div className="flex flex-row justify-between  items-center border  hover:bg-slate-300  border-slat-800 font-dm font-semibold text-xl   gap-2 px-2 py-1.5 rounded-lg">
                               <button onClick={themesection}>
                                 <h2 className="flex items-center text-[18px] gap-1"><IoIosSettings  size={20}/>Custom</h2>
                                 </button>
@@ -109,9 +109,9 @@ function Nava(){
                                 </div>
                               )}
                               </div>
-                              <Link to="account/security" className="flex  items-center border   font-dm font-semibold text-xl  gap-2 px-2 py-1.5 rounded-lg ">
+                              <Link to="account/security" className="flex  items-center border  hover:bg-slate-300  font-dm font-semibold text-xl  gap-2 px-2 py-1.5 rounded-lg ">
                               <MdOutlineSecurity  size={28} color="gray"/>Security</Link>
-                              <Link to="/account/logout" className="flex  items-center border   font-dm font-semibold text-xl  hover:bg-gray-700 gap-2 px-2 py-1.5 rounded-lg ">
+                              <Link to="/account/logout" className="flex  items-center border   hover:bg-slate-300  font-dm font-semibold text-xl  gap-2 px-2 py-1.5 rounded-lg ">
                               <IoIosLogOut  size={28} color="red"/>Logout</Link>
                               </div>
                        </div>
@@ -139,7 +139,7 @@ function Nava(){
                  </div>
                  {IsOpen && (
                       <div className={` 
-                       ${themeStyles[theme as keyof typeof themeStyles]} md:hidden absolute  bg-slate-300  right-0 z-30 top-[45px] w-64  rounded-b-lg transition-all duration-300 ease-in-out`}>
+                       ${themeStyles[theme as keyof typeof themeStyles]} md:hidden absolute bg-slate-100  right-0 z-30 top-[45px] w-64  rounded-b-lg transition-all duration-300 ease-in-out`}>
                         {user?(
                           <div className=" flex  flex-col rounded-md h-[390px]  gap-2  px-2 cursor-pointer relative  py-1.5">
                             <div className="flex  relative flex-col items-center  gap-2   px-2  py-3 rounded-md">
@@ -152,12 +152,12 @@ function Nava(){
                             </div>
                               {/*Account Part */}
                               <div className="flex flex-col gap-2 ">
-                              <div className="flex  w-full  items-center border font-dm font-semibold text-xl  hover:bg-gray-700 gap-2 px-2 py-1.5 rounded-lg">
+                              <div className="flex  w-full  hover:bg-slate-300 items-center border font-dm font-semibold text-xl  gap-2 px-2 py-1.5 rounded-lg">
                                <span className="font-dm text-[19px]">{Uppercase(user)}</span>
                               </div>
-                             <Link to="/account/profile" className="flex  items-center border   font-dm font-semibold text-xl  hover:bg-gray-700 gap-2 px-2 py-1.5 rounded-lg ">
+                             <Link to="/account/profile" className="flex  hover:bg-slate-300  items-center border   font-dm font-semibold text-xl  gap-2 px-2 py-1.5 rounded-lg ">
                              <FaUserCircle  size={28} color="gray"/>Profile</Link>
-                             <div className="flex flex-col  md:flex-row justify-between  border  font-dm font-semibold text-xl  hover:bg-gray-700 gap-2 px-2 py-1.5 rounded-lg">
+                             <div className="flex flex-col  hover:bg-slate-300   md:flex-row justify-between  border  font-dm font-semibold text-x  gap-2 px-2 py-1.5 rounded-lg">
                               <button onClick={themesection}>
                                 <h2 className="flex items-center text-[18px] gap-1"><IoIosSettings  size={20}/>Custom</h2>
                                 </button>
@@ -176,9 +176,9 @@ function Nava(){
                                 // {/* </div> */}
                               )}
                               </div>
-                              <Link to="/account/security" className="flex  items-center border   font-dm font-semibold text-xl  hover:bg-gray-700 gap-2 px-2 py-1.5 rounded-lg ">
+                              <Link to="/account/security" className="flex  items-center border   font-dm font-semibold text-xl  hover:bg-slate-300 gap-2 px-2 py-1.5 rounded-lg ">
                               <MdOutlineSecurity  size={28} color="gray"/>Security</Link>
-                              <Link to="/account/logout" className="flex  items-center border   font-dm font-semibold text-xl  hover:bg-gray-700 gap-2 px-2 py-1.5 rounded-lg ">
+                              <Link to="/account/logout" className="flex  items-center border   font-dm font-semibold text-xl  hover:bg-slate-300 gap-2 px-2 py-1.5 rounded-lg ">
                               <IoIosLogOut  size={28} color="red"/>Logout</Link>
                             </div>
                          </div>  
