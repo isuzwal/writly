@@ -1,12 +1,13 @@
 const express=require("express")
 const User=require("../databse/Personschema")
+const Post=require("../databse/PostSchema")
 const route=express.Router()
 const bcrypt=require("bcryptjs")
 
 require('dotenv').config();
 
 route.get("/",(req,res)=>{
-    res.send("Welcome to Sever Fuck")
+    res.send("Welcome to Sever")
 })
 
 //->user-register route
@@ -38,7 +39,7 @@ route.post("/register",async(req,res)=>{
         console.log("Error at the create user",e)
         res.status(500).json({
             status:"fail",
-            message:"Error at user creation "
+            message:"Server Error at "
         })
     }
 })
@@ -74,7 +75,7 @@ route.post("/login",async(req,res)=>{
         consol.log("Can't login",e)
         res.status(500).json({
             status:"fail",
-            message:"Innternal Server Errro"
+            message:"Internal Server Errro"
         })
     }
 })
@@ -98,44 +99,107 @@ route.get("/profile/:id",async(req,res)=>{
         console.log("Can't find user",e)
         res.status(500).json({
             status:"fail",
-            message:"Fali to load User"
+            message:"Sever Error"
         })
     }
 })
-//->upadata the profile info
-// route.patch("/profile/:id",async(req,res)=>{
-//     try{
-//         const updateuser= await User.findByIdAndUpdate(
-//             req.params.id,
-//             {$set:req.body},
-//             {new:true,runValidators:true},
-//         );
-//         console.log(req.body) 
-//         if(!updateuser){
-//             return res.status(404).json({
-//                 status: "fail",
-//                 message: "User not found"
-//             }); 
-//         }
-//         // if (!user) {
-//         //     return res.status(404).json({
-//         //         status: "fail",
-//         //         message: "User not found"
-//         //     });
-//         // }
-//          res.status(200).json({
-//             status:"succes",
-//             data:{
-//              user: updateuser
-//             }
-//          })
+//->Profile of the usres
 
-//     }catch(e){
-//         console.log("Can't find user",e)
-//         res.status(500).json({
-//             status:"fail",
-//             message:"Fali to update  User"
-//         })
-//     }
-// })
+route.get("/profile/:id",async(req,res)=>{
+    try{
+        //-> first get user
+      const user = await User.findById(req.params.id).select("-password");//-> select tell that do not send the password to response 
+        
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+      const userAllpost = await Post.find({ author: req.params.id });
+     if(!userAllpost){
+        return res.status(404).json({
+         error:"Can't get user profile"
+         })
+       }
+      res.status(200).json({
+      status:"success",
+      data:{
+        user,//->user
+        userAllpost //-> and posts
+       }
+     })
+    }catch(e){
+        console.log("Can't find user",e)
+        res.status(500).json({
+            status:"fail",
+            message:"Server Error"
+        })
+    }
+})
+
+//-> post route
+route.post("/post",async(req,res)=>{
+    try{
+        const {title,body,image,}=req.body
+    if(!title || !body){
+        return res.status(400).json({
+            error:"Title and body are required"
+        })
+    }
+    const newPost=new Post({
+        title,
+        body,
+        Image:image,
+        // this will be change by Jwt auth token 
+        author:"67f6e79ccbd964ea0101ec84"
+    })
+    const postsaved=await newPost.save()
+    res.status(200).json({
+        status:"succes",
+        data:{
+            postsaved
+        }
+    })
+    }catch(e){
+        console.log("Error at the post",e)
+        res.status(500).json({
+            error:"Server error"
+        })
+    }
+
+})
+// --> get all post
+route.get("/blog",async(req,res)=>{
+    try{
+        const allpost= await Post.find({})
+        res.status(200).json({
+               status:"sucess",
+               data:{
+                post:allpost
+               }
+        })
+    }catch(e){
+        console.log("Internal Error",e)
+        res.status(500).json({
+            error:"Interanl Server Error"
+        })
+    }
+})
+//--> for the single post show case
+route.get("/blog/:id",async(req,res)=>{
+    try{
+        const post= await Post.findById(req.params.id)
+        .populate("author","username Image",)
+        if(!post){
+            return  res.status(404).json({error:"Post not found"})
+        }
+        res.status(200).json({
+            status:"succes",
+            data:{
+                post
+            }
+        })
+    }catch(e){
+        console.log("Error at Fetching Post",e)
+        res.status(500).json({"error":"Server Error"})
+    }
+})
 module.exports=route
