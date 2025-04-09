@@ -5,7 +5,7 @@ const UserScheam=new mongoose.Schema({
     username:{
          type:String,
          required: true,
-         unique:true,
+         unique: true
     },
     email:{
         type:String,
@@ -17,40 +17,33 @@ const UserScheam=new mongoose.Schema({
     password:{
         type:String,
         required:true,
-        unique:true,
-        minlength:[8,"Paaword must be least 8 charactters long"],
+        minlength:[8,"Paaword must be least 8 characters long"],
         match:[ 
             /^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z\d]).+$/,
             "Password must have Upper letter ,number & one special character "
-
         ]
     },
     bio:{
         type:String,
-      
         minlength:[150,"Bio must less then 150 words"]
     },
     profileImage: {
-        type: String,  
-       
+            type: String,  
     },
     coverImage: {
-        type: String,  
-       
+            type: String,  
     },
     links:[
         {
          platform:{
           type:String,
-         
          },
          urls:{
             type:String,
-           
          }
     }],
        
-        default: []
+
 })
 
 const Userscheam=mongoose.model("User",UserScheam)
