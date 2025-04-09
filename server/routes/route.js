@@ -6,7 +6,7 @@ const bcrypt=require("bcryptjs")
 require('dotenv').config();
 
 route.get("/",(req,res)=>{
-    res.send("Welcome to Sever")
+    res.send("Welcome to Sever Fuck")
 })
 
 //->user-register route
