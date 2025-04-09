@@ -42,9 +42,13 @@ const UserScheam=new mongoose.Schema({
             type:String,
          }
     }],
+    follower:{
+        type:Number,
+        default:0
+    }
        
 
-})
+},{timestamps:true})
 
 const Userscheam=mongoose.model("User",UserScheam)
 module.exports=Userscheam;
