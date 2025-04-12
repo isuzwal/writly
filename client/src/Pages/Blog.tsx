@@ -21,6 +21,7 @@ const Blog=()=>{
     throw new Error
   }
   const {user}=context
+  //-FUNCTION FOT USERCASE LETTER
   const uppercaseletter=(text:string|null)=>{
     if (!text) return "";
     if(text?.charAt(0)===text?.charAt(0).toUpperCase()){
@@ -35,10 +36,10 @@ const Blog=()=>{
     github?: string;
     website?: string;
   };
+  const localDate=new Date().toLocaleDateString();
   
   const linkslist=localStorage.getItem("Links")||"[]"
   const newlink:SocialLink[]=JSON.parse(linkslist) as SocialLink[]
-  const localDate=new Date().toLocaleDateString();
   
   //->opening the Comment Section
    const commentOpen=()=>{
