@@ -1,6 +1,7 @@
 const express=require("express")
 const User=require("../databse/Personschema")
 const Post=require("../databse/PostSchema")
+const {verifytoken,token}=require("../jwt/jwt")
 const route=express.Router()
 const bcrypt=require("bcryptjs")
 
@@ -17,7 +18,7 @@ route.post("/register",async(req,res)=>{
     try{
        const user=await User.findOne({username})
        if(user){
-        return res.status({
+        return res.status(409).json({
             status:"Fali",
             message:"User already Already exits"
         })
@@ -28,10 +29,19 @@ route.post("/register",async(req,res)=>{
       email:email,
       password:hasspassowrd,
   })
-  res.status(201).json({
+    const tokenValue=token({id:newuser._id})
+    res.cookie("auth_token",tokenValue,{
+        httpOnly:true,
+        secure:true,
+        maxAge:10*24*60*60*1000,
+        sameSite:"None"
+     })
+    const { password: _, ...userWithoutPassword } = newuser._doc;
+    res.status(201).json({
     status:"Succes",
+     token:tokenValue,
     data:{
-        user:newuser
+        user:userWithoutPassword
     },
     message:"User is create"
   })
@@ -58,10 +68,21 @@ route.post("/login",async(req,res)=>{
     // comapring the userpassword 
     const comaprepassword=bcrypt.compare(password,user.password) 
   if(comaprepassword){
+     const tokenValue=token({id:user._id})
+     res.cookie("auth_token",tokenValue,{
+        httpOnly:true,
+        secure:true,
+        maxAge:10*24*60*60*1000,
+        sameSite:"None"
+     })
+     //->Remove the password fromt the response data showing case 
+     const {password: _, ...userwithoutPassword}=user._doc
      res.status(200).json({ 
         status:"success",
+        token: tokenValue,
         data:{
-            user
+            user:userwithoutPassword
+
         },
         message:"Login Successfully"
      })
@@ -72,7 +93,7 @@ route.post("/login",async(req,res)=>{
       })
     }
     }catch(e){
-        consol.log("Can't login",e)
+        console.log("Can't login",e)
         res.status(500).json({
             status:"fail",
             message:"Internal Server Errro"
@@ -136,7 +157,7 @@ route.get("/profile/:id",async(req,res)=>{
 })
 
 //-> post route
-route.post("/post",async(req,res)=>{
+route.post("/post" ,verifytoken,async(req,res)=>{
     try{
         const {title,body,image,}=req.body
     if(!title || !body){
