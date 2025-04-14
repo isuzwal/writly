@@ -15,11 +15,11 @@ const Latest=()=>{
   const {user}=context
     const uppercaseletter=(text:string|null)=>{
         if (!text) return "";
-        if(text?.charAt(0)===text?.charAt(0).toUpperCase()){
+        if(text.charAt(0)===text.charAt(0).toUpperCase()){
           return text
         }else{
-       const upperletter=user?.charAt(0).toUpperCase()+text.slice(1)
-         return upperletter
+          return text.charAt(0).toUpperCase() + text.slice(1);
+       
         }
       }
       const localDate=new Date().toLocaleDateString();
@@ -32,7 +32,7 @@ const Latest=()=>{
                 <div className="flex flex-row items-center  text-gray-800 font-dm font-semibold">
                  <img src={ProfiledImage} className="object-cover rounded-full w-9 h-9" />
                    <div className="mt-4  flex-col flex  ">
-                   <span className="text-[12px] ml-1 font-extrabold">{uppercaseletter(user)}</span>
+                   <span className="text-[12px] ml-1 font-extrabold">{uppercaseletter(user?.username)}</span>
                    <p className="text-[9px] font-bold">{localDate}</p>
                    </div>
                 </div>

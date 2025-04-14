@@ -4,11 +4,11 @@ import { Link } from "react-router";
 import { UserContext } from "../UserAuth/User"
 import { useNavigate } from "react-router";
 function Register(){
-    const [userName,setUserName]=useState<string>("")
+    const [username,setUserName]=useState<string>("")
     const [email,setEmail]=useState<string>()
     const [password,setPassword]=useState<string>("")
     const [loading,setLoading]=useState<boolean>(false)
-    const [error,setError]=useState<boolean>(false)
+    const [error,setError]=useState<string |null>(null)
     // checking the context is define or not .
     const context=useContext(UserContext)
     if(!context){
@@ -17,27 +17,39 @@ function Register(){
     // nagavation
     const navgation=useNavigate()
     const {setUser}=context
-    const register=(event:React.FormEvent)=>{
+
+    const register=async(event:React.FormEvent)=>{
        event.preventDefault()
         try{
             setLoading(true)
-            setUser(userName)
+            setUser(username)
             // Sav the useDetalis for Temp
-              localStorage.setItem("username",userName)
-              localStorage.setItem("useremail",email||"")
-              localStorage.setItem("paswword",password)
-            console.log("Password before clearing:", password);
-            console.log("UserName before clearing:", userName);
-            console.log("Email before clearing:", email);
-            navgation("/")
+            const response=await fetch(`${import.meta.env.VITE_BACKEND_URL}/register`,{
+              method:'POST',
+              headers:{
+                'Content-Type':'application/json',
+              },
+              body:JSON.stringify({
+                   username:username,
+                   email:email,
+                   password:password
+              }),
+              credentials: "include" 
+            })
+            //->checking the response is !ok
+             if(!response.ok){
+              throw new Error ("Register failed! Please check your credentain")
+             }
+             const data=await response.json()
+             console.log("User Data is ",data)
+             setUser(username);
+            navgation("/blog")
             setEmail("")
             setPassword("")
             setUserName("")
-            
-            alert("Registration successful!");
         }catch(error){
             console.log("Error",error)
-            setError(true)
+            setError((error as Error).message || "Something went wrong. Please try again.");
         }finally{
             setLoading(false)
         }
@@ -49,7 +61,7 @@ function Register(){
              <h1 className="text-xl font-semibold text-center font-mono">Register</h1>
             <div className="flex flex-col  text-start">
           <label className="font-mono font-medium ">UserName
-            <input type="text" value={userName} onChange={(e)=>setUserName(e.target.value)} placeholder="Enter your username"
+            <input type="text" value={username} onChange={(e)=>setUserName(e.target.value)} placeholder="Enter your username"
            className=" w-full  border px-3 py-1 rounded-md  placeholder:text-sm" />
           </label>
          </div>

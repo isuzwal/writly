@@ -3,7 +3,6 @@ import { useContext, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { UserContext } from "../UserAuth/User";
 import { FaUserCircle } from "react-icons/fa";
-import { useEffect } from "react";
 import CoverImage from "../assets/download.jpeg"
 import ProfiledImage from "../assets/discord.jpeg"
 import { IoIosSettings } from "react-icons/io";
@@ -28,24 +27,19 @@ function Nava(){
       throw new Error
     }
     // this for temp will change from backend
-    const {user,setUser}=context
-    useEffect(()=>{
-      const  Storeuser=localStorage.getItem("username")
-      if(Storeuser){
-         setUser(Storeuser)
-      }
-    },[setUser])
+    const {user}=context
+  
     //->Menubar function
     const ToogleMunebar=()=>{
         setIsOpen(prev=>!prev)
     }
     // Convert the First Letter to Uppercase
     function Uppercase(text:string){
-      if(text?.charAt(0)===text.charAt(0).toUpperCase()){
+      if(text.charAt(0)===text.charAt(0).toUpperCase()){
         return text;
       }else{
-        const upperletter=user?.charAt(0).toUpperCase()+text.slice(1)
-        return upperletter;
+        return text.charAt(0).toUpperCase() + text.slice(1);
+       
       }
     }
     //for the theme section
@@ -80,13 +74,13 @@ function Nava(){
                         <div  onClick={ToogleMunebar}
                         className={` flex gap-2 justify-between    px-4 py-1.5 cursor-pointer rounded-lg   ${themeStyles[theme as keyof typeof themeStyles]}`}>
                       <img src={ProfiledImage} className="object-cover w-7 h-7   rounded-lg"  />    
-                      <span className="font-mono  font-medium text-[18px]">{user}</span>
+                      <span className="font-mono  font-medium text-[18px]">{(user?.username)}</span>
                         </div>
                       {IsOpen && (
                        <div className={`absolute  w-72 top-[49px]  h-[320px] right-0   bg-slate-100 shadow-lg rounded-b-lg z-50  ${themeStyles[theme as keyof typeof themeStyles]}`}>
                               <div className="flex flex-col gap-4 p-3">
                               <div className="flex  w-full  items-center border hover:bg-slate-300 font-dm font-semibold text-xl  gap-2 px-2 py-1.5 rounded-lg">
-                               <span className="font-dm text-[19px]">{Uppercase(user)}</span>
+                               <span className="font-dm text-[19px]">{Uppercase(user?.username)}</span>
                               </div>
                               <Link to="/account/profile" className="flex  items-center border  hover:bg-slate-300 font-dm font-semibold text-xl  gap-2 px-2 py-1.5 rounded-lg ">
                              <FaUserCircle  size={28} color="gray"/>Profile</Link>
@@ -153,7 +147,7 @@ function Nava(){
                               {/*Account Part */}
                               <div className="flex flex-col gap-2 ">
                               <div className="flex  w-full  hover:bg-slate-300 items-center border font-dm font-semibold text-xl  gap-2 px-2 py-1.5 rounded-lg">
-                               <span className="font-dm text-[19px]">{Uppercase(user)}</span>
+                               <span className="font-dm text-[19px]">{Uppercase(user?.username)}</span>
                               </div>
                              <Link to="/account/profile" className="flex  hover:bg-slate-300  items-center border   font-dm font-semibold text-xl  gap-2 px-2 py-1.5 rounded-lg ">
                              <FaUserCircle  size={28} color="gray"/>Profile</Link>
