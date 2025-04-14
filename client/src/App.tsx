@@ -21,7 +21,6 @@ function App() {
   }
   const {setUser,user}=context
   const [loading, setLoading] = useState(true);
-  console.log("User first place",user)
   useEffect(()=>{
     const checkinguser=async()=>{
 try{
@@ -34,7 +33,7 @@ try{
   })
   if (response.ok) {
     const data = await response.json();
-    context.setUser(data.user); // 
+    context.setUser(data.user); 
   } else {
     context.setUser(null);
   }
