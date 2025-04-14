@@ -5,6 +5,8 @@ const {verifytoken,token}=require("../jwt/jwt")
 const route=express.Router()
 const bcrypt=require("bcryptjs")
 
+
+
 require('dotenv').config();
 
 route.get("/",(req,res)=>{
@@ -14,7 +16,6 @@ route.get("/",(req,res)=>{
 //->user-register route
 route.post("/register",async(req,res)=>{
     const {username,email,password}=req.body
-    
     try{
        const user=await User.findOne({username})
        if(user){
@@ -23,7 +24,7 @@ route.post("/register",async(req,res)=>{
             message:"User already Already exits"
         })
        }
-     const hasspassowrd=await bcrypt.hash(password,12)
+      const hasspassowrd=await bcrypt.hash(password,12)
       const newuser= await User.create({
       username:username,
       email:email,
@@ -32,14 +33,16 @@ route.post("/register",async(req,res)=>{
     const tokenValue=token({id:newuser._id})
     res.cookie("auth_token",tokenValue,{
         httpOnly:true,
-        secure:true,
+        secure: true,
+        // secure:process.env.NODE_ENV==="production",
         maxAge:10*24*60*60*1000,
-        sameSite:"None"
+        sameSite:"None",
+        path:"/"
      })
     const { password: _, ...userWithoutPassword } = newuser._doc;
     res.status(201).json({
     status:"Succes",
-     token:tokenValue,
+    token:tokenValue,
     data:{
         user:userWithoutPassword
     },
@@ -59,94 +62,60 @@ route.post("/login",async(req,res)=>{
     try{
     const user=await User.findOne({username})
     if(!user){
-        res.status(404).json({
+       return res.status(404).json({
             status:"fail",
             message:"user not found"
         })
       
     }
+    console.log("User find ",user)
     // comapring the userpassword 
-    const comaprepassword=bcrypt.compare(password,user.password) 
-  if(comaprepassword){
+    const comaprePassword=await bcrypt.compare(password,user.password) 
+    if(!comaprePassword){
+        return res.status(404).json({
+            status:"fail",
+            message:"Incorrect username or Password "
+        })
+    }
      const tokenValue=token({id:user._id})
      res.cookie("auth_token",tokenValue,{
         httpOnly:true,
-        secure:true,
+        // secure: process.env.NODE_ENV === "production",
+        secure: true,
         maxAge:10*24*60*60*1000,
-        sameSite:"None"
+        sameSite:"None",
+        path:"/"
      })
+     console.log("Profile route accessed");
+     console.log("Cookies received:", req.cookies);
+     console.log("User from token:", req.user);
      //->Remove the password fromt the response data showing case 
-     const {password: _, ...userwithoutPassword}=user._doc
      res.status(200).json({ 
         status:"success",
         token: tokenValue,
         data:{
-            user:userwithoutPassword
-
+            user
         },
         message:"Login Successfully"
      })
-    }else{
-      res.status(400).json({
-      status:"fail",
-      message:"Username and password wrong"
-      })
-    }
     }catch(e){
         console.log("Can't login",e)
         res.status(500).json({
             status:"fail",
-            message:"Internal Server Errro"
+            message:"Internal Server Error"
         })
     }
 })
-//->for the Profile by the id 
-route.get("/profile/:id",async(req,res)=>{
-    try{
-        const user= await User.findById((req.params.id));
-        if (!user) {
-            return res.status(404).json({
-                status: "fail",
-                message: "User not found"
-            });
-        }
-         res.status(200).json({
-            status:"succes",
-            data:{
-                user
-                }
-         })
-    }catch(e){
-        console.log("Can't find user",e)
-        res.status(500).json({
-            status:"fail",
-            message:"Sever Error"
-        })
-    }
-})
-//->Profile of the usres
 
-route.get("/profile/:id",async(req,res)=>{
+// //->Profile of the usres
+route.get("/profile", verifytoken,async(req,res)=>{
     try{
-        //-> first get user
-      const user = await User.findById(req.params.id).select("-password");//-> select tell that do not send the password to response 
-        
-      if (!user) {
+       const user=await User.findById(req.user.id).select("-password")
+       if(!user){
         return res.status(404).json({ error: "User not found" });
-      }
-      const userAllpost = await Post.find({ author: req.params.id });
-     if(!userAllpost){
-        return res.status(404).json({
-         error:"Can't get user profile"
-         })
-       }
-      res.status(200).json({
-      status:"success",
-      data:{
-        user,//->user
-        userAllpost //-> and posts
-       }
-     })
+       } 
+     console.log("From the Profile Route",user)
+      res.status(200).json({user})
     }catch(e){
         console.log("Can't find user",e)
         res.status(500).json({
@@ -169,8 +138,7 @@ route.post("/post" ,verifytoken,async(req,res)=>{
         title,
         body,
         Image:image,
-        // this will be change by Jwt auth token 
-        author:"67f6e79ccbd964ea0101ec84"
+        author:req.user.id
     })
     const postsaved=await newPost.save()
     res.status(200).json({
@@ -185,7 +153,6 @@ route.post("/post" ,verifytoken,async(req,res)=>{
             error:"Server error"
         })
     }
-
 })
 // --> get all post
 route.get("/blog",async(req,res)=>{
