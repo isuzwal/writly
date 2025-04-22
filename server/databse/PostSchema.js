@@ -1,18 +1,13 @@
 const mongoose=require("mongoose")
 
 const post=new mongoose.Schema({
-      title:
+   content:
       {
          type:String,
          required:[true,"Post must have title"],
          maxlength:150,
        },
-      body:
-      {
-         type:String,
-         required:true,
-      },
-      author:
+      user:
       {
          type:mongoose.Schema.Types.ObjectId,
          ref:"User",
@@ -23,21 +18,18 @@ const post=new mongoose.Schema({
          type:String,
       },
       likes: 
-      {
-         type: Number,
-         default: 0, 
-      },
+      [{
+       type: mongoose.Schema.Types.ObjectId,
+       ref: "User"
+      }],
       comments:
       [{
          user:{
          type:mongoose.Schema.Types.ObjectId,
          ref:"User",
       },
-      text:
-      {
-         type:String,
-         required:true,
-      },
+      text:String,
+      createdAt:{type:Date,},
       }],
       createdAt: 
       {

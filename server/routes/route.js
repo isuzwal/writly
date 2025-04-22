@@ -86,9 +86,7 @@ route.post("/login",async(req,res)=>{
         sameSite:"None",
         path:"/"
      })
-     console.log("Profile route accessed");
-     console.log("Cookies received:", req.cookies);
-     console.log("User from token:", req.user);
+
      //->Remove the password fromt the response data showing case 
      res.status(200).json({ 
         status:"success",
@@ -114,7 +112,7 @@ route.get("/profile", verifytoken,async(req,res)=>{
        if(!user){
         return res.status(404).json({ error: "User not found" });
        } 
-     console.log("From the Profile Route",user)
+    
       res.status(200).json({user})
     }catch(e){
         console.log("Can't find user",e)
@@ -124,7 +122,29 @@ route.get("/profile", verifytoken,async(req,res)=>{
         })
     }
 })
-
+//-> updata route fro profile for all Field
+route.put("/profile/:id",async (req,res)=>{
+    try{
+ 
+  const userUpdata= await User.findByIdAndUpdate(
+    req.params.id,
+    {$set:req.body},
+    {new:true}
+  )
+  res.status(200).json({
+    status:"Success",
+    data:{ 
+        userUpdata
+    }
+  })
+    }catch(e){
+        console.log("Cant updata",e)
+        res.status(500).json({
+            status:"Fail",
+            message:"Interal Sever Error"
+        })
+    }
+})
 //-> post route
 route.post("/post" ,verifytoken,async(req,res)=>{
     try{

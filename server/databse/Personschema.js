@@ -12,12 +12,12 @@ const UserScheam=new mongoose.Schema({
         required:true,
         unique:true,
         match:[/^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-      "Please enter a valid email address."]
+          "Please enter a valid email address."]
     },
     password:{
         type:String,
         required:true,
-        minlength:[8,"Paaword must be least 8 characters long"],
+        minlength:[8,"Paaword must be at  least 8 characters long"],
         match:[ 
             /^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z\d]).+$/,
             "Password must have Upper letter ,number & one special character "
@@ -25,13 +25,15 @@ const UserScheam=new mongoose.Schema({
     },
     bio:{
         type:String,
-        minlength:[150,"Bio must less then 150 words"]
+        default:"I am Lazy ",
     },
     profileImage: {
             type: String,  
+            default:"https://i.pinimg.com/736x/17/df/a4/17dfa4b53172d9742b85bc699c5aeb1d.jpg"
     },
     coverImage: {
-            type: String,  
+            type: String, 
+            default:"https://i.pinimg.com/736x/a5/42/11/a5421117741b0f51f4096f52fd09877a.jpg", 
     },
     links:[
         {
