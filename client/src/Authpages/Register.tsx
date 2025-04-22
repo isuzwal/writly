@@ -36,13 +36,13 @@ function Register(){
               }),
               credentials: "include" 
             })
+       
             //->checking the response is !ok
              if(!response.ok){
               throw new Error ("Register failed! Please check your credentain")
              }
              const data=await response.json()
-             console.log("User Data is ",data)
-             setUser(username);
+             setUser(data.user);
             navgation("/blog")
             setEmail("")
             setPassword("")

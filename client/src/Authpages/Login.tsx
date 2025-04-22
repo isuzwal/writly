@@ -32,8 +32,8 @@ function Login(){
             throw new Error ("Register failed! Please check your credentain")
            }
            const data=await response.json()
-           console.log("User Data is ",data)
-           setUserName(username);
+          
+           setUserName(data.user);
            navgation("/blog")
             setPassword("")
             setUserName("")

@@ -1,4 +1,4 @@
-import {  useContext,useEffect ,useState } from "react";
+import {  useContext,useState } from "react";
 import DiscordImg from "../assets/discord.jpeg"
 import coverImage from "../assets/download.jpeg"
 import ProfiledImage from "../assets/discord.jpeg"
@@ -13,7 +13,7 @@ const Profile=()=>{
     if(!context){
       throw new Error
     }
-    const {user}=context
+    const {user,setUser}=context
     const [ProfileImage,setProfileImage]=useState<string>("")
     const [CoverImage,setCoverImage]=useState<string>("")
     const [Newusername,setUserName]=useState<string>("")
@@ -30,15 +30,16 @@ const Profile=()=>{
     console.log(()=>{
         setProfileImage(ProfileImage)
         setCoverImage(CoverImage)
+        console.log("Your all links",links)
     }
     )
-    useEffect(()=>{
-      const storename=localStorage.getItem("username")
-      const storeBio=localStorage.getItem("Bio")
-      if (storename) setUserName(storename);
-      if (storeBio) setBio(storeBio);
-    },[])
-    console.log("All libks",links)
+    // useEffect(()=>{
+    //   const storename=localStorage.getItem("username")
+    //   const storeBio=localStorage.getItem("Bio")
+    //   if (storename) setUserName(storename);
+    //   if (storeBio) setBio(storeBio);
+    // },[])
+    // console.log("All libks",links)
     // function for the getall Link
     const getallLink=()=>{
            const alllinks=[
@@ -46,7 +47,6 @@ const Profile=()=>{
              {github:githubLink},
              {website:websiteLink},
            ]
-           localStorage.setItem("Links",JSON.stringify(alllinks))
             setlinks(alllinks)   
     } 
     const itemList=[
@@ -55,14 +55,37 @@ const Profile=()=>{
     { label: "Portfolio", value: websiteLink, setValue: setwebsiteLink, placeholder: "Portfolio link" },  
     ] 
     //- temp function to save the Infroamtion
-    const getallInfro=(event:React.FormEvent)=>{
+    const getallInfro=async(event:React.FormEvent)=>{
       event.preventDefault();
       try{
+        const response=await  fetch(`${import.meta.env.VITE_BACKEND_URL}/profile/${user._id}}`,{
+          method:"PUT",
+          headers:{
+           'Content-Type':'application/json',
+       },
+       credentials:"include",
+      body:JSON.stringify({
+        username:Newusername,
+        bio: Bio,
+        profileImage: ProfileImage,
+        coverImage: CoverImage,
+        links: [
+          { platform: "twitter", urls: twitterLink },
+          { platform: "github", urls: githubLink },
+          { platform: "website", urls: websiteLink },
+        ]
+      })
+        })
+        if(!response.ok){
+          throw new Error ("Problems st Saving Profile")
+        }
+        console.log("Response is",response)
+        const data=response.json()
+        setUser(data)
+        console.log("User Upadat datat",data)
         setSaving(true)
         setUserName(Newusername)
         setBio(Bio)
-        localStorage.setItem("username",Newusername)
-        localStorage.setItem("Bio",Bio)
         getallLink();
         setBio("")
         setUserName("")
