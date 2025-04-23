@@ -21,7 +21,7 @@ import 'froala-editor/js/plugins/image_manager.min.js';
 // import { CgWebsite } from "react-icons/cg";
 const Blog=()=>{
   const [IsCommnet,setComment]=useState<boolean>(false)
-
+  const [error,setError]=useState<boolean>(false)
   const location=useLocation()
   const nestedlocation=location.pathname !== "/blog";
   const context=useContext(UserContext)

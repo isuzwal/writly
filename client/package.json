@@ -11,8 +11,9 @@
   },
   "dependencies": {
     "axios": "^1.8.4",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "draft-js": "^0.11.7",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "react-froala-wysiwyg": "^4.5.1",
     "react-icons": "^5.5.0",
     "react-router": "^7.4.1"
