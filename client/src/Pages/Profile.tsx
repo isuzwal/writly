@@ -55,16 +55,16 @@ const Profile=()=>{
     { label: "Portfolio", value: websiteLink, setValue: setwebsiteLink, placeholder: "Portfolio link" },  
     ] 
     //- temp function to save the Infroamtion
-    const getallInfro=async(event:React.FormEvent)=>{
+    const getallInfo=async(event:React.FormEvent)=>{
       event.preventDefault();
       try{
         const response=await  fetch(`${import.meta.env.VITE_BACKEND_URL}/profile/${user._id}}`,{
-          method:"PUT",
+          method:"POST",
           headers:{
            'Content-Type':'application/json',
-       },
-       credentials:"include",
-      body:JSON.stringify({
+          },
+        credentials:"include",
+        body:JSON.stringify({
         username:Newusername,
         bio: Bio,
         profileImage: ProfileImage,
@@ -111,7 +111,7 @@ const Profile=()=>{
     return (
         <section className="py-8 text-center border-2 ">
          <div className="items-center flex flex-col justify-center py-2 gap-2   ">
-            <form onSubmit={getallInfro} className="w-[710px]  md:w-[900px]  ">
+            <form onSubmit={getallInfo} className="w-[710px]  md:w-[900px]  ">
                 <h1 className="text-3xl  p-1  text-start px-8 font-semibold font-dm">Profile</h1>
                  <div className="p-2 sticky top-0  z-30 shadow-sm bg-white m-2 ">
                     <h2 className="text-start font-bold text-md  text-[12px]  sm:text-[16px] md:text-[18px]">Profile Picture</h2>

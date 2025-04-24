@@ -9,6 +9,7 @@ import { Outlet } from "react-router";
 import { useLocation } from "react-router";
 import { NavLink } from "react-router";
 import Post from "./Post";
+import {PostType} from "./PostType";
 // // import { FaXTwitter } from "react-icons/fa6";
 // import { FaGithub } from "react-icons/fa";
 // import { CgWebsite } from "react-icons/cg";
@@ -26,6 +27,7 @@ const Blog=()=>{
     throw new Error
   }
   const {user,uppercaseletter,ISPoped,isPoped}=context;
+  const [post ,setPost]=useState<PostType[]>([])
   // type SocialLink = {
     //   twitter?: string;
     //   github?: string;
@@ -38,7 +40,22 @@ const Blog=()=>{
     const commentOpen=()=>{
       setComment((prevstate)=>!prevstate)
     }
-    
+    // for all post 
+    useEffect(()=>{
+      const fetchPosts = async () => {
+        try {
+          const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/blog`, {
+            credentials: "include",
+          });
+          const data = await res.json();
+          console.log("User data",data.data.post)
+          setPost(data.data.post); 
+        } catch (error) {
+          console.error("Error fetching posts:", error);
+        }
+      };
+      fetchPosts()
+    },[])
     useEffect(() => {
       if (isPoped) {
         document.body.style.overflow = "hidden";
@@ -148,8 +165,8 @@ const Blog=()=>{
                    </div>
                )}
             </div>
-              <div className="flex flex-col border-2 px-2 py-2  m-3 gap-2 shadow-sm rounded-md ">
-              <div className="flex flex-row justify-between p-1 items-center gap-2">
+              <div className="flex  flex-col border-2 px-2 py-2  m-3 gap-2 shadow-sm rounded-md ">
+              <div className="flex  flex-row justify-between p-1 items-center gap-2">
                 <div className="flex flex-row items-center  text-gray-800 font-dm font-semibold">
                  <img src={ProfiledImage} className="object-cover rounded-full w-9 h-9" />
                    <div className="mt-4  flex-col flex  ">
@@ -191,10 +208,30 @@ const Blog=()=>{
                 </span>
                 </div>
                   {IsCommnet&& (
-                    <div className="bg-pink-500 h-32 w-full rounded-md border-2 ">
+                    <div className="h-32 w-full rounded-md border-2 ">
                       <h1>Hello</h1>
                     </div>
                   )}
+                  {post.map((post) => (
+  <div key={post._id} className="mb-4 p-4 rounded-lg shadow bg-white">
+    <p className="text-xs text-gray-500 mt-1">
+      Posted by: {post.user?.username}
+    </p>
+    <h2 className="text-xl font-bold">{post.title}</h2>
+    <p className="text-sm text-gray-700 mb-2">{post.text}</p>
+
+    {post.image && (
+      <img
+        src={post.image} // ✅ This is a full Cloudinary URL from the DB
+        alt="Post"
+        className="w-full max-h-64 object-cover rounded-md mt-2"
+      />
+    )}
+
+   
+  </div>
+))}
+
             </div>
             </div>
                 )}
