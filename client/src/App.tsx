@@ -10,6 +10,7 @@ import Latest from "./Pages/Latest";
 import Following from "./Pages/Following";
 import Popular from "./Pages/Popluar";
 import Home from "./Pages/Home";
+import Post from "./Pages/Post";
 import { UserContext } from "./UserAuth/User";
 import { useContext, useEffect } from "react";
 import { Navigate } from "react-router";
@@ -51,7 +52,6 @@ try{
     <Routes>
     <Route path="/login" element={<Login />} />
     <Route path="/register" element={<Register />} />
-
     <Route path="/" element={<Layout />}>
     <Route index element={user ? <Navigate to ="/blog" />:<Home />} />
     <Route path="blog" element={<Blog />}>
@@ -59,6 +59,7 @@ try{
       <Route path="popular" element={<Popular />} />
       <Route path="following" element={<Following />} />
     </Route>
+    <Route path="post" element={<Post />} />
     <Route path ="/account/profile" element={<Profile />} />
     <Route path ="/account/security" element={<Security />} />
     </Route>
