@@ -4,7 +4,7 @@ const Post=require("../databse/PostSchema")
 const {verifytoken,token}=require("../jwt/jwt")
 const route=express.Router()
 const bcrypt=require("bcryptjs")
-const {cloud,uploadimage} =require("../cloudStroage/cloud")
+const {uploadimage} =require("../cloudStroage/cloud")
 
 
 require('dotenv').config();
@@ -148,18 +148,21 @@ route.put("/profile/:id",async (req,res)=>{
 //-> post route
 route.post("/post" ,verifytoken,async(req,res)=>{
     try{
-        const {content,image,}=req.body
-    if(!content){
-        return res.status(400).json({
-            error:"Content is Requried "
-        })
-    }
+        const {title,text,image,}=req.body
+    // if(){
+    //     return res.status(400).json({
+    //         error:"Content is Requried "
+    //     })
+    // }
     const newPost=new Post({
-        content,
+        title:title,
+        text:text,
         image:image,
-        user:req.user.id
+        user:req.user.id,
+        
     })
     const postsaved=await newPost.save()
+    await postsaved.populate('user', 'username');
     res.status(200).json({
         status:"succes",
         data:{
@@ -191,6 +194,7 @@ route.post("/upload",verifytoken ,uploadimage.single('image'),async(req,res)=>{
 route.get("/blog",async(req,res)=>{
     try{
         const allpost= await Post.find({})
+           .populate('user', 'username image likes comments');
         res.status(200).json({
                status:"sucess",
                data:{
@@ -208,7 +212,7 @@ route.get("/blog",async(req,res)=>{
 route.get("/blog/:id",async(req,res)=>{
     try{
         const post= await Post.findById(req.params.id)
-        .populate("author","username Image",)
+        .populate("author","username usermage",)
         if(!post){
             return  res.status(404).json({error:"Post not found"})
         }

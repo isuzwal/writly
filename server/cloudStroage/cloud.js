@@ -9,12 +9,12 @@ cloud.config({
     api_secret:process.env.API_SECRET
 })
 
-const stroage=new CloudinaryStorage({
+const storage=new CloudinaryStorage({
     cloudinary:cloud, params:{
             folder:'writly',
-            allowed_foramts:['jpg','png','jpeg']
+            allowed_foramts: ['jpg', 'png', 'jpeg']
         
     }
 })
-const uploadimage=multer({stroage})
-module.exports={cloud:cloud,uploadimage}
+const uploadimage = multer({storage})
+module.exports={uploadimage}

@@ -15,7 +15,7 @@ const PORT=process.env.PORT || 8000;
 
 app.use(express.json())
 app.use(cookieParser());
-app.use("/writly",writlyroutes)
+app.use(writlyroutes)
 app.listen(PORT,()=>{
     console.log(`Sever start at Port ${PORT}`)
 })

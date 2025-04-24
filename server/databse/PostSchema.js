@@ -1,11 +1,15 @@
 const mongoose=require("mongoose")
 
 const post=new mongoose.Schema({
-   content:
+   title:
       {
          type:String,
          required:[true,"Post must have title"],
-         maxlength:10000,
+         maxlength:20,
+       },
+      text:{
+         type:String,
+          maxlength:200,
        },
       user:
       {
@@ -13,15 +17,20 @@ const post=new mongoose.Schema({
          ref:"User",
          required:true
       },
+      userimage:{
+         type:mongoose.Schema.Types.ObjectId,
+         ref:'User'
+      },
       image:
       {
+         
          type:String,
+
       },
       likes: 
-      [{
-       type: mongoose.Schema.Types.ObjectId,
-       ref: "User"
-      }],
+      {
+       type: Number,
+      },
       comments:
       [{
          user:{
