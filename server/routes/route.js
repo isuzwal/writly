@@ -4,7 +4,7 @@ const Post=require("../databse/PostSchema")
 const {verifytoken,token}=require("../jwt/jwt")
 const route=express.Router()
 const bcrypt=require("bcryptjs")
-
+const {cloud,uploadimage} =require("../cloudStroage/cloud")
 
 
 require('dotenv').config();
@@ -68,7 +68,7 @@ route.post("/login",async(req,res)=>{
         })
       
     }
-    console.log("User find ",user)
+    
     // comapring the userpassword 
     const comaprePassword=await bcrypt.compare(password,user.password) 
     if(!comaprePassword){
@@ -148,17 +148,16 @@ route.put("/profile/:id",async (req,res)=>{
 //-> post route
 route.post("/post" ,verifytoken,async(req,res)=>{
     try{
-        const {title,body,image,}=req.body
-    if(!title || !body){
+        const {content,image,}=req.body
+    if(!content){
         return res.status(400).json({
-            error:"Title and body are required"
+            error:"Content is Requried "
         })
     }
     const newPost=new Post({
-        title,
-        body,
-        Image:image,
-        author:req.user.id
+        content,
+        image:image,
+        user:req.user.id
     })
     const postsaved=await newPost.save()
     res.status(200).json({
@@ -167,10 +166,24 @@ route.post("/post" ,verifytoken,async(req,res)=>{
             postsaved
         }
     })
+    console.log("Saved Post",postsaved)
     }catch(e){
         console.log("Error at the post",e)
         res.status(500).json({
             error:"Server error"
+        })
+    }
+})
+//--> for image upload
+route.post("/upload",verifytoken ,uploadimage.single('image'),async(req,res)=>{
+    try{
+        const link=req.file.path
+        res.json({ link:link});
+        console.log("Image link",link)
+    }catch(e){
+        res.status(500).json({
+            status:"Fail",
+            msg:"Internal Sever Error"
         })
     }
 })

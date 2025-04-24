@@ -5,7 +5,7 @@ const post=new mongoose.Schema({
       {
          type:String,
          required:[true,"Post must have title"],
-         maxlength:150,
+         maxlength:10000,
        },
       user:
       {
@@ -13,7 +13,7 @@ const post=new mongoose.Schema({
          ref:"User",
          required:true
       },
-      Image:
+      image:
       {
          type:String,
       },
