@@ -1,27 +1,29 @@
-import {  useContext,useState } from "react";
+import {  useContext,useEffect,useState } from "react";
 import DiscordImg from "../assets/discord.jpeg"
 import coverImage from "../assets/download.jpeg"
 import ProfiledImage from "../assets/discord.jpeg"
 import { UserContext } from "../UserAuth/User";
 import { SlLike } from "react-icons/sl";
-import { AiOutlineDislike } from "react-icons/ai";
 import {  FaRegComment } from "react-icons/fa";
 import { CiBookmarkPlus } from "react-icons/ci";
+import { PostType } from "./PostType";
 const Profile=()=>{
 
   const context=useContext(UserContext)
     if(!context){
       throw new Error
     }
-    const {user,setUser}=context
+    const {setUser}=context
     const [ProfileImage,setProfileImage]=useState<string>("")
     const [CoverImage,setCoverImage]=useState<string>("")
     const [Newusername,setUserName]=useState<string>("")
+    const [IsCommnet,setComment]=useState<boolean>(false)
     const [Bio,setBio]=useState<string>("")
     const [githubLink,setGitHubLink]=useState<string>("")
     const [twitterLink,settwitterLink]=useState<string>("")
     const [websiteLink,setwebsiteLink]=useState<string>("")
     const [isSaveing,setSaving]=useState<boolean>(false)
+     const [post ,setPost]=useState<PostType[]>([])
     const [links,setlinks]=useState<{ 
         twitter?: string; 
         github?:  string; 
@@ -58,7 +60,7 @@ const Profile=()=>{
     const getallInfo=async(event:React.FormEvent)=>{
       event.preventDefault();
       try{
-        const response=await  fetch(`${import.meta.env.VITE_BACKEND_URL}/profile/${user._id}}`,{
+        const response=await  fetch(`${import.meta.env.VITE_BACKEND_URL}/profile`,{
           method:"POST",
           headers:{
            'Content-Type':'application/json',
@@ -98,16 +100,28 @@ const Profile=()=>{
         setSaving(false)
       }
     } 
-    const uppercaseletter=(text:string|null)=>{
-      if (!text) return "";
-      if(text.charAt(0)===text.charAt(0).toUpperCase()){
-        return text
-      }else{
-        return text.charAt(0).toUpperCase() + text.slice(1);
-  
-      }
+ 
+    const commentOpen=()=>{
+      setComment((prevstate)=>!prevstate)
     }
-    const localDate=new Date().toLocaleDateString();
+    //get profile od user
+    useEffect(()=>{
+      const getUserProfle=async()=>{
+        try{
+
+          const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/profile/post`,{
+            credentials:"include",
+          })
+          const data = await response.json();
+          console.log("User Post",data.post)
+          setPost(data.post); 
+        }catch(e){
+           console.log("Error at Fetching",e)
+        }      
+      }
+      getUserProfle()
+    },[])
+
     return (
         <section className="py-8 text-center border-2 ">
          <div className="items-center flex flex-col justify-center py-2 gap-2   ">
@@ -175,45 +189,55 @@ const Profile=()=>{
           {/*For the all Post of user*/}
           <div className="border-2 w-[710px]  md:w-[900px] rounded-md ">
             <h1 className="text-start px-4 font-dm font-semibold py-2 underline">Post Section</h1>
-            <div className="flex flex-col     border-2 px-2  m-3 gap-2 shadow-sm rounded-md ">
-            <div className="flex flex-row justify-between p-1 items-center gap-2">
-                <div className="flex flex-row items-center  text-gray-800 font-dm font-semibold">
+            <div className="flex  flex-col  p-1  gap-2   ">
+               {post.map((post) => (
+                <div key={post._id} className="mb-4 p-4 border-b-[1.5px] border-gray-600 shadow bg-white">
+                  <div className="flex  flex-row justify-between p-1 items-center gap-2">
+                  <div className="flex flex-row items-center  text-gray-800 font-dm font-semibold">
                  <img src={ProfiledImage} className="object-cover rounded-full w-9 h-9" />
                    <div className="mt-4  flex-col flex  ">
-                   <span className="text-[12px] ml-1 font-extrabold">{uppercaseletter(user?.username)}</span>
-                   <p className="text-[9px] font-bold">{localDate}</p>
+                   <span className="text-[12px] ml-1 font-extrabold">{post.user?.username}</span>
+                   <p className="text-[9px] font-bold">{new Date(post.createdAt).toLocaleDateString()}</p>
                    </div>
                 </div>
-              </div>
-              <div className="px-2 ">
-                <p className="text-[15px] text-start font-dm ">
-                  Just publicshed my lastest article on React hooks and State management</p>
-               </div>
-              {/**Image section */}
-              <div className=" w-full h-56 rounded-md border-2 overflow-hidden">
-                <img src={ProfiledImage} className="object-cover rounded-md w-full h-full " />
-              </div>
-              <div className="flex flex-row px-2 rounded-sm   border-t-2 items-center gap-2   justify-between">
-                <div className="flex flex-row  py-1  gap-3 justify-center items-center  text-center">
-                <span className="flex gap-1 text-sm items-center cursor-pointer">
-                <SlLike  size={18}/>
-                  <h3 className="font-semibold mt-1 ">5k</h3>
-                </span>
-                <span className="flex gap-1 text-sm items-center cursor-pointer">
-                <AiOutlineDislike size={19} className="mt-1"  />
-                <h3 className="font-semibold mt-1 ">80</h3>
-                </span>
-                <span className="flex items-center text-sm gap-1 cursor-pointer">
-                <FaRegComment  size={19}/>
-                 <h3 className="font-semibold ">150</h3>
-                </span>
+                <div className="p-2">
+                    <button className="bg-black  md:px-4 md:py-1.5 px-3 py-1 flex font-dm font-semibold rounded-md text-white text-[14px] items-center">Follow</button>
                 </div>
+               </div>
+              <div className="px-2  text-start">
+                <span className="text-[18px] text-start font-dm ">{post.title}</span>
+                <p className="text-gray-800 text-[16px]">{post.text}</p>
+               </div>
+
+               <div className="w-full border-2  h-56 overflow-hidden rounded-md">
+                <img src={post.image} 
+                loading="lazy"
+                className="w-full h-full object-cover" />
+               </div>
+               <div className="flex flex-row p-2 items-center border-t-2  rounded-sm  gap-2   justify-between">
+                <div className="flex flex-row   px-2     py-1    gap-3 justify-between w-32  items-center  text-center">
+                <span className="flex gap-2   text-sm items-center cursor-pointer">
+                <SlLike  size={18}/>
+                  <h3 className="font-semibold mt-1 ">{post.like}</h3>
+                </span>
+                <span onClick={commentOpen}
+                 className="flex items-center text-sm gap-1 cursor-pointer">
+                   <FaRegComment  size={19}/>
+                   <h3 className="font-semibold ">{post.comment?.length}</h3>
+                   </span>
+                   </div>
                 <span className="flex text-sm cursor-pointer ">
                 <CiBookmarkPlus  size={20}/>
                 </span>
-              </div>
+                </div>
+                {IsCommnet&& (
+                    <div className="h-32 w-full rounded-md border-2 ">
+                      <h1>Hello</h1>
+                    </div>
+                  )}
+             </div>  
+          ))}
             </div>
-            
           </div>
         </div>
 </section>

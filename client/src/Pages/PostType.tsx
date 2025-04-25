@@ -3,10 +3,15 @@ export type PostType = {
     title: string;
     text: string;
     image?: string;
+    createdAt:string;
+    like:number;
+    comment:[];
     user?: {
       username?: string;
       _id?: string;
+      image:string;
     };
    
   };
-   
+
+  
