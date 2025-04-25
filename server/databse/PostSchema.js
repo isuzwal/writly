@@ -22,15 +22,17 @@ const post=new mongoose.Schema({
          ref:'User'
       },
       image:
-      {
-         
+      { 
          type:String,
-
       },
-      likes: 
+      likes:[ 
       {
-       type: Number,
-      },
+       user:{
+         type:mongoose.Schema.Types.ObjectId,
+         ref:"User",
+        },
+        likes: Number,
+      }],
       comments:
       [{
          user:{

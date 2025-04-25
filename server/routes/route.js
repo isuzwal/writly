@@ -106,14 +106,15 @@ route.post("/login",async(req,res)=>{
 })
 
 // //->Profile of the usres
-route.get("/profile", verifytoken,async(req,res)=>{
+route.get("/profile/post", verifytoken,async(req,res)=>{
     try{
-       const user=await User.findById(req.user.id).select("-password")
-       if(!user){
-        return res.status(404).json({ error: "User not found" });
+       const post=await Post.find({user:req.user.id})
+       .populate("user","username userimage",)
+       if(!post){
+        return res.status(404).json({ error: "Post not found" });
        } 
     
-      res.status(200).json({user})
+      res.status(200).json({post})
     }catch(e){
         console.log("Can't find user",e)
         res.status(500).json({
@@ -122,29 +123,7 @@ route.get("/profile", verifytoken,async(req,res)=>{
         })
     }
 })
-//-> updata route fro profile for all Field
-route.put("/profile/:id",async (req,res)=>{
-    try{
- 
-  const userUpdata= await User.findByIdAndUpdate(
-    req.params.id,
-    {$set:req.body},
-    {new:true}
-  )
-  res.status(200).json({
-    status:"Success",
-    data:{ 
-        userUpdata
-    }
-  })
-    }catch(e){
-        console.log("Cant updata",e)
-        res.status(500).json({
-            status:"Fail",
-            message:"Interal Sever Error"
-        })
-    }
-})
+
 //-> post route
 route.post("/post" ,verifytoken,async(req,res)=>{
     try{
@@ -212,7 +191,7 @@ route.get("/blog",async(req,res)=>{
 route.get("/blog/:id",async(req,res)=>{
     try{
         const post= await Post.findById(req.params.id)
-        .populate("author","username usermage",)
+        .populate("user","username usermage",)
         if(!post){
             return  res.status(404).json({error:"Post not found"})
         }
