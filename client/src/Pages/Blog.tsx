@@ -2,13 +2,13 @@ import { useContext, useState ,useEffect} from "react";
 import ProfiledImage from "../assets/discord.jpeg"
 import { UserContext } from "../UserAuth/User";
 import { SlLike } from "react-icons/sl";
-
 import {  FaRegComment } from "react-icons/fa";
 import { CiBookmarkPlus } from "react-icons/ci";
 import { Outlet } from "react-router";
 import { useLocation } from "react-router";
-import { NavLink } from "react-router";
+import { NavLink ,Link } from "react-router";
 import Post from "./Post";
+import Userlist from "./userlist";
 import {PostType} from "./PostType";
 // // import { FaXTwitter } from "react-icons/fa6";
 // import { FaGithub } from "react-icons/fa";
@@ -166,15 +166,15 @@ const Blog=()=>{
             </div>
            
               <div className="flex  flex-col border-x-[1.5px]  border-gray-500 p-1 m-2 gap-2   ">
-               {post.map((post) => (
-                <div key={post._id} className="mb-4 p-4 border-b-[1.5px] border-gray-600 shadow bg-white">
-                  <div className="flex  flex-row justify-between p-1 items-center gap-2">
-                  <div className="flex flex-row items-center  text-gray-800 font-dm font-semibold">
-                 <img src={ProfiledImage} className="object-cover rounded-full w-9 h-9" />
-                   <div className="mt-4  flex-col flex  ">
-                   <span className="text-[12px] ml-1 font-extrabold">{post.user?.username}</span>
-                   <p className="text-[9px] font-bold">{new Date(post.createdAt).toLocaleDateString()}</p>
-                   </div>
+               {post.map((post,index) => (
+                <Link key={index} to={`/blog/${post._id}`} className=" p-1 border-b-[1.5px] cursor-pointer hover:bg-slate-200  transition-all ease-in-out duration-300  bg-opacity-50 border-gray-600 shadow bg-white">
+                   <div className="flex  flex-row justify-between p-1 items-center gap-2">
+                    <div className="flex flex-row items-center  text-gray-800 font-dm font-semibold">
+                     <img src={ProfiledImage} className="object-cover rounded-full w-9 h-9" />
+                     <div className="mt-4  flex-col flex  ">
+                     <span className="text-[12px] ml-1 font-extrabold">{post.user?.username}</span>
+                     <p className="text-[9px] font-bold">{new Date(post.createdAt).toLocaleDateString()}</p>
+                    </div>
                 </div>
                 <div className="p-2">
                     <button className="bg-black  md:px-4 md:py-1.5 px-3 py-1 flex font-dm font-semibold rounded-md text-white text-[14px] items-center">Follow</button>
@@ -211,14 +211,14 @@ const Blog=()=>{
                       <h1>Hello</h1>
                     </div>
                   )}
-             </div>  
+             </Link>  
           ))}
             </div>
             </div>
         )}
         </div>
           <div className="md:col-span-1 hidden  text-center  md:block">
-            <h1 className="font-dm font-semiboldt">Comming Sonn !</h1>
+            <Userlist />
             </div>
         </div>
 

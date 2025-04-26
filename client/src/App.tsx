@@ -11,6 +11,8 @@ import Following from "./Pages/Following";
 import Popular from "./Pages/Popluar";
 import Home from "./Pages/Home";
 import Post from "./Pages/Post";
+import Singelpost from "./Pages/SinglePost";
+import UserProfile from "./Pages/Userprofile";
 import { UserContext } from "./UserAuth/User";
 import { useContext, useEffect } from "react";
 import { Navigate } from "react-router";
@@ -34,7 +36,7 @@ try{
   })
   if (response.ok) {
     const data = await response.json();
-    context.setUser(data.user); 
+    context.setUser(data.userInfo); 
   } else {
     context.setUser(null);
   }
@@ -58,6 +60,8 @@ try{
       <Route path="latest" element={<Latest />} />
       <Route path="popular" element={<Popular />} />
       <Route path="following" element={<Following />} />
+      <Route path=":id" element={<Singelpost/>} />
+      <Route path="user/:id" element={<UserProfile/>} />
     </Route>
     <Route path="post" element={<Post />} />
     <Route path ="/account/profile" element={<Profile />} />

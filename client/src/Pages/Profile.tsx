@@ -60,7 +60,7 @@ const Profile=()=>{
     const getallInfo=async(event:React.FormEvent)=>{
       event.preventDefault();
       try{
-        const response=await  fetch(`${import.meta.env.VITE_BACKEND_URL}/profile`,{
+        const response=await  fetch(`${import.meta.env.VITE_BACKEND_URL}/profile/update`,{
           method:"POST",
           headers:{
            'Content-Type':'application/json',
