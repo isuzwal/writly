@@ -44,12 +44,19 @@ const UserScheam=new mongoose.Schema({
             type:String,
          }
     }],
-    follower:{
-        type:Number,
-        default:0
-    }
-       
-
+    follower:[{
+        user:{
+          type:mongoose.Schema.Types.ObjectId,
+          ref:"User",
+         },
+        people:Number
+    }],
+    post:
+        {
+         type:mongoose.Schema.Types.ObjectId,
+         ref:"Post",
+         required:true
+        },
 },{timestamps:true})
 
 const Userscheam=mongoose.model("User",UserScheam)

@@ -6,7 +6,6 @@ const route=express.Router()
 const bcrypt=require("bcryptjs")
 const {uploadimage} =require("../cloudStroage/cloud")
 
-
 require('dotenv').config();
 
 route.get("/",(req,res)=>{
@@ -56,7 +55,7 @@ route.post("/register",async(req,res)=>{
         })
     }
 })
-//-> for ther login  route
+//->login  route
 route.post("/login",async(req,res)=>{
     const {username,password}=req.body
     try{
@@ -104,8 +103,7 @@ route.post("/login",async(req,res)=>{
         })
     }
 })
-
-// //->Profile of the usres
+//->Post of the user
 route.get("/profile/post", verifytoken,async(req,res)=>{
     try{
        const post=await Post.find({user:req.user.id})
@@ -123,7 +121,26 @@ route.get("/profile/post", verifytoken,async(req,res)=>{
         })
     }
 })
+//-> user Prfile
+route.get("/profile",verifytoken,async(req,res)=>{
+    try{
+        const newuser=await User.findById(req.user.id)
+        if(!newuser){
+           return  res.status(204).json({status:"Fail",msg:"User not Found"})
+        }
+        const {password ,...user}=newuser._doc
+        res.status(200).json({
+            status:"Success",
+             userInfo:user
 
+        })
+    }catch(e){
+        console.log("Error at Profile route",e)
+        res.status(500).json({
+            status:"Fail",
+            msg:"Internal Error"})
+        }
+})
 //-> post route
 route.post("/post" ,verifytoken,async(req,res)=>{
     try{
@@ -148,7 +165,7 @@ route.post("/post" ,verifytoken,async(req,res)=>{
             postsaved
         }
     })
-    console.log("Saved Post",postsaved)
+ 
     }catch(e){
         console.log("Error at the post",e)
         res.status(500).json({
@@ -170,7 +187,7 @@ route.post("/upload",verifytoken ,uploadimage.single('image'),async(req,res)=>{
     }
 })
 // --> get all post
-route.get("/blog",async(req,res)=>{
+route.get("/blog", verifytoken,async(req,res)=>{
     try{
         const allpost= await Post.find({})
            .populate('user', 'username image likes comments');
@@ -188,15 +205,15 @@ route.get("/blog",async(req,res)=>{
     }
 })
 //--> for the single post show case
-route.get("/blog/:id",async(req,res)=>{
+route.get("/blog/:id",verifytoken,async(req,res)=>{
     try{
         const post= await Post.findById(req.params.id)
-        .populate("user","username usermage",)
+        .populate("user","username userimage",)
         if(!post){
             return  res.status(404).json({error:"Post not found"})
         }
         res.status(200).json({
-            status:"succes",
+            status:"success",
             data:{
                 post
             }
@@ -205,5 +222,55 @@ route.get("/blog/:id",async(req,res)=>{
         console.log("Error at Fetching Post",e)
         res.status(500).json({"error":"Server Error"})
     }
+})
+//->user
+route.get("/user",verifytoken,async(req,res)=>{
+    try{
+        const userlist=await User.find({})
+        if(userlist.length==0) {
+             return  res.status(404).json({
+                status:"Fail",
+                msg:"No user lsit"
+            })
+        }
+        const sanitizedUsers = userlist.map(user => {
+            const { password, ...rest } = user._doc; // -> remove the password 
+            return rest;
+          });
+        res.status(200).json({
+            status:"Success",
+            user:sanitizedUsers
+        })
+       
+    }catch(e){
+        console.log("Error at Fetching user",e)
+        res.status(500).json({
+             status:"Fail",
+              msg:"Internal Server Error"
+            })
+     }
+})
+//-> for single user
+route.get("/blog/user/:id",verifytoken,async(req,res)=>{
+    try{
+        const userInfo=await User.findById(req.params.id)
+          if(!userInfo){
+             return   res.status(404).json({
+                status:'Faile',
+               msg:"User Info can't Fetch"
+            })
+          }
+          const {password ,...user}=userInfo._doc
+         res.status(200).json({
+             status:"Success",
+             userInfo:user
+
+        })
+    }catch(e){
+        console.log("Error at Profile route",e)
+        res.status(500).json({
+            status:"Fail",
+            msg:"Internal Error"})
+        }
 })
 module.exports=route
