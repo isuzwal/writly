@@ -51,12 +51,10 @@ const UserScheam=new mongoose.Schema({
          },
         people:Number
     }],
-    post:
-        {
+    post:[{
          type:mongoose.Schema.Types.ObjectId,
          ref:"Post",
-         required:true
-        },
+        }],
 },{timestamps:true})
 
 const Userscheam=mongoose.model("User",UserScheam)

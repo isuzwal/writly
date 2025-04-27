@@ -103,28 +103,11 @@ route.post("/login",async(req,res)=>{
         })
     }
 })
-//->Post of the user
-route.get("/profile/post", verifytoken,async(req,res)=>{
-    try{
-       const post=await Post.find({user:req.user.id})
-       .populate("user","username userimage",)
-       if(!post){
-        return res.status(404).json({ error: "Post not found" });
-       } 
-    
-      res.status(200).json({post})
-    }catch(e){
-        console.log("Can't find user",e)
-        res.status(500).json({
-            status:"fail",
-            message:"Server Error"
-        })
-    }
-})
-//-> user Prfile
+
+//-> user  Profile route 
 route.get("/profile",verifytoken,async(req,res)=>{
     try{
-        const newuser=await User.findById(req.user.id)
+        const newuser=await User.findById(req.user.id).populate('post')
         if(!newuser){
            return  res.status(204).json({status:"Fail",msg:"User not Found"})
         }
@@ -145,27 +128,24 @@ route.get("/profile",verifytoken,async(req,res)=>{
 route.post("/post" ,verifytoken,async(req,res)=>{
     try{
         const {title,text,image,}=req.body
-    // if(){
-    //     return res.status(400).json({
-    //         error:"Content is Requried "
-    //     })
-    // }
     const newPost=new Post({
         title:title,
         text:text,
         image:image,
-        user:req.user.id,
-        
+        user:req.user.id,   
     })
     const postsaved=await newPost.save()
     await postsaved.populate('user', 'username');
+    // adding the user post to userScheama
+    await User.findByIdAndUpdate(req.user.id,{
+        $push:{post:postsaved._id}
+    });
     res.status(200).json({
         status:"succes",
         data:{
             postsaved
         }
     })
- 
     }catch(e){
         console.log("Error at the post",e)
         res.status(500).json({
@@ -178,7 +158,7 @@ route.post("/upload",verifytoken ,uploadimage.single('image'),async(req,res)=>{
     try{
         const link=req.file.path
         res.json({ link:link});
-        console.log("Image link",link)
+       
     }catch(e){
         res.status(500).json({
             status:"Fail",
@@ -207,8 +187,7 @@ route.get("/blog", verifytoken,async(req,res)=>{
 //--> for the single post show case
 route.get("/blog/:id",verifytoken,async(req,res)=>{
     try{
-        const post= await Post.findById(req.params.id)
-        .populate("user","username userimage",)
+        const post= await Post.findById(req.params.id).populate("user")
         if(!post){
             return  res.status(404).json({error:"Post not found"})
         }
@@ -254,9 +233,10 @@ route.get("/user",verifytoken,async(req,res)=>{
 route.get("/blog/user/:id",verifytoken,async(req,res)=>{
     try{
         const userInfo=await User.findById(req.params.id)
+        .populate("post", "title text image like comment createdAt")
           if(!userInfo){
              return   res.status(404).json({
-                status:'Faile',
+                status:'Fail',
                msg:"User Info can't Fetch"
             })
           }
