@@ -3,8 +3,6 @@ import { useContext, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { UserContext } from "../UserAuth/User";
 import { FaUserCircle } from "react-icons/fa";
-import CoverImage from "../assets/download.jpeg"
-import ProfiledImage from "../assets/discord.jpeg"
 import { IoIosSettings } from "react-icons/io";
 import { ThemeContex } from "../Theme/Theme";
 import { themeoptions } from "../Theme/Theme";
@@ -73,7 +71,7 @@ function Nava(){
                       className="flex gap-2 justify-between ">
                         <div  onClick={ToogleMunebar}
                         className={` flex gap-2 justify-between    px-4 py-1.5 cursor-pointer rounded-lg   ${themeStyles[theme as keyof typeof themeStyles]}`}>
-                      <img src={ProfiledImage} className="object-cover w-7 h-7   rounded-lg"  />    
+                      <img src={user.profileImage} className="object-cover w-7 h-7   rounded-lg"  />    
                       <span className="font-mono  font-medium text-[18px]">{(user?.username)}</span>
                         </div>
                       {IsOpen && (
@@ -138,10 +136,10 @@ function Nava(){
                           <div className=" flex  flex-col rounded-md h-[390px]  gap-2  px-2 cursor-pointer relative  py-1.5">
                             <div className="flex  relative flex-col items-center  gap-2   px-2  py-3 rounded-md">
                              <div className=" w-full h-20  rounded">
-                             <img src={CoverImage} className="object-cover w-full h-full  rounded "  />    
+                             <img src={user.CoverImage} className="object-cover w-full h-full  rounded "  />    
                               </div>
                               <div className=" absolute  z-30 rounded-r-2xl left-2 ">
-                              <img src={ProfiledImage} className="  rounded-r-2xl object-cover w-20 h-full  "  />  
+                              <img src={user.profileImage} className="  rounded-r-2xl object-cover w-20 h-full  "  />  
                               </div>
                             </div>
                               {/*Account Part */}

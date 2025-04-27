@@ -1,7 +1,4 @@
-import {  useContext,useEffect,useState } from "react";
-import DiscordImg from "../assets/discord.jpeg"
-import coverImage from "../assets/download.jpeg"
-import ProfiledImage from "../assets/discord.jpeg"
+import {  useContext,useState } from "react";
 import { UserContext } from "../UserAuth/User";
 import { SlLike } from "react-icons/sl";
 import {  FaRegComment } from "react-icons/fa";
@@ -13,7 +10,8 @@ const Profile=()=>{
     if(!context){
       throw new Error
     }
-    const {setUser}=context
+    const {user,setUser}=context
+    console.log("User post only",user.post)
     const [ProfileImage,setProfileImage]=useState<string>("")
     const [CoverImage,setCoverImage]=useState<string>("")
     const [Newusername,setUserName]=useState<string>("")
@@ -23,7 +21,6 @@ const Profile=()=>{
     const [twitterLink,settwitterLink]=useState<string>("")
     const [websiteLink,setwebsiteLink]=useState<string>("")
     const [isSaveing,setSaving]=useState<boolean>(false)
-     const [post ,setPost]=useState<PostType[]>([])
     const [links,setlinks]=useState<{ 
         twitter?: string; 
         github?:  string; 
@@ -56,7 +53,7 @@ const Profile=()=>{
     { label: "GitHub", value: githubLink, setValue: setGitHubLink, placeholder: "GitHub link" },
     { label: "Portfolio", value: websiteLink, setValue: setwebsiteLink, placeholder: "Portfolio link" },  
     ] 
-    //- temp function to save the Infroamtion
+    //- updata the user Proflie api
     const getallInfo=async(event:React.FormEvent)=>{
       event.preventDefault();
       try{
@@ -104,24 +101,6 @@ const Profile=()=>{
     const commentOpen=()=>{
       setComment((prevstate)=>!prevstate)
     }
-    //get profile od user
-    useEffect(()=>{
-      const getUserProfle=async()=>{
-        try{
-
-          const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/profile/post`,{
-            credentials:"include",
-          })
-          const data = await response.json();
-          console.log("User Post",data.post)
-          setPost(data.post); 
-        }catch(e){
-           console.log("Error at Fetching",e)
-        }      
-      }
-      getUserProfle()
-    },[])
-
     return (
         <section className="py-8 text-center border-2 ">
          <div className="items-center flex flex-col justify-center py-2 gap-2   ">
@@ -135,7 +114,7 @@ const Profile=()=>{
                  <div className="relative rounded-xl px-2  h-32 ">
                  <div className="relative   w-full h-20 sm:h-36 md:h-44 lg:h-52 ">
                      <input type="file"  id="coverImageInput" className="hidden" accept="image/*" />
-                     <img src={CoverImage || coverImage}  className="object-cover w-full h-20 sm:h-32  md:h-32 rounded-r-2xl"/>
+                     <img src={CoverImage || user.coverImage}  className="object-cover w-full h-20 sm:h-32  md:h-32 rounded-r-2xl"/>
                      <label htmlFor="coverImageInput" 
                        className="absolute inset-0  bg-opacity-50 opacity-0 group-hover/cover:opacity-100 flex items-center justify-center text-black cursor-pointer bg-gray-700 transition-opacity duration-300">
                        <span>Change Cover</span>
@@ -144,7 +123,7 @@ const Profile=()=>{
                     <div className="absolute left-0 md:left-0 -top-[25.7px] sm:-top-[42.5px] transform translate-y-1/3">
                     <div className="relative w-20 h-20 sm:w-32 sm:h-32  md:w-32 md:h-32 lg:w-32 lg:h-32 rounded-r-xl   overflow-hidden group/profile">
                    <input type="file"  id="profileImageInput"    className="hidden"   accept="image/*" />
-                   <img   src={ProfileImage || DiscordImg}  className="object-cover w-full h-full"   alt="Profile" />
+                   <img   src={ProfileImage || user.profileImage}  className="object-cover w-full h-full"   alt="Profile" />
                    <label  htmlFor="profileImageInput" 
                     className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover/profile:opacity-100 flex items-center justify-center text-white text-xs cursor-pointer transition-opacity duration-300">
                    <span>Edit</span>
@@ -157,10 +136,10 @@ const Profile=()=>{
              <div className="flex justify-between  items-center gap-2">
              <h2 className="  font-dm   text-[12px] sm:text-[16px]  md:text-[18px] font-bold">Account Infromation</h2>
             </div>
-               <input type="text" value={Newusername}  onChange={(e)=>setUserName(e.target.value)}
+               <input type="text" value={Newusername || user.username}  onChange={(e)=>setUserName(e.target.value)}
                placeholder="Username"  className="md:w-1/2  sm:w-96  rounded-lg  outline-none font-dm    w-full  bg-gray-200 font-medium px-2 py-1"/>
                <h3 className="font-dm font-bold">Bio</h3>
-               <textarea rows={3} value={Bio}  onChange={(e)=>setBio(e.target.value)}
+               <textarea rows={3} value={Bio || user.bio}  onChange={(e)=>setBio(e.target.value)}
                placeholder="Bio"  className="md:w-1/2  sm:w-96 w-full  rounded-lg  outline-none font-dm    bg-gray-200 font-medium px-2 py-1"/>
                <div className=" rounded-md px-3 py-1">
                   <h1 className="text-xl  p-1  text-start px-3 font-bold font-dm text-[12px]   sm:text-[16px] md:text-[22px] ">Profile Social Links</h1>
@@ -190,11 +169,11 @@ const Profile=()=>{
           <div className="border-2 w-[710px]  md:w-[900px] rounded-md ">
             <h1 className="text-start px-4 font-dm font-semibold py-2 underline">Post Section</h1>
             <div className="flex  flex-col  p-1  gap-2   ">
-               {post.map((post) => (
+               {user.post.map((post:PostType) => (
                 <div key={post._id} className="mb-4 p-4 border-b-[1.5px] border-gray-600 shadow bg-white">
                   <div className="flex  flex-row justify-between p-1 items-center gap-2">
                   <div className="flex flex-row items-center  text-gray-800 font-dm font-semibold">
-                 <img src={ProfiledImage} className="object-cover rounded-full w-9 h-9" />
+                 <img src={user.profileImage} className="object-cover rounded-full w-9 h-9" />
                    <div className="mt-4  flex-col flex  ">
                    <span className="text-[12px] ml-1 font-extrabold">{post.user?.username}</span>
                    <p className="text-[9px] font-bold">{new Date(post.createdAt).toLocaleDateString()}</p>
@@ -218,7 +197,7 @@ const Profile=()=>{
                 <div className="flex flex-row   px-2     py-1    gap-3 justify-between w-32  items-center  text-center">
                 <span className="flex gap-2   text-sm items-center cursor-pointer">
                 <SlLike  size={18}/>
-                  <h3 className="font-semibold mt-1 ">{post.like}</h3>
+                  <h3 className="font-semibold mt-1 ">{post?.like.length}</h3>
                 </span>
                 <span onClick={commentOpen}
                  className="flex items-center text-sm gap-1 cursor-pointer">

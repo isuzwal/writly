@@ -66,22 +66,26 @@ const Blog=()=>{
         document.body.style.overflow = "auto";
       };
     }, [isPoped]);
-    
     return (
 <section className="min-h-screen  ">
      <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr_1fr] px-5 py-2">
           <div className="  hidden md:block  md:col-span-1   px-5    md:px-7  lg:px-10 py-6 ">
           <div className="   border-2  items-center shadow-sm  rounded-md">
             <div className="flex   items-center p-2  justify-between w-36 gap-2 ">
-              <img src={ProfiledImage} className="object-cover w-20 h-20 rounded-full" />
-               <p className="font-dm font-semibold mt-12">{uppercaseletter(user?.username)}</p>
+              <div className="bg-pink-400 w-16 h-16 rounded-full">
+              <img src={user.profileImage} className="object-cover w-full h-full  rounded-full" />
+              </div>
+               <div>
+               <p className="font-dm font-semibold mt-6">{uppercaseletter(user?.username)}</p>
+               <span className="text-[12px] font-dm text-gray-700">{new Date(user.createdAt).toLocaleDateString()}</span>
+               </div>
             </div>
             <div className="flex  flex-col gap-2 px-4  py-3 ">
               <h2 className="flex justify-between bg-slate-100 px-3  font-bold rounded-md py-1 ">Post
-                <span className="font-semibold">12</span>
+                <span className="font-semibold">{user.post.length}</span>
               </h2>
               <h3  className="flex justify-between bg-slate-100 px-3  font-bold rounded-md py-1">Followers
-                <span className="font-semibold">{user.follower}</span>
+                <span className="font-semibold">{user.follower.length}</span>
               </h3>
               <h3  className="flex justify-between bg-slate-100 px-3  font-bold rounded-md py-1">Folowing
                 <span className="font-semibold">1,024</span></h3>

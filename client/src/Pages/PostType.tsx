@@ -4,12 +4,13 @@ export type PostType = {
     text: string;
     image?: string;
     createdAt:string;
-    like:number;
+    like:[];
     comment:[];
     user?: {
       username?: string;
       _id?: string;
       image:string;
+      profileImage: string; 
     };
    
   };

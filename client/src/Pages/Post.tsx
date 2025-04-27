@@ -110,7 +110,7 @@ const Post=()=>{
               const file = (e.target as HTMLInputElement).files?.[0];
               console.log("Image File",file)
               if (file) {
-                // setImage(file); 
+               
                 uploadimage(file); //-- function passing parm
                 console.log("Calling upload with file:", file.name);
               }}}

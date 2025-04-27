@@ -4,7 +4,6 @@ import { PostType } from "./PostType";
 import { SlLike } from "react-icons/sl";
 import {  FaRegComment } from "react-icons/fa";
 import { CiBookmarkPlus } from "react-icons/ci";
-import ProfiledImage from "../assets/discord.jpeg"
 const Singlepost=()=>{
       const [post ,setPost]=useState<PostType |null>(null)
       const [IsCommnet,setComment]=useState<boolean>(false)
@@ -18,6 +17,7 @@ const Singlepost=()=>{
             })
             const data = await response.json();
             setPost(data.data.post); 
+            console.log("From single post" ,data.data.post)
         }catch (error) {
             console.error("Error fetching posts:", error);
         }
@@ -37,7 +37,7 @@ const Singlepost=()=>{
          <div key={post._id}  className=" p-1 border-b-[1.5px] cursor-pointer hover:bg-slate-200  transition-all ease-in-out duration-300  bg-opacity-50 border-gray-600 shadow bg-white">
             <div className="flex  flex-row justify-between p-1 items-center gap-2">
              <div className="flex flex-row items-center  text-gray-800 font-dm font-semibold">
-              <img src={ProfiledImage} className="object-cover rounded-full w-9 h-9" />
+              <img src={post.user?.profileImage} className="object-cover rounded-full w-9 h-9" />
               <div className="mt-4  flex-col flex  ">
               <span className="text-[12px] ml-1 font-extrabold">{post.user?.username}</span>
               <p className="text-[9px] font-bold">{new Date(post.createdAt).toLocaleDateString()}</p>
@@ -61,7 +61,7 @@ const Singlepost=()=>{
          <div className="flex flex-row   px-2     py-1    gap-3 justify-between w-32  items-center  text-center">
          <span className="flex gap-2   text-sm items-center cursor-pointer">
          <SlLike  size={18}/>
-           <h3 className="font-semibold mt-1 ">{post.like}</h3>
+           <h3 className="font-semibold mt-1 ">{post.like?.length}</h3>
          </span>
          <span onClick={commentOpen}
           className="flex items-center text-sm gap-1 cursor-pointer">

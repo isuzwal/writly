@@ -28,7 +28,7 @@ const [userlist,setUserlist]=useState<userlist[] >([])
             <img src={user.profileImage} alt="profile"  className="object-cover rounded-full h-12 w-12"/>
             <div className="flex flex-col">
               <span className="font-semibold text-sm">{user.username}</span>
-              <span className="text-xs text-gray-500">Followers {user.follower.length}</span>
+              <span className="text-xs text-gray-500">Followers {user.follower?.length}</span>
             </div>
             <button
               type="button"

@@ -1,7 +1,8 @@
 import { useParams } from "react-router";
 import { useEffect,useState } from "react";
 import { userlist } from "./userlistType";
-
+import { SlLike } from "react-icons/sl";
+import {  FaRegComment } from "react-icons/fa";
 const UserProfile=()=>{
     const [user ,setUser]=useState<userlist|null>(null)
     const {id}=useParams()
@@ -14,7 +15,6 @@ const UserProfile=()=>{
            })
            const data = await response.json();
             setUser(data.userInfo); 
-           console.log("User Info",data.userInfo)
        }catch (error) {
            console.error("Error fetching posts:", error);
        }
@@ -25,57 +25,43 @@ const UserProfile=()=>{
        return <div className="text-center p-10">Loading User</div>;
      }
     return (
-        <div className="max-w-4xl mx-auto p-4">
-
-        {/* Cover Image */}
-        <div className="relative h-48 rounded-xl overflow-hidden shadow-md mb-16">
-          <img
-            src={user.coverImage}
-            alt="Cover"
-            className="h-full w-full object-cover"
-          />
-          {/* Profile Image */}
-          <div className="absolute -bottom-16 left-4">
-            <img
-              src={user.profileImage}
-              alt="Profile"
-              className="h-32 w-32 object-cover rounded-full border-4 border-white"
-            />
+        <div className="  p-2">
+        <div className="relative h-56  border-2 cursor-pointer  rounded-xl overflow-hidden shadow-md mb-2">
+          <img  src={user.coverImage} alt="Cover" className="h-full w-full object-cover"/>
+          <div className="absolute -bottom-1 z-30 ">
+            <img src={user.profileImage} alt="Profile" className="h-36 w-36 object-cover  rounded-full border-[3px] cursor-pointer  "/>
           </div>
         </div>
-      
-        {/* User Info */}
-        <div className="mt-10 mb-6">
-          <h1 className="text-3xl font-bold">{user.username}</h1>
-          <p className="text-gray-600">{user.bio}</p>
-          
-          <div className="flex items-center gap-4 text-gray-600 text-sm mt-2">
-            <span><strong>{user.follower.length}</strong> Followers</span>
+        <div className="p-1 flex flex-col ">
+          <div className="flex    px-2 text-start  flex-col  text-sm mt-2">
+           <h1 className="text-3xl font-bold">{user.username}</h1>
+            <span className="flex gap-3  text-gray-700 ">
+              <strong className="font-dm">Followers {user.follower.length}</strong> 
+              <strong className="">Post {user.post.length}</strong>
+              </span>
           </div>
+            <div className="p-2">
+              <span className="text-slate-900 font-semibold">Bio</span>
+            <p className="text-gray-600">{user.bio}</p>
+            </div>
         </div>
-      
-        {/* Posts */}
-        <div className="space-y-4">
-          {user.post?.map((post, index) => (
-            <div key={index} className="bg-white p-5 rounded-xl shadow-md">
+        <div className="p-2">
+            {user.post?.map((post, index) => (
+            <div key={index} className=" border-t-[2px] border-gray-300 p-5 rounded-xl shadow-md">
               <h2 className="text-xl font-semibold">{post.title}</h2>
               <p className="text-gray-600 mt-2">{post.text}</p>
-              <div className="flex justify-between text-xs text-gray-400 mt-4">
-                <span>{new Date(post.createdAt).toLocaleDateString()}</span>
-                <span>{post.like} Likes</span>
-                <span>{post.comment.length} Comments</span>
+              <div className="w-full border-2  h-56 overflow-hidden rounded-md">
+                <img src={post.image} 
+                loading="lazy"
+                className="w-full h-full object-cover" />
+               </div>
+              <div className="flex  gap-5  text-xs text-gray-800 mt-4">
+                <span>{post.like?.length}<SlLike size={18} /></span>
+                <span>{post.comment?.length}<FaRegComment  size={18}/></span>
               </div>
             </div>
           ))}
         </div>
-      
-        {/* Load More */}
-        <div className="flex justify-center mt-8">
-          <button className="bg-gray-200 hover:bg-gray-300 text-gray-700 px-6 py-2 rounded-full">
-            Load More Posts
-          </button>
-        </div>
-      
       </div>
         
     )

@@ -37,6 +37,7 @@ try{
   if (response.ok) {
     const data = await response.json();
     context.setUser(data.userInfo); 
+    
   } else {
     context.setUser(null);
   }
