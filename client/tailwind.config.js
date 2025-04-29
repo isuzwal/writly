@@ -8,6 +8,8 @@ export default {
     extend: {
       colors: {
         profile: "rgb(27,30,38)",
+        writly: "rgb(0,1,254)",
+        maincolor:"rgb(29,28,28)"
       },
       fontFamily:{
         sans: ["DM Sans", "sans-serif"], 

@@ -1,6 +1,5 @@
 import { Link } from "react-router";
 import { useContext, useState } from "react";
-import { CiSearch } from "react-icons/ci";
 import { UserContext } from "../UserAuth/User";
 import { FaUserCircle } from "react-icons/fa";
 import { IoIosSettings } from "react-icons/io";
@@ -13,7 +12,6 @@ import { CgMenu } from "react-icons/cg";
 import { IoIosClose } from "react-icons/io";
 function Nava(){
     const [IsOpen,setIsOpen]=useState<boolean>(false)
-    const [searching,setSearching]=useState<string>("")
     const [darksection,setDarksection]=useState<boolean>(false)
    
     // checking that User did't return undefine so.
@@ -53,16 +51,12 @@ function Nava(){
     
    
     return(
-       <section className={` ${themeStyles[theme as keyof typeof themeStyles]}`}>
-        <div className=" border-b border-b-slate-300 py-2" >
+<section className={`fixed top-0 left-0 w-full  ${themeStyles[theme as keyof typeof themeStyles]}`}>
+        <div className=" border-b-[1.2px] border-b-slate-300 py-2" >
             <div className=" px-1 flex relative items-center justify-between ">
                 <Link to ="/" className="md:text-xl  text-[16px] font-semibold font-dm  whitespace-nowrap flex-shrink-0 ">Writly</Link>
                  <div className="flex items-center relative px-2 md:w-96 ">
-                 <input type="search"  value={searching} onChange={(e)=>setSearching(e.target.value)} placeholder="Search.."    
-                 className=" rounded-lg px-3 focus:outline-none font-serif bg-slate-100   py-1.5  placeholder:text-[15px] w-full "/>
-                 {searching.length === 0  && (
-                  <CiSearch  size={22} color="black" className="absolute right-3  "/>
-                  )}    
+                  
               </div>
                  <div className={`rounded-lg px-6  hidden md:flex   ${themeStyles[theme as keyof typeof themeStyles]}`}>
                    <div className="flex w-full    rounded-md">

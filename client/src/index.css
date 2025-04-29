@@ -5,9 +5,13 @@
 input[type="search"]::-webkit-search-cancel-button {
     display: none;
   }
- /* #root {
-    background-color: rgb(14, 18, 23);
-} */
+/* Remove spinner arrows in number input */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 /* Hide scrollbar for Chrome, Safari, and Edge */
 .scroll-hidden::-webkit-scrollbar {
   display: none;

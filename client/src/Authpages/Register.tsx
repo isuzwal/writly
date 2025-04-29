@@ -3,12 +3,17 @@ import { BiLoaderAlt } from 'react-icons/bi';
 import { Link } from "react-router";
 import { UserContext } from "../UserAuth/User"
 import { useNavigate } from "react-router";
+import { Eye ,EyeClosed,CircleAlert,CheckCircle, PenTool} from 'lucide-react';
+
 function Register(){
     const [username,setUserName]=useState<string>("")
     const [email,setEmail]=useState<string>()
     const [password,setPassword]=useState<string>("")
     const [loading,setLoading]=useState<boolean>(false)
     const [error,setError]=useState<string |null>(null)
+    const [Isshow,setIsShow]=useState<boolean>(false)
+    const [code ,setCode]=useState<number>()
+    const [success, setSuccess]=useState<string|null>(null);
     // checking the context is define or not .
     const context=useContext(UserContext)
     if(!context){
@@ -43,6 +48,7 @@ function Register(){
              }
              const data=await response.json()
              setUser(data.user);
+             setSuccess(data.message);
             navgation("/blog")
             setEmail("")
             setPassword("")
@@ -54,47 +60,100 @@ function Register(){
             setLoading(false)
         }
    }
+   // for the eyes 
+   const showEyes=()=>{
+    setIsShow((prevstate)=>!prevstate)
+   }
     return (
-        <section className='relative min-h-screen flex items-center justify-center p-4'>
-        <form onSubmit={register}
-        className="flex flex-col gap-3  border   rounded-md   max-w-md px-6 py-12">
-             <h1 className="text-xl font-semibold text-center font-mono">Register</h1>
-            <div className="flex flex-col  text-start">
-          <label className="font-mono font-medium ">UserName
-            <input type="text" value={username} onChange={(e)=>setUserName(e.target.value)} placeholder="Enter your username"
-           className=" w-full  border px-3 py-1 rounded-md  placeholder:text-sm" />
-          </label>
-         </div>
-         <div className="flex flex-col ">
-          <label className="font-mono font-medium ">Email
-            <input type="email" value={email} onChange={(e)=>setEmail(e.target.value)} placeholder="Enter your Email"
-           className="  border px-3 py-1 rounded-md w-full  placeholder:text-sm" />
-          </label>
+      <section className="flex items-center justify-center min-h-screen px-4 py-8 bg-gray-50">
+      <form onSubmit={register} className="w-full max-w-md bg-white shadow-md rounded-xl p-6 sm:p-10 flex flex-col gap-4">
+        <h1 className="text-4xl sm:text-5xl  justify-center md:justify-start font-semibold font-serif text-writly text-center sm:text-left flex items-center gap-2">
+          <PenTool size={40} />
+          Writly
+        </h1>
+    
+        <div className="flex flex-col text-start">
+          <label className="font-mono font-medium">Username</label>
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUserName(e.target.value)}
+            placeholder="Enter your username"
+            className="border px-3 py-2 rounded-md w-full placeholder:text-sm" />
+        </div>
+    
+        <div className="flex flex-col">
+          <label className="font-mono font-medium">Email</label>
+          <input type="email" value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter your Email"
+            className="border px-3 py-2 rounded-md w-full placeholder:text-sm" />
+        </div>
+    
+        <div className="flex flex-col gap-2">
+          <label className="font-mono font-medium">Password</label>
+          <div className="relative">
+            <input
+              type={Isshow ? "text" : "password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter your password"
+              className="border px-3 py-2 rounded-md w-full placeholder:text-sm"
+            />
+            <div onClick={showEyes} className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer">
+              {Isshow ? <Eye /> : <EyeClosed />}
+            </div>
           </div>
-         <div className="flex flex-col gap-2">
-          <label className="font-mono font-medium ">Password
-            <input type="password" value={password} onChange={(e)=>setPassword(e.target.value)} placeholder="Enter your password"
-            className=" border px-3 py-1 rounded-md  w-full  placeholder:text-sm "/>
+        </div>
+    
+        <div className="flex   flex-col sm:flex-row items-start sm:items-center gap-2">
+          <label className="font-mono font-medium w-full">
+            Code
+            <input type="number" value={code}
+              onChange={(e) => setCode(Number(e.target.value))}
+              placeholder="Verification Code"
+             
+              className="border px-3 py-2 rounded-md w-full placeholder:text-sm mt-1"/>
           </label>
-         </div>
-          <button  type="submit" className="bg-black rounded-md font-serif text-white py-1">
-            {loading ? (  
-          <p className=" flex items-center  justify-center gap-2"> 
-           Creating Account 
-            <BiLoaderAlt className="animate-spin" /></p> 
-         ):(
-         <p className="flex items-center justify-center"> Register </p>
-         )
-         }</button>
-         <div className='text-center mt-4 text-black'>
-          Already have an account? 
-         <Link to='/login' className='font-semibold hover:text-blue-600 underline ml-1'>Login</Link>
-          </div>
-        <div>
-                {error && <p>{error}</p>}
-              </div>
-        </form>
+          <button type="button" className="w-full sm:mt-6  sm:w-auto   mt-1 px-4 py-2 border-2 rounded-md font-semibold hover:bg-slate-200 transition-all duration-300 ease-in-out"> 
+            Send
+          </button>
+        </div>
+        <button type="submit" className="bg-black text-white font-serif py-2 rounded-md text-center w-full">
+          {loading ? (
+            <span className="flex items-center justify-center gap-2">
+              Creating Account
+              <BiLoaderAlt className="animate-spin" />
+            </span>
+          ) : (
+            "Register"
+          )}
+        </button>
+        <div className="text-center text-sm mt-2">
+          Already have an account?
+          <Link to="/login" className="ml-1 underline font-semibold hover:text-blue-600">
+            Login
+          </Link>
+        </div>
+      </form>
+      {success && (
+        <div className="fixed bottom-4 right-4 bg-green-100 border border-green-500 text-green-700 px-4 py-2 rounded-xl shadow-md">
+          <span className="flex items-center gap-2">
+            <CheckCircle />
+            <p>{success}</p>
+          </span>
+        </div>
+      )}
+      {error && (
+        <div className="fixed bottom-4 right-4 bg-red-600 text-white border px-4 py-2 rounded-xl shadow-md">
+          <span className="flex items-center gap-2">
+            <CircleAlert />
+            <p>{error}</p>
+          </span>
+        </div>
+      )}
     </section>
+    
     )
 }
 export default Register;

@@ -1,4 +1,4 @@
-
+import {  PenTool } from 'lucide-react';
 import { Routes, Route } from "react-router";
 import Layout from "./Screen/Layout";
 import Login from "./Authpages/Login";
@@ -9,7 +9,7 @@ import Security from "./Pages/Security";
 import Latest from "./Pages/Latest";
 import Following from "./Pages/Following";
 import Popular from "./Pages/Popluar";
-import Home from "./Pages/Home";
+
 import Post from "./Pages/Post";
 import Singelpost from "./Pages/SinglePost";
 import UserProfile from "./Pages/Userprofile";
@@ -51,13 +51,18 @@ try{
     }
     checkinguser()
   },[])
-  if (loading) return <div className="text-center p-10">Loading...</div>; 
+  if (loading) return <section className="min-h-screen bg-maincolor flex justify-center items-center px-4 py-8">
+  <div className="flex items-center justify-center gap-3  px-4 py-3 rounded-2xl w-full max-w-4xl">
+    <PenTool color="blue" size={56} className="cursor-pointer sm:size-50" />
+    <h1 className="text-3xl sm:text-5xl lg:text-6xl font-serif font-semibold text-writly">Writly</h1>
+  </div>
+</section>; 
   return (
     <Routes>
     <Route path="/login" element={<Login />} />
     <Route path="/register" element={<Register />} />
     <Route path="/" element={<Layout />}>
-    <Route index element={user ? <Navigate to ="/blog" />:<Home />} />
+    <Route index element={user ? <Navigate to ="/blog" />:<Login />} />
     <Route path="blog" element={<Blog />}>
       <Route path="latest" element={<Latest />} />
       <Route path="popular" element={<Popular />} />

@@ -72,7 +72,7 @@ const Blog=()=>{
     
     }
     return (
-<section className="min-h-screen  ">
+<section className="flex-grow">
      <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr_1fr] px-5 py-2">
           <div className="  hidden md:block  md:col-span-1   px-5    md:px-7  lg:px-10 py-6 ">
           <div className="   border-2  items-center shadow-sm  rounded-md">

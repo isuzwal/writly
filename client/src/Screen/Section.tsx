@@ -21,7 +21,9 @@ const Section=({children}:ContextProps)=>{
 }
     },[theme])
     return (
-        <div>{children}</div>
+        <div className="flex flex-col min-h-screen pt-14">
+        {children}
+        </div>
     )
 }
 export default Section;

@@ -2,12 +2,14 @@ import {  useState } from "react";
 import { BiLoaderAlt } from 'react-icons/bi';
 import { Link } from "react-router";
 import { useNavigate } from "react-router";
+import { Eye ,EyeClosed,CircleAlert,CheckCircle,PenTool} from 'lucide-react';
 function Login(){
    const [username,setUserName]=useState<string>("")
    const [password,setPassword]=useState<string>("")
    const [loading,setLoading]=useState<boolean>(false)
    const [error,setError]=useState<string|null>(null)
-
+   const [Isshow,setIsShow]=useState<boolean>(false)
+   const [success, setSuccess]=useState<string|null>(null);
    const navgation=useNavigate()
    const login=async(event:React.FormEvent)=>{
     event.preventDefault()
@@ -32,41 +34,51 @@ function Login(){
             throw new Error ("Register failed! Please check your credentain")
            }
            const data=await response.json()
-          
            setUserName(data.user);
-           navgation("/blog")
+           setSuccess(data.message);
+            navgation("/blog")
             setPassword("")
             setUserName("")
         }catch(error){
-          console.log("Error",error)
           setError((error as Error).message || "Something went wrong. Please try again.");
         }finally{
             setLoading(false)
         }
    }
+   const showEyes=()=>{
+    setIsShow((prevstate)=>!prevstate)
+   }
     return (
-        <section className='relative  flex items-center justify-center h-screen   p-4'>
+        <section className='relative    flex items-center justify-center flex-grow  p-4'>
             <form  onSubmit={login}
-            className="flex flex-col gap-2  border  rounded-md  px-3 py-12">
-                 <h1 className="text-xl font-semibold text-center font-mono">Login</h1>
-                <div className="flex flex-row gap-2">
-              <label className="font-mono font-medium m-2">UserName
+            className="flex flex-col gap-2 max-w-sm border w-full rounded-md  px-3 py-12">
+              <h1 className="  justify-center md:justify-start  text-3xl  sm:text-4xl font-semibold font-serif text-writly flex items-center gap-2">
+                 <PenTool size={40} />
+                 Writly
+               </h1>
+                <div className="flex  flex-row  gap-2">
+               <label className="font-mono   w-full font-medium  ml-1 mb-1 ">UserName
                 <input type="text" value={username} onChange={(e)=>setUserName(e.target.value)}
-               className="ml-1 border px-3 py-1 rounded-md w-64 placeholder:text-sm" />
+                 className="ml-1 border px-3 py-1 rounded-md  w-full   placeholder:text-sm" />
               </label>
              </div>
-             <div className="flex flex-row gap-2">
-              <label className="font-mono font-medium m-2">Password
-                <input type="password" value={password} onChange={(e)=>setPassword(e.target.value)} 
-                className="ml-1 border px-3 py-1 rounded-md   w-64  placeholder:text-sm "/>
+             <div className="flex flex-row  gap-2">
+              <label className="font-mono w-full   font-medium ml-1 mb-1">Password
+             <div className="relative">
+                <input type={Isshow ? "text":"password"} value={password} onChange={(e)=>setPassword(e.target.value)} 
+                className="ml-1 border px-3 py-1 rounded-md   w-full  placeholder:text-sm "/>
+               <div  onClick={showEyes} className="absolute   px-2 right-2 top-1/2 -translate-y-1/2 cursor-pointer">
+                {Isshow ? (<Eye />):(<EyeClosed />)}
+              </div>
+              </div>
               </label>
              </div>
               <button  type="submit"
                className="bg-black rounded-md font-serif text-white py-1">
                 {loading ? (  
               <p className=" flex items-center  justify-center gap-2"> 
-                Login
-                <BiLoaderAlt className="animate-spin" /></p> 
+                
+                <BiLoaderAlt  size={23} className="animate-spin" /></p> 
              ):(
              <p className="flex items-center justify-center"> Login </p>
              )
@@ -76,9 +88,27 @@ function Login(){
              <Link to='/register' className='font-semibold hover:text-blue-600 underline ml-1'>Register</Link>
               </div>
             <div>
-                {error && <p>{error}</p>}
               </div>
             </form>
+            {success && (
+              <div className="absolute bottom-4 right-3 border-2 border-green-500 bg-green-100 text-green-700 px-4 rounded-3xl py-1 shadow-md">
+              <span className="flex items-center gap-2">
+                <CheckCircle /> 
+              <p className="font-semibold">{success}</p>
+             </span>
+             </div>
+             )}
+                 {error && (
+                   <div className=" absolute bottom-4 right-3   bg-red-600 text-white   border-2 px-4  rounded-3xl py-1">
+                   <span className="flex gap-2 "><CircleAlert />
+                   {
+                     <p className="font-semibold ">{error}
+                     </p>
+                    }
+                    </span>
+                  </div>
+               
+                 )}
         </section>
         
     )
