@@ -12,9 +12,9 @@ cloud.config({
 const storage=new CloudinaryStorage({
     cloudinary:cloud, params:{
             folder:'writly',
-            allowed_foramts: ['jpg', 'png', 'jpeg']
+            allowed_formats: ['jpg', 'png', 'jpeg']
         
     }
 })
 const uploadimage = multer({storage})
-module.exports={uploadimage}
+module.exports=uploadimage
