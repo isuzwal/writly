@@ -81,7 +81,7 @@ const Blog=()=>{
               <img src={user?.profileImage} className="object-cover w-full h-full  rounded-full" />
               </div>
                <div>
-               <p className="font-dm font-semibold mt-6">{uppercaseletter(user?.username)}</p>
+               <p className="font-dm font-semibold mt-6">Hello{uppercaseletter(user?.username)}</p>
                <span className="text-[12px] font-dm text-gray-700">{new Date(user?.createdAt).toLocaleDateString()}</span>
                </div>
             </div>
