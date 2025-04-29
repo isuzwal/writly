@@ -1,6 +1,7 @@
 const User=require("../models/Personschema");
 const bcrypt=require("bcryptjs");
-const {token}=require("../middleware/verifytoken")
+const {token}=require("../middleware/verifytoken");
+const  Sendingverfiactioncode = require("../middleware/Email");
 
 
 //-->user register
@@ -17,17 +18,21 @@ exports.register=async(req,res)=>{
        if(user){
         return res.status(409).json({
             status:"Fail",
-            message:"User already Already exits"
+            message:"User already Already exits Please Login"
         })
        }
       const hasspassowrd=await bcrypt.hash(password,12)
-      const newuser= await User.create({
-      username:username,
-      email:email,
+      const verficationCode=Math.floor(1000+Math.random()*9000).toString();
+      const newuser= new User({
+      username,
+      email,
       password:hasspassowrd,
+      verficationCode:verficationCode
   })
-    const tokenValue=token({id:newuser._id})
-    res.cookie("auth_token",tokenValue,{
+       await newuser.save()
+       Sendingverfiactioncode(newuser.email,verficationCode,newuser.username)
+      const tokenValue=token({id:newuser._id})
+      res.cookie("auth_token",tokenValue,{
         httpOnly:true,
         secure: true,
         // secure:process.env.NODE_ENV==="production",
@@ -46,7 +51,7 @@ exports.register=async(req,res)=>{
     }catch(e){
         console.log("Error at the create user",e)
         res.status(500).json({
-            status:"fail",
+            status:"Fail",
             message:"Internal Server Error"
         })
     }

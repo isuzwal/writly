@@ -26,9 +26,9 @@ route.get("/",(req,res)=>{
     res.send("Welcome to Sever")
 })
 
+app.use("/", route);
 app.use("/api",UserRoutes);
 app.use("/api",PostRoutes)
-
 
 app.listen(PORT,()=>{
     console.log(`Server started at Port ${PORT}`)

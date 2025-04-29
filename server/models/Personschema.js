@@ -23,6 +23,11 @@ const UserScheam=new mongoose.Schema({
             "Password must have Upper letter ,number & one special character "
         ]
     },
+    isVerified:{
+        type:String,
+        default:false,
+    },
+    verficationCode:String,
     bio:{
         type:String,
         default:"I am Lazy ",
