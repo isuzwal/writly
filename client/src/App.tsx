@@ -20,13 +20,14 @@ import { useState } from "react";
 function App() {
   const context=useContext(UserContext)
   if(!context){
-    throw new Error
+    throw new Error("User context not found")
   }
   const {setUser,user}=context
   const [loading, setLoading] = useState(true);
   useEffect(()=>{
     const checkinguser=async()=>{
 try{
+  setLoading(true)
   const response=await fetch (`${import.meta.env.VITE_BACKEND_URL}/profile`,{
     method:'GET',
     headers:{
@@ -34,13 +35,13 @@ try{
     },
      credentials:"include"
   })
-  if (response.ok) {
-    const data = await response.json();
-    context.setUser(data.userInfo); 
-    
-  } else {
-    context.setUser(null);
-  }
+  if (!response.ok) {
+      context.setUser(null);
+      return ;
+    } 
+  const data = await response.json();
+  context.setUser(data.userInfo); 
+  console.log("APP.tsx",data)
 }catch(error){
  console.log("Error",error)
  setUser(null);
@@ -62,7 +63,7 @@ try{
       <Route path="popular" element={<Popular />} />
       <Route path="following" element={<Following />} />
       <Route path=":id" element={<Singelpost/>} />
-      <Route path="user/:id" element={<UserProfile/>} />
+      <Route path="user/:username" element={<UserProfile/>} />
     </Route>
     <Route path="post" element={<Post />} />
     <Route path ="/account/profile" element={<Profile />} />

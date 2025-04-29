@@ -197,7 +197,7 @@ const Profile=()=>{
                 <div className="flex flex-row   px-2     py-1    gap-3 justify-between w-32  items-center  text-center">
                 <span className="flex gap-2   text-sm items-center cursor-pointer">
                 <SlLike  size={18}/>
-                  <h3 className="font-semibold mt-1 ">{post?.like.length}</h3>
+                  <h3 className="font-semibold mt-1 ">{post.like?.length}</h3>
                 </span>
                 <span onClick={commentOpen}
                  className="flex items-center text-sm gap-1 cursor-pointer">

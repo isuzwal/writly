@@ -23,7 +23,7 @@ function Register(){
         try{
             setLoading(true)
             setUser(username)
-            // Sav the useDetalis for Temp
+            // Save the useDetalis for Temp
             const response=await fetch(`${import.meta.env.VITE_BACKEND_URL}/register`,{
               method:'POST',
               headers:{
