@@ -22,31 +22,19 @@ exports.register=async(req,res)=>{
         })
        }
       const hasspassowrd=await bcrypt.hash(password,12)
-      const verficationCode=Math.floor(1000+Math.random()*9000).toString();
+      const verificationCode=Math.floor(1000+Math.random()*9000).toString();
       const newuser= new User({
       username,
       email,
       password:hasspassowrd,
-      verficationCode:verficationCode
+      verificationCode,
+      isVerified: false,
   })
        await newuser.save()
-       Sendingverfiactioncode(newuser.email,verficationCode,newuser.username)
-      const tokenValue=token({id:newuser._id})
-      res.cookie("auth_token",tokenValue,{
-        httpOnly:true,
-        secure: true,
-        // secure:process.env.NODE_ENV==="production",
-        maxAge:10*24*60*60*1000,
-        sameSite:"None",
-        path:"/"
-     })
-    const { password: _, ...userWithoutPassword } = newuser._doc;
-    res.status(201).json({
-    status:"Succes",
-    data:{
-        user:userWithoutPassword
-    },
-    message:"User register successfuly"
+       Sendingverfiactioncode(email,verificationCode,username)
+       res.status(201).json({
+       status:"Succes",
+       msg: "Registered successfully. Please verify your email."
   })
     }catch(e){
         console.log("Error at the create user",e)
@@ -56,6 +44,54 @@ exports.register=async(req,res)=>{
         })
     }
 }
+//-> verfiaction code 
+exports.sendVertification=async(req,res)=>{
+    try{
+    const {email,verificationCode}=req.body
+    if(!email || !verificationCode){
+        return res.status(400).json({
+            status:"Fail",
+            msg:"Email and verification code are  requried"
+        })
+      }    
+    const exitsuser=await User.findOne({email}) 
+    if (exitsuser.isVerified) {
+        return res.status(409).json({
+            status: "Fail",
+            msg: "Email already verified."
+        });
+    }
+   if(exitsuser.verificationCode !==verificationCode){
+    return res.status(400).json({
+        status:"Fail",
+        msg:"Invaild Verifiaction code"
+    })
+   }
+   exitsuser.isVerified=true;
+   exitsuser.verificationCode=undefined;
+   await exitsuser.save()
+   const tokenValue = token({ id: exitsuser._id }); 
+   res.cookie("auth_token", tokenValue, {
+     httpOnly: true,
+     secure: true,
+     sameSite: "None",
+     maxAge: 10 * 24 * 60 * 60 * 1000,
+   });
+   const { password, ...safeUser } = exitsuser._doc;
+   return res.status(200).json({
+     status: "Success",
+     msg: "Email verified and logged in",
+     user: safeUser,
+    });
+    
+ }catch(error){
+        console.log("Error sending Verifaction code",error)
+        return res.status(500).json({
+            status:"Fail",
+            msg:"Internal Server Error "
+        })
+    }
+ }
 //-->login user
 exports.login=async(req,res)=>{
     try{
@@ -155,6 +191,7 @@ exports.getuserlist=async(req,res)=>{
         })
   }
 }
+
 //--> logout user
 exports.logout=(req, res) => {
     res

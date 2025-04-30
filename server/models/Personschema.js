@@ -17,6 +17,7 @@ const UserScheam=new mongoose.Schema({
     password:{
         type:String,
         required:true,
+        trim:true,
         minlength:[8,"Paaword must be at  least 8 characters long"],
         match:[ 
             /^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z\d]).+$/,
@@ -24,13 +25,16 @@ const UserScheam=new mongoose.Schema({
         ]
     },
     isVerified:{
-        type:String,
+        type:Boolean,
         default:false,
     },
-    verficationCode:String,
+    verificationCode:{
+    type:String,
+    default:null 
+   },
     bio:{
         type:String,
-        default:"I am Lazy ",
+        default:"I am Lazy",
     },
     profileImage: {
             type: String,  
@@ -50,16 +54,31 @@ const UserScheam=new mongoose.Schema({
          }
     }],
     follower:[{
-        user:{
           type:mongoose.Schema.Types.ObjectId,
           ref:"User",
-         },
-        people:Number
+    }],
+    following:[{
+         type:mongoose.Schema.Types.ObjectId,
+         ref:"User"
     }],
     post:[{
          type:mongoose.Schema.Types.ObjectId,
          ref:"Post",
         }],
+    bookmarks:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"Post"
+        }],
+    likedpost:[
+            {
+            type:mongoose.Schema.Types.ObjectId,
+            ref:"Post"
+            }
+        ],
+        lasteSeen:{
+            type:Date,
+            dafault:Date.now
+        }
 },{timestamps:true})
 
 const Userscheam=mongoose.model("User",UserScheam)

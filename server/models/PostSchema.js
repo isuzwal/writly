@@ -27,20 +27,13 @@ const post=new mongoose.Schema({
       },
       likes:[ 
       {
-       user:{
          type:mongoose.Schema.Types.ObjectId,
          ref:"User",
-        },
-        likes: Number,
       }],
       comments:
       [{
-         user:{
-         type:mongoose.Schema.Types.ObjectId,
-         ref:"User",
-      },
-      text:String,
-      createdAt:{type:Date,},
+         type: mongoose.Schema.Types.ObjectId,
+         ref: "Comment"
       }],
       createdAt: 
       {

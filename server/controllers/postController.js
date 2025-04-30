@@ -94,6 +94,7 @@ exports.userPost=async(req,res)=>{
             msg:"Internal Error"})
         }
 }
+
 //--> for the image upload
 exports.imageupload=uploadimage.single('image'),async(req,res)=>{
     try{
