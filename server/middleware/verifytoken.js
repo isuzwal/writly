@@ -9,6 +9,7 @@ const verifytoken=(req,res,next)=>{
           id: decoded.id,
           username: decoded.username,
         }
+        console.log("Decode ",decoded)
         next();
       } catch (err) {
         res.status(403).json({ message: "Invalid or expired token" });

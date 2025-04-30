@@ -1,12 +1,6 @@
 const mongoose=require("mongoose")
 
 const post=new mongoose.Schema({
-   title:
-      {
-         type:String,
-         required:[true,"Post must have title"],
-         maxlength:20,
-       },
       text:{
          type:String,
           maxlength:200,

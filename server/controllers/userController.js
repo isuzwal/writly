@@ -121,8 +121,8 @@ exports.login=async(req,res)=>{
      const tokenValue=token({id:user._id})
      res.cookie("auth_token",tokenValue,{
         httpOnly:true,
-        // secure: process.env.NODE_ENV === "production",
-        secure: true,
+        //  secure: process.env.NODE_ENV === "production",
+        secure:false,
         maxAge:10*24*60*60*1000,
         sameSite:"None",
         path:"/"
@@ -145,7 +145,7 @@ exports.login=async(req,res)=>{
 // --> get User Profile
 exports.profile=async(req,res)=>{
     try{
-        const dbuser=await User.findById(req.user._id).populate('post')
+        const dbuser=await User.findById(req.user.id).populate('post')
         if(!dbuser){
            return  res.status(404).json({status:"Fail",msg:"User not Found"})
         }
@@ -174,7 +174,7 @@ exports.getuserlist=async(req,res)=>{
                 msg:"No user lsit"
             })
         }
-        const sanitizedUsers = userlist.map(user => {
+        const sanitizedUsers = users.map(user => {
             const { password, ...rest } = user._doc; // -> remove the password 
             return rest;
           });

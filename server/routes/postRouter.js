@@ -5,7 +5,7 @@ const {verifytoken}=require("../middleware/verifytoken")
 
 const router=express.Router()
 router.get("/post",verifytoken,getAllposts);
-router.post("/post",verifytoken,postcreate);
+router.post("/post/create",verifytoken,postcreate);
 router.post('/post/upload',verifytoken,imageupload);
 router.get("/post/id/:id",verifytoken,getPostByID);
 router.get("/post/user/:username",verifytoken,userPost);

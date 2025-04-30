@@ -7,7 +7,6 @@ exports.postcreate=async(req,res)=>{
     try{
         const {title,text,image,}=req.body
         const newPost=new Post({
-        title:title,
         text:text,
         image:image,
         user:req.user.id,   
