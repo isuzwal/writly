@@ -87,10 +87,10 @@ const Blog=()=>{
             </div>
             <div className="flex  flex-col gap-2 px-4  py-3 ">
               <h2 className="flex justify-between bg-slate-100 px-3  font-bold rounded-md py-1 ">Post
-                <span className="font-semibold">{user.post?.length}</span>
+                {/* <span className="font-semibold">{user.post?.length}</span> */}
               </h2>
               <h3  className="flex justify-between bg-slate-100 px-3  font-bold rounded-md py-1">Followers
-                <span className="font-semibold">{user.follower?.length}</span>
+                {/* <span className="font-semibold">{user.follower?.length}</span> */}
               </h3>
               <h3  className="flex justify-between bg-slate-100 px-3  font-bold rounded-md py-1">Folowing
                 <span className="font-semibold">1,024</span></h3>
@@ -144,14 +144,14 @@ const Blog=()=>{
           {/*Post Section*/}
           <div className="  col-span-3 md:col-span-1 w-full flex flex-col justify-start md:h-[calc(100vh-1rem)] overflow-y-auto scroll-hidden">
             <div className={` bg-slate-100  flex  sticky top-0 z-20  rounded-t-lg  flex-wrap md:flex-row gap-6  md:justify-start justify-evenly py-3 px-4  `}>
-              <NavLink to="/blog/latest"    className={({isActive})=>isActive
+              <NavLink to="/home/latest"    className={({isActive})=>isActive
               ? "bg-black px-4 py-1.5 flex rounded-md text-white text-[14px] items-center":
               " px-4 py-1.5 flex bg-slate-100  rounded-md text-black text-[14px] items-center"  
             }>Latest</NavLink>
-              <NavLink  to="/blog/popular"  className={({isActive})=>isActive 
+              <NavLink  to="/home/popular"  className={({isActive})=>isActive 
               ?"bg-black px-4 py-1.5 flex rounded-md text-white text-[14px] items-center":"bg-slate-100  px-4 py-1.5 flex rounded-md text-black text-[14px] items-center"}
               >Popular</NavLink>
-              <NavLink to="/blog/following"  className={({isActive})=>isActive 
+              <NavLink to="/home/following"  className={({isActive})=>isActive 
               ?"bg-black px-4 py-1.5 flex rounded-md text-white text-[14px] items-center":" bg-slate-100 px-4 py-1.5 flex rounded-md text-black text-[14px] items-center"}
               >Follwing</NavLink>
             </div>

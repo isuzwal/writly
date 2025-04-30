@@ -26,7 +26,7 @@ const Latest=()=>{
     
     return(
 
-        <section className=" items-center">
+        <section className=" items-center bg-maincolor">
             <div className="flex flex-col  border-2 px-2  m-3 gap-2 shadow-sm rounded-md ">
               <div className="flex flex-row justify-between p-1 items-center gap-2">
                 <div className="flex flex-row items-center  text-gray-800 font-dm font-semibold">

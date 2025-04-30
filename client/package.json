@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^2.7.0",
     "axios": "^1.8.4",
     "draft-js": "^0.11.7",
     "lucide-react": "^0.503.0",
@@ -17,6 +18,7 @@
     "react-dom": "^18.3.1",
     "react-froala-wysiwyg": "^4.5.1",
     "react-icons": "^5.5.0",
+    "react-redux": "^9.2.0",
     "react-router": "^7.4.1"
   },
   "devDependencies": {

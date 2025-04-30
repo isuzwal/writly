@@ -7,12 +7,12 @@ import { Eye ,EyeClosed,CircleAlert,CheckCircle, PenTool} from 'lucide-react';
 
 function Register(){
     const [username,setUserName]=useState<string>("")
-    const [email,setEmail]=useState<string>()
+    const [email,setEmail]=useState<string>("")
     const [password,setPassword]=useState<string>("")
     const [loading,setLoading]=useState<boolean>(false)
     const [error,setError]=useState<string |null>(null)
     const [Isshow,setIsShow]=useState<boolean>(false)
-    const [code ,setCode]=useState<number>()
+    const [verificationCode ,setCode]=useState<string>()
     const [success, setSuccess]=useState<string|null>(null);
     // checking the context is define or not .
     const context=useContext(UserContext)
@@ -20,16 +20,16 @@ function Register(){
       throw new Error
     }
     // nagavation
-    const navgation=useNavigate()
+    const navigation=useNavigate()
     const {setUser}=context
-
+// for register 
     const register=async(event:React.FormEvent)=>{
        event.preventDefault()
         try{
             setLoading(true)
             setUser(username)
             // Save the useDetalis for Temp
-            const response=await fetch(`${import.meta.env.VITE_BACKEND_URL}/register`,{
+            const response=await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/register`,{
               method:'POST',
               headers:{
                 'Content-Type':'application/json',
@@ -39,20 +39,17 @@ function Register(){
                    email:email,
                    password:password
               }),
-              credentials: "include" 
+             
             })
        
             //->checking the response is !ok
              if(!response.ok){
-              throw new Error ("Register failed! Please check your credentain")
+              const data=await response.json()
+              throw new Error ( data.message  ||"Register failed! Please check your credentain")
              }
              const data=await response.json()
-             setUser(data.user);
+            
              setSuccess(data.message);
-            navgation("/blog")
-            setEmail("")
-            setPassword("")
-            setUserName("")
         }catch(error){
             console.log("Error",error)
             setError((error as Error).message || "Something went wrong. Please try again.");
@@ -63,6 +60,36 @@ function Register(){
    // for the eyes 
    const showEyes=()=>{
     setIsShow((prevstate)=>!prevstate)
+   }
+   // for verfiaction code
+   const getverificationcode=async()=>{
+    try{
+      const response=await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/verification`,{
+        method:"POST",
+        headers:{
+          'Content-Type':'application/json',
+        },
+        body:JSON.stringify({
+           email,
+           verificationCode
+        }),
+        credentials: "include" 
+      })
+      if(!response.ok){
+        throw new Error ("Fail to verified Email")
+      }
+      const result = await response.json();
+      if (result.status === "Success") {
+        setSuccess(result.msg); 
+        setUser(result.user);
+        navigation("/home");
+      } else {
+        setError(result.msg); 
+      }
+      console.log("Verified code is",result)
+    }catch(e){
+      console.log("Can't Verified email",e)
+    }
    }
     return (
       <section className="flex items-center justify-center min-h-screen px-4 py-8 bg-gray-50">
@@ -109,13 +136,14 @@ function Register(){
         <div className="flex   flex-col sm:flex-row items-start sm:items-center gap-2">
           <label className="font-mono font-medium w-full">
             Code
-            <input type="number" value={code}
-              onChange={(e) => setCode(Number(e.target.value))}
+            <input type="text" value={verificationCode}
+              onChange={(e) => setCode(e.target.value)}
               placeholder="Verification Code"
              
               className="border px-3 py-2 rounded-md w-full placeholder:text-sm mt-1"/>
           </label>
-          <button type="button" className="w-full sm:mt-6  sm:w-auto   mt-1 px-4 py-2 border-2 rounded-md font-semibold hover:bg-slate-200 transition-all duration-300 ease-in-out"> 
+          <button onClick={getverificationcode} 
+           type="button" className="w-full sm:mt-6  sm:w-auto   mt-1 px-4 py-2 border-2 rounded-md font-semibold hover:bg-slate-200 transition-all duration-300 ease-in-out"> 
             Send
           </button>
         </div>

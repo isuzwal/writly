@@ -49,7 +49,7 @@ function Login(){
     setIsShow((prevstate)=>!prevstate)
    }
     return (
-        <section className='relative    flex items-center justify-center flex-grow  p-4'>
+        <section className='relative min-h-screen flex items-center justify-center    p-4'>
             <form  onSubmit={login}
             className="flex flex-col gap-2 max-w-sm border w-full rounded-md  px-3 py-12">
               <h1 className="  justify-center md:justify-start  text-3xl  sm:text-4xl font-semibold font-serif text-writly flex items-center gap-2">
@@ -57,7 +57,7 @@ function Login(){
                  Writly
                </h1>
                 <div className="flex  flex-row  gap-2">
-               <label className="font-mono   w-full font-medium  ml-1 mb-1 ">UserName
+               <label className="font-mono   w-full font-medium  ml-1 mb-1 ">Username
                 <input type="text" value={username} onChange={(e)=>setUserName(e.target.value)}
                  className="ml-1 border px-3 py-1 rounded-md  w-full   placeholder:text-sm" />
               </label>
