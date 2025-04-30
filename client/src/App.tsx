@@ -44,6 +44,7 @@ try{
   console.log("APP.tsx",data)
 }catch(error){
  console.log("Error",error)
+ console.log("From the user APP,tsx",error)
  setUser(null);
 }finally{
   setLoading(false);
@@ -68,7 +69,7 @@ try{
       <Route path="popular" element={<Popular />} />
       <Route path="following" element={<Following />} />
       <Route path=":id" element={<Singelpost/>} />
-      <Route path="user/:username" element={<UserProfile/>} />
+      <Route path=":username" element={<UserProfile/>} />
     </Route>
     <Route path="post" element={<Post />} />
     <Route path ="/account/profile" element={<Profile />} />

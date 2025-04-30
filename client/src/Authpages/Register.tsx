@@ -48,7 +48,6 @@ function Register(){
               throw new Error ( data.message  ||"Register failed! Please check your credentain")
              }
              const data=await response.json()
-            
              setSuccess(data.message);
         }catch(error){
             console.log("Error",error)
@@ -82,11 +81,10 @@ function Register(){
       if (result.status === "Success") {
         setSuccess(result.msg); 
         setUser(result.user);
-        navigation("/home");
+        navigation("/login");
       } else {
         setError(result.msg); 
       }
-      console.log("Verified code is",result)
     }catch(e){
       console.log("Can't Verified email",e)
     }

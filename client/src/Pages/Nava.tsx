@@ -36,12 +36,11 @@ function Nava() {
         </Link>
 
       
-        <div className="hidden md:flex items-center gap-4">
+        <div className="hidden md:flex  items-center gap-4">
           {user ? (
             <div onClick={ToggleMenuBar}
               className={`cursor-pointer flex items-center gap-2 px-4 py-1.5 rounded-lg ${themeStyles[theme as keyof typeof themeStyles]}`}>
               <img src={user.profileImage} className="object-cover w-7 h-7 rounded-lg" />
-              <span className="font-mono font-medium text-[18px]">{user.username}</span>
             </div>
           ) : (
             <div className="flex items-center gap-3 px-3">
@@ -65,7 +64,7 @@ function Nava() {
         </div>
 
         {IsOpen && (
-          <div className={`absolute bg-navabar top-[40px] right-[1px] w-full p-2 rounded-b-lg transition-all duration-300 ease-in-out ${themeStyles[theme as keyof typeof themeStyles]}`}>
+          <div className={`absolute bg-navabar  text-white top-[40px] right-[1px] w-full p-2 rounded-b-lg transition-all duration-300 ease-in-out ${themeStyles[theme as keyof typeof themeStyles]}`}>
             {user ? (
               <div className="flex flex-col items-center gap-2 px-2 py-3">
                 <div className="w-full h-20 rounded">

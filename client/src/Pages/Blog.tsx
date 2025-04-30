@@ -6,27 +6,26 @@ import { CiBookmarkPlus } from "react-icons/ci";
 import { Outlet } from "react-router";
 import { useLocation } from "react-router";
 import { NavLink ,Link } from "react-router";
-import Post from "./Post";
+ import Post from "./Post";
 import Userlist from "./userlist";
 import {PostType} from "./PostType";
-// // import { FaXTwitter } from "react-icons/fa6";
-// import { FaGithub } from "react-icons/fa";
-// import { CgWebsite } from "react-icons/cg";
+
 const Blog=()=>{
 
   // const [loading ,setLoading]=useState<boolean>(false);
   // const [error ,setError]=useState<boolean>(false);
   const [isliked,setLiked]=useState<{[key:string]:boolean}>({});
   const location=useLocation()
-  const nestedlocation=location.pathname !== "/blog";
+  const nestedlocation=location.pathname !== "/home";
   const context=useContext(UserContext)
  
   if(!context){
 
     throw new Error
   }
-  const {user,uppercaseletter,ISPoped,isPoped}=context;
+  const {ISPoped,isPoped}=context;
   const [post ,setPost]=useState<PostType[]>([])
+
   // type SocialLink = {
     //   twitter?: string;
     //   github?: string;
@@ -41,11 +40,10 @@ const Blog=()=>{
     useEffect(()=>{
       const fetchPosts = async () => {
         try {
-          const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/blog`, {
+          const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/post`, {
             credentials: "include",
           });
           const data = await res.json();
-          console.log("Post user Route checking",data.data)
           setPost(data.data.post); 
         } catch (error) {
           console.error("Error fetching posts:", error);
@@ -71,117 +69,57 @@ const Blog=()=>{
       console.log("Post id is",postID)
     
     }
+    console.log("Post",post)
     return (
-<section className="flex-grow">
+<section className=" bg-maincolor flex-grow">
      <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr_1fr] px-5 py-2">
-          <div className="  hidden md:block  md:col-span-1   px-5    md:px-7  lg:px-10 py-6 ">
-          <div className="   border-2  items-center shadow-sm  rounded-md">
-            <div className="flex   items-center p-2  justify-between w-36 gap-2 ">
-              <div className="w-16 h-16 rounded-full">
-              <img src={user?.profileImage} className="object-cover w-full h-full  rounded-full" />
-              </div>
-               <div>
-               <p className="font-dm font-semibold mt-6">Hello{uppercaseletter(user?.username)}</p>
-               <span className="text-[12px] font-dm text-gray-700">{new Date(user?.createdAt).toLocaleDateString()}</span>
-               </div>
-            </div>
-            <div className="flex  flex-col gap-2 px-4  py-3 ">
-              <h2 className="flex justify-between bg-slate-100 px-3  font-bold rounded-md py-1 ">Post
-                {/* <span className="font-semibold">{user.post?.length}</span> */}
-              </h2>
-              <h3  className="flex justify-between bg-slate-100 px-3  font-bold rounded-md py-1">Followers
-                {/* <span className="font-semibold">{user.follower?.length}</span> */}
-              </h3>
-              <h3  className="flex justify-between bg-slate-100 px-3  font-bold rounded-md py-1">Folowing
-                <span className="font-semibold">1,024</span></h3>
-              <div className="flex flex-row  justify-center   rounded-md px-5 gap-5">
-               {/* {user.follower.newlink.map((link:SocialLink,index:number)=>{
-                  if (link.twitter) {
-                    return (
-                      <a 
-                        key={index} 
-                        href={link.twitter} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="p-2 hover:bg-gray-100 rounded-full"
-                      >
-                        <FaXTwitter className="text-xl" />
-                      </a>
-                    );
-                  }
-                  if (link.github) {
-                    return (
-                      <a 
-                        key={index} 
-                        href={link.github} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="p-2 hover:bg-gray-100 rounded-full"
-                      >
-                        <FaGithub className="text-xl" />
-                      </a>
-                    );
-                  }
-                  if (link.website) {
-                    return (
-                      <a 
-                        key={index} 
-                        href={link.website} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="p-2 hover:bg-gray-100 rounded-full"
-                      >
-                        <CgWebsite className="text-xl" />
-                      </a>
-                    );
-                  }
-                  return null;
-                   })} */}
-              </div>
-            </div>
-          </div>
-          </div>
+       <div className="  hidden md:block   md:col-span-1   px-5    md:px-7  lg:px-10 py-6 ">
+        
+           <div className="  px-2 py-1 flex items-center ">
+            <button onClick={ISPoped} 
+           className="bg-black md:px-4 md:py-1.5 px-7 py-1 flex font-dm font-semibold rounded-lg text-slate-100  text-[16px] items-center">Post</button>
+           </div> 
+          {isPoped && (
+          <div className="fixed  inset-0 z-40 bg-black  bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white w-full max-w-xl rounded-xl p-2 relative shadow-lg">
+          <Post />
+         </div> 
+        </div>
+          )}
+     
+      </div>
           {/*Post Section*/}
           <div className="  col-span-3 md:col-span-1 w-full flex flex-col justify-start md:h-[calc(100vh-1rem)] overflow-y-auto scroll-hidden">
-            <div className={` bg-slate-100  flex  sticky top-0 z-20  rounded-t-lg  flex-wrap md:flex-row gap-6  md:justify-start justify-evenly py-3 px-4  `}>
+            
+            <div className={`flex   justify-center  gap-1  p-2 `}>
+            <div className="flex     rounded-md text-white border-2">
               <NavLink to="/home/latest"    className={({isActive})=>isActive
-              ? "bg-black px-4 py-1.5 flex rounded-md text-white text-[14px] items-center":
-              " px-4 py-1.5 flex bg-slate-100  rounded-md text-black text-[14px] items-center"  
+              ? "bg-gray-600   bg-opacity-70 rounded-l-md text-center  w-24 px-4 py-1.5  border-r-2 border-slate-100  text-[14px] items-center":
+              " px-4 py-1.5 flex w-24 bg-navabar bg-opacity-80 rounded-l-md   border-r-2   border-slate-100   text-[14px] items-center"  
             }>Latest</NavLink>
               <NavLink  to="/home/popular"  className={({isActive})=>isActive 
-              ?"bg-black px-4 py-1.5 flex rounded-md text-white text-[14px] items-center":"bg-slate-100  px-4 py-1.5 flex rounded-md text-black text-[14px] items-center"}
+              ?"bg-gray-600   bg-opacity-70 text-center px-4 py-1.5 flex   w-24  text-[14px] items-center":  " bg-navabar bg-opacity-80  w-24  px-4 py-1.5 flex   text-[14px] items-center"}
               >Popular</NavLink>
               <NavLink to="/home/following"  className={({isActive})=>isActive 
-              ?"bg-black px-4 py-1.5 flex rounded-md text-white text-[14px] items-center":" bg-slate-100 px-4 py-1.5 flex rounded-md text-black text-[14px] items-center"}
+              ?"bg-gray-600    bg-opacity-70 rounded-r-md text-center  px-4 py-1.5 flexs  w-24 border-l-2 border-slate-100  text-[14px] items-center":" border-slate-100    rounded-r-md   w-24  bg-navabar bg-opacity-80   border-l-2 px-4 py-1.5 flex  text-[14px] items-center"}
               >Follwing</NavLink>
+              </div>
             </div>
             
             {nestedlocation ? (
               <Outlet />
             ):(
                  <div className="">
-                  <div  className=" px-2 py-1 flex  flex-col rounded-md ">
-                      <div className="  border-b-[1.5px] border-gray-500 px-2 py-1 flex items-center justify-end ">
-                       <button onClick={ISPoped} 
-                       className="bg-black md:px-4 md:py-1.5 px-7 py-1 flex font-dm font-semibold rounded-lg text-slate-100  text-[16px] items-center">Post</button>
-                      </div> 
-                      {isPoped && (
-                   <div className="fixed  inset-0 z-40 bg-black  bg-opacity-50 flex items-center justify-center">
-                   <div className="bg-white w-full max-w-xl rounded-xl p-2 relative shadow-lg">
-                      <Post />
-                     </div>
-                   </div>
-               )}
-            </div>
+              
            
-              <div className="flex  flex-col border-x-[1.5px]  border-gray-500 p-1 m-2 gap-2   ">
+              <div className="flex    flex-col  p-1 m-2 gap-2   ">
                {post.map((post) => (
-                <div className=" p-1 border-b-[1.5px] cursor-pointer   border-gray-600 shadow bg-white">
+                <div className=" p-1  cursor-pointer  hover:bg-navabar hover:bg-opacity-40  shadow rounded-lg bg-navabar text-white px-2 ">
                    <div className="flex  flex-row justify-between p-1 items-center gap-2">
-                    <div className="flex flex-row items-center  text-gray-800 font-dm font-semibold">
+                    <div className="flex flex-row items-center  font-dm font-semibold">
                      <img src={ProfiledImage} className="object-cover rounded-full w-9 h-9" />
                      <div className="mt-4  flex-col flex  ">
-                     <Link  to={`/blog/user/${post.user?.username}`} className="text-[12px] ml-1  hover:underline  font-extrabold">{post.user?.username}</Link>
+                     <Link  to={`/home/user/${post.user?.username}`} className="text-[12px] ml-1  hover:underline  font-extrabold">{post.user?.username}</Link>
                      <p className="text-[9px] font-bold">{new Date(post.createdAt).toLocaleDateString()}</p>
                     </div>
                 </div>
@@ -194,12 +132,12 @@ const Blog=()=>{
                 <p>{post.text}</p>
                </div>
 
-               <div className="w-full border-2  h-72 overflow-hidden rounded-md">
-                <img src={post.image} 
+               <div className="w-full  h-72 overflow-hidden rounded-sm ">
+                <img src={post?.image} 
                 loading="lazy"
                 className="w-full h-full object-cover" />
                </div>
-               <div className="flex flex-row p-2 items-center border-t-2  rounded-sm  gap-2   justify-between">
+               <div className="flex flex-row p-2 items-center  rounded-sm  gap-2   justify-between">
                 <div className="flex flex-row   px-2     py-1    gap-3 justify-between w-32  items-center  text-center">
                 
                 <button className="flex  items-center   px-1  ">
@@ -243,3 +181,4 @@ const Blog=()=>{
     )
 }
 export default Blog;
+

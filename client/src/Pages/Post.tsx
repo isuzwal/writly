@@ -4,7 +4,6 @@ import ProfiledImage from "../assets/discord.jpeg"
 import { IoIosClose } from "react-icons/io";
 import { LuImageUp } from "react-icons/lu";
 const Post=()=>{
-    const  [title,setTitle]=useState<string>("");
     const  [text,settext]=useState<string>("");
     const  [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null); 
     const textref=useRef<HTMLTextAreaElement>(null)
@@ -28,7 +27,7 @@ const Post=()=>{
         const formData =new FormData()
         formData.append("image",file)
             try{
-              const response=await fetch(`${import.meta.env.VITE_BACKEND_URL}/upload`,{
+              const response=await fetch(`${import.meta.env.VITE_BACKEND_URL}/post/upload`,{
                 method:"POST",
                 credentials:"include",
                 body:formData
@@ -47,14 +46,13 @@ const Post=()=>{
        const posted=async(event:React.FormEvent)=>{
         event.preventDefault()
            try{
-           const response=await fetch(`${import.meta.env.VITE_BACKEND_URL}/post`,{
+           const response=await fetch(`${import.meta.env.VITE_BACKEND_URL}/post/create`,{
             method:"POST",
           headers:{
            'Content-Type':'application/json',
           },
            credentials:"include",
            body:JSON.stringify({
-             title:title,
              text:text,
              image:uploadedImageUrl,
            
@@ -88,8 +86,7 @@ const Post=()=>{
              </div>
       </div> 
          <form  onSubmit={posted} className="w-full  px-2  gap-3  py-1 rounded-md">
-           <input type="text" value={title} placeholder=" Set title your Post ?" 
-           onChange={(e)=>setTitle(e.target.value)}  className="w-full  px-2  border-b-[2px] outline-none p-1 mb-2 "/>
+      
            <textarea 
            ref={textref}
            value={text} cols={10} onChange={(e)=>settext(e.target.value)}

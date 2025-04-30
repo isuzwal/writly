@@ -15,8 +15,8 @@ function Login(){
     event.preventDefault()
         try{
             setLoading(true)
-            // alert("Working on it ")
-           const response=await fetch(`${import.meta.env.VITE_BACKEND_URL}/login`,{
+            
+           const response=await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/login`,{
             method:'POST',
             headers:{
               'Content-Type':'application/json',
@@ -28,15 +28,13 @@ function Login(){
             credentials:"include",
             //->checking the response is !ok
           })
-           
-        
           if(!response.ok){
             throw new Error ("Register failed! Please check your credentain")
            }
            const data=await response.json()
            setUserName(data.user);
            setSuccess(data.message);
-            navgation("/blog")
+            navgation("/home")
             setPassword("")
             setUserName("")
         }catch(error){

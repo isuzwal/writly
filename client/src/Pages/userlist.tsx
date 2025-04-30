@@ -7,7 +7,7 @@ const [userlist,setUserlist]=useState<userlist[] >([])
     useEffect(()=>{
         const userFetch=async()=>{
             try{
-           const response=await  fetch(`${import.meta.env.VITE_BACKEND_URL}/user`,{
+           const response=await  fetch(`${import.meta.env.VITE_BACKEND_URL}/api/user`,{
             credentials:"include"
            })
            const data=await response.json()
@@ -19,20 +19,20 @@ const [userlist,setUserlist]=useState<userlist[] >([])
         userFetch()
     },[])
     return(
-        <div className="px-4 w-full border rounded-xl bg-white shadow-sm">
+        <div className="bg-navabar bg-opacity-40  ml-4  w-full text-white rounded-xl  shadow-sm">
         <div className="py-3 mt-2">
           <span className="font-bold text-xl">Who to follow</span>
         </div>
         {userlist.map((user, index) => (
-          <Link key={index} to={`/blog/user/${user.username}`} className="flex items-center gap-3 p-3 hover:bg-gray-100 rounded-lg transition" >
+          <Link key={index} to={`/home/${user.username}`} className="flex items-center gap-3 p-3 hover:bg-neutral-700 rounded-lg transition" >
             <img src={user.profileImage} alt="profile"  className="object-cover rounded-full h-12 w-12"/>
             <div className="flex flex-col">
               <span className="font-semibold text-sm">{user.username}</span>
-              <span className="text-xs text-gray-500">Followers {user.follower?.length}</span>
+              <span className="text-xs ">Followers {user.follower?.length}</span>
             </div>
             <button
               type="button"
-              className="ml-auto px-4 py-1 text-sm font-medium text-white bg-black rounded-full hover:bg-gray-800 transition">
+              className="ml-auto px-4 py-1 text-sm font-medium bg-black rounded-full hover:bg-gray-800 transition">
               Follow
             </button>
           </Link>
