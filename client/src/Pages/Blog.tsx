@@ -1,7 +1,7 @@
 import { useContext, useState ,useEffect} from "react";
 import ProfiledImage from "../assets/discord.jpeg"
 import { UserContext } from "../UserAuth/User";
-import { Heart ,MessageSquareMore,PencilLineIcon } from "lucide-react";
+import { Heart ,MessageSquareMore,PencilLineIcon,Send } from "lucide-react";
 import { CiBookmarkPlus } from "react-icons/ci";
 import { Outlet } from "react-router";
 import { useLocation } from "react-router";
@@ -15,6 +15,8 @@ const Blog=()=>{
   // const [loading ,setLoading]=useState<boolean>(false);
   // const [error ,setError]=useState<boolean>(false);
   const [isliked,setLiked]=useState<{[key:string]:boolean}>({});
+  const [Iscommnet,setIsComment]=useState<{[key:string]:boolean}>({})
+  const [comment ,setComment]=useState<string>("")
   const location=useLocation()
   const nestedlocation=location.pathname !== "/home";
   const context=useContext(UserContext)
@@ -63,20 +65,30 @@ const Blog=()=>{
       };
     }, [isPoped]);
     //-> for liked 
-    const likedpost=(postID:string)=>{
-      setLiked((prevliked)=>({
-        ...prevliked,[postID]:!prevliked}))
-      console.log("Post id is",postID)
-    
+    const likedpost = (postID: string) => {
+      setLiked((prevliked) => ({
+        ...prevliked, 
+        [postID]: !prevliked[postID]
+      }));
+    };
+    // comment show case
+    const showcommnet=(postID:string)=>{
+       setIsComment((prevcomment)=>({
+        ...prevcomment,[postID]:!prevcomment[postID]}))
     }
-    console.log(post)
+   
 
     return (
-<section className=" bg-maincolor ">
+<section className=" bg-maincolor  min-h-screen ">
      <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr_1fr] px-5 py-2">
      <div className="hidden md:block md:col-span-1 bg-[#1d1c1c] px-2 py-3">
      <div className="flex flex-col py-14  w-full h-full gap-8">
-
+     <div className="flex items-center gap-3 hover:bg-navabar bg-opacity-25 rounded-md  px-4 py-2 mb-4">
+              <img src={user?.profileImage} className="w-10 h-10 rounded-full object-cover" alt="Profile" />
+              <span className="text-white mt-1 font-medium text-[15px] hidden lg:block">
+                {user?.username || "User"}
+              </span>
+            </div>
     {/* Navigation Items */}
     {linklist.map((link, index) => (
       <Link to={typeof link.link==="function" ?link.link(user?.username):link.link} key={index}
@@ -140,12 +152,12 @@ const Blog=()=>{
                 </div>
                </div>
                <Link to={`/home/${post._id}`} className="block underline:none px-2">
-        <span className="text-[15px] text-start font-dm font-semibold hover:underline">{post.title}</span>
-        <p className="text-gray-300">{post.text}</p>
-      </Link>
+                <span className="text-[15px] text-start font-dm font-semibold hover:underline">{post.title}</span>
+                <p className="text-gray-300">{post.text}</p>
+                </Link>
                 {post.image && (
                 <Link  to={`/home/${post._id}`} className="">
-                <div className="w-full  bg-pink-500 h-72 overflow-hidden rounded-sm">
+                <div className="w-full   h-72 overflow-hidden rounded-sm">
                 <img  src={post?.image}  className="w-full h-full object-cover" 
                alt="Post image" />
               </div>
@@ -153,38 +165,47 @@ const Blog=()=>{
                )}             
                <div className="flex flex-row p-2 items-center  rounded-sm  gap-2   justify-between">
                 <div className="flex flex-row   px-2     py-1    gap-3 justify-between w-32  items-center  text-center">
-                <button className="flex  items-center   px-1  ">
-                 <span key={post._id}  onClick={() => likedpost(post._id)}
-                 className="flex items-center cursor-pointer">
-                <div className="flex  p-1.5 hover:bg-rose-700 transition-colors duration-200 ease-in-out  hover:text-white hover:bg-opacity-80 rounded-full items-center justify-center text-sm gap-1 cursor-pointer">
-                  <Heart 
-                    className={`${isliked[post._id]  ? 'fill-rose-600 text-rose-600'
-                      :'fill-none  group-hover:text-rose-600'
-                    }transition-colors duration-200  rounded-full`} 
-                  size={22} />
-                 </div>
-                </span>
-                  <h3 className="font-semibold text-[15px] ">{post.like?.length}10</h3>
-                </button>
-                 
-                 <button className="flex  items-center  p-1  ">
+                <button className="flex items-center gap-1">
+                          <span onClick={() => likedpost(post._id)} className="flex items-center cursor-pointer">
+                            <div className="flex p-1.5 hover:bg-rose-700 transition-colors duration-200 ease-in-out hover:text-white hover:bg-opacity-80 rounded-full items-center justify-center text-sm gap-1 cursor-pointer">
+                              <Heart size={22} 
+                                className={`${isliked[post._id] ? 'fill-rose-600 text-rose-600' : 'fill-none'} transition-colors duration-200 rounded-full`} 
+                              />
+                            </div>
+                          </span>
+                          <h3 className="font-semibold text-[15px]">{post.like?.length || 0}</h3>
+                        </button>
+                 <button 
+                  onClick={()=>showcommnet(post._id)}
+                  className="flex  items-center  p-1  ">
                   <div className="flex  p-1.5 hover:bg-blue-700 transition-colors duration-200 ease-in-out hover:bg-opacity-30  hover:text-blue-600 rounded-full items-center justify-center text-sm gap-1 cursor-pointer">
                     <MessageSquareMore  size={22}/>
                    </div>
-                   <h3 className="font-semibold ">{post.comment?.length}100</h3> 
+                   <h3 className="font-semibold ">{post.comment?.length || 0}</h3> 
                 </button>
               </div>
                  <span className="flex text-sm cursor-pointer ">
                 <CiBookmarkPlus  size={20}/>
                 </span>
                 </div>
-               
+                {Iscommnet[post._id] && (
+                  <div className="flex items-start gap-3 px-4 py-3 bg-maincolor bg-opacity-50 border border-gray-700 rounded-xl shadow-sm w-full">
+                     <img src={user?.profileImage}  alt="Profile" className="w-10 h-10 rounded-full object-cover"/>
+                     <div className="flex-1">
+                       <div className="bg-[#2a2a2a] flex  text-white px-4 py-2 rounded-full text-sm w-full  ">
+                       <input type="text" value={comment} placeholder="Write a comment..." 
+                       onChange={(e)=>setComment(e.target.value)} className="bg-transparent  w-full outline-none" />
+                       <button className="hover:bg-maincolor  px-2 py-1 bg-opacity-40 rounded-lg duration-300 "><Send size={20} /></button>
+                     </div>
+                    </div>
+               </div>
+                )}
              </div>  
-          ))}
+              ))}
             </div>
             </div>
-        )}
-        </div>
+           )}
+          </div>
           <div className="md:col-span-1 hidden  text-center  md:block">
             <Userlist />
             </div>

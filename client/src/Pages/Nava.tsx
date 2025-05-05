@@ -28,7 +28,7 @@ function Nava() {
   };
 
   return (
-    <section className={` bg-navabar w-full ${themeStyles[theme as keyof typeof themeStyles]}`}>
+    <section className={` bg-navabar sticky top-0 z-30  w-full ${themeStyles[theme as keyof typeof themeStyles]}`}>
       <div className=" py-1 px-2 flex relative items-center justify-between">
         <Link  to="/"
           className="  text-white hover:bg-gradient-to-t from-slate-100 via-slate-200 to-slate-300 md:text-xl hover:shadow-md   rounded-md py-1 hover:text-writly flex gap-1 text-[16px] font-semibold font-dm px-4 whitespace-nowrap">

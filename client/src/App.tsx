@@ -45,7 +45,7 @@ try{
     } 
   const data = await response.json();
   context.setUser(data.userInfo); 
-  console.log("APP.tsx",data)
+
 }catch(error){
  console.log("Error",error)
  console.log("From the user APP,tsx",error)
