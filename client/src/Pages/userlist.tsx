@@ -1,5 +1,5 @@
 import { useEffect,useState } from "react";
-import { userlist } from "./userlistType";
+import { userlist } from "../type/userlistType";
 import { Link } from "react-router";
 
 const Userlist=()=>{
@@ -19,7 +19,7 @@ const [userlist,setUserlist]=useState<userlist[] >([])
         userFetch()
     },[])
     return(
-        <div className="bg-navabar bg-opacity-40  ml-4  w-full text-white rounded-xl  shadow-sm">
+        <div className="bg-navabar  bg-opacity-40  ml-4  w-full text-white rounded-xl  shadow-sm">
         <div className="py-3 mt-2">
           <span className="font-bold text-xl">Who to follow</span>
         </div>

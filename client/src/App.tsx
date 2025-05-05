@@ -11,8 +11,12 @@ import Following from "./Pages/Following";
 import Popular from "./Pages/Popluar";
 import Home from './Pages/Home';
 import Post from "./Pages/Post";
+import UserPost from './Pages/UserPost';
+import Notification from './Pages/Notification';
 import Singelpost from "./Pages/SinglePost";
 import UserProfile from "./Pages/Userprofile";
+import Story from './Pages/Story';
+import Bookmark from './Pages/Bookmark';
 import { UserContext } from "./UserAuth/User";
 import { useContext, useEffect } from "react";
 import { Navigate } from "react-router";
@@ -63,12 +67,16 @@ try{
     <Route path="/login" element={<Login />} />
     <Route path="/register" element={<Register />} />
     <Route path="/" element={<Layout />}>
-    <Route index element={user ? <Navigate to ="/home" />:<Home />} />
+    <Route index element={user?.username ?<Navigate to ="/home" />:<Home />} />
     <Route path="home" element={<Blog />}>
       <Route path="latest" element={<Latest />} />
       <Route path="popular" element={<Popular />} />
       <Route path="following" element={<Following />} />
       <Route path=":id" element={<Singelpost/>} />
+      <Route path="notification" element={<Notification />} />
+      <Route path="story" element={<Story />} />
+      <Route path="post" element={<UserPost />} />
+      <Route path="bookmark" element={<Bookmark />} />
       <Route path=":username" element={<UserProfile/>} />
     </Route>
     <Route path="post" element={<Post />} />

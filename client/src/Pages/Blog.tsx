@@ -1,15 +1,15 @@
 import { useContext, useState ,useEffect} from "react";
 import ProfiledImage from "../assets/discord.jpeg"
 import { UserContext } from "../UserAuth/User";
-import { Heart ,MessageSquareMore } from "lucide-react";
+import { Heart ,MessageSquareMore,PencilLineIcon } from "lucide-react";
 import { CiBookmarkPlus } from "react-icons/ci";
 import { Outlet } from "react-router";
 import { useLocation } from "react-router";
 import { NavLink ,Link } from "react-router";
  import Post from "./Post";
 import Userlist from "./userlist";
-import {PostType} from "./PostType";
-
+import {PostType} from "../type/PostType";
+import linklist from "./Links/links";
 const Blog=()=>{
 
   // const [loading ,setLoading]=useState<boolean>(false);
@@ -23,7 +23,7 @@ const Blog=()=>{
 
     throw new Error
   }
-  const {ISPoped,isPoped}=context;
+  const {ISPoped,isPoped ,user}=context;
   const [post ,setPost]=useState<PostType[]>([])
 
   // type SocialLink = {
@@ -69,28 +69,42 @@ const Blog=()=>{
       console.log("Post id is",postID)
     
     }
-    console.log("Post",post)
+    console.log(post)
+
     return (
-<section className=" bg-maincolor flex-grow">
+<section className=" bg-maincolor ">
      <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr_1fr] px-5 py-2">
-       <div className="  hidden md:block   md:col-span-1   px-5    md:px-7  lg:px-10 py-6 ">
-        
-           <div className="  px-2 py-1 flex items-center ">
-            <button onClick={ISPoped} 
-           className="bg-black md:px-4 md:py-1.5 px-7 py-1 flex font-dm font-semibold rounded-lg text-slate-100  text-[16px] items-center">Post</button>
-           </div> 
-          {isPoped && (
-          <div className="fixed  inset-0 z-40 bg-black  bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white w-full max-w-xl rounded-xl p-2 relative shadow-lg">
-          <Post />
-         </div> 
-        </div>
-          )}
-     
+     <div className="hidden md:block md:col-span-1 bg-[#1d1c1c] px-2 py-3">
+     <div className="flex flex-col py-14  w-full h-full gap-8">
+
+    {/* Navigation Items */}
+    {linklist.map((link, index) => (
+      <Link to={typeof link.link==="function" ?link.link(user?.username):link.link} key={index}
+        className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-[#2a2929] transition-colors duration-200" >
+        <span className="text-white text-xl">{link.icon}</span>
+        <span className="text-white font-medium text-[15px] hidden lg:block">{link.label}</span>
+      </Link>
+    ))}
+    <button onClick={ISPoped} className="mt-4  w-1/2  flex items-center justify-center gap-2  bg-[#4f46e5] hover:bg-[#635bff] text-white px-4 py-2 rounded-xl font-semibold text-sm transition-all duration-300">
+       <PencilLineIcon />Post
+    </button>
+  </div>
+
+  {isPoped && (
+    <div className="fixed inset-0 z-40 bg-black bg-opacity-50 flex items-center justify-center">
+      <div className="bg-navabar bg-opacity-60   w-full max-w-xl rounded-xl p-4 shadow-xl relative">
+        <button
+          className="absolute top-2 right-2 text-gray-600 hover:text-black text-2xl"
+          onClick={ISPoped}>
+          &times;
+        </button>
+        <Post />
       </div>
+    </div>
+  )}
+</div>
           {/*Post Section*/}
           <div className="  col-span-3 md:col-span-1 w-full flex flex-col justify-start md:h-[calc(100vh-1rem)] overflow-y-auto scroll-hidden">
-            
             <div className={`flex   justify-center  gap-1  p-2 `}>
             <div className="flex     rounded-md text-white border-2">
               <NavLink to="/home/latest"    className={({isActive})=>isActive
@@ -110,8 +124,6 @@ const Blog=()=>{
               <Outlet />
             ):(
                  <div className="">
-              
-           
               <div className="flex    flex-col  p-1 m-2 gap-2   ">
                {post.map((post) => (
                 <div className=" p-1  cursor-pointer  hover:bg-navabar hover:bg-opacity-40  shadow rounded-lg bg-navabar text-white px-2 ">
@@ -119,7 +131,7 @@ const Blog=()=>{
                     <div className="flex flex-row items-center  font-dm font-semibold">
                      <img src={ProfiledImage} className="object-cover rounded-full w-9 h-9" />
                      <div className="mt-4  flex-col flex  ">
-                     <Link  to={`/home/user/${post.user?.username}`} className="text-[12px] ml-1  hover:underline  font-extrabold">{post.user?.username}</Link>
+                     <span className="text-[12px] ml-1  hover:underline  font-extrabold">{post.user?.username}</span>
                      <p className="text-[9px] font-bold">{new Date(post.createdAt).toLocaleDateString()}</p>
                     </div>
                 </div>
@@ -127,19 +139,20 @@ const Blog=()=>{
                     <button className="bg-black  md:px-4 md:py-1.5 px-3 py-1 flex font-dm font-semibold rounded-md text-white text-[14px] items-center">Follow</button>
                 </div>
                </div>
-              <div className="px-2 ">
-                <span className="text-[15px] text-start font-dm ">{post.title}</span>
-                <p>{post.text}</p>
-               </div>
-
-               <div className="w-full  h-72 overflow-hidden rounded-sm ">
-                <img src={post?.image} 
-                loading="lazy"
-                className="w-full h-full object-cover" />
-               </div>
+               <Link to={`/home/${post._id}`} className="block underline:none px-2">
+        <span className="text-[15px] text-start font-dm font-semibold hover:underline">{post.title}</span>
+        <p className="text-gray-300">{post.text}</p>
+      </Link>
+                {post.image && (
+                <Link  to={`/home/${post._id}`} className="">
+                <div className="w-full  bg-pink-500 h-72 overflow-hidden rounded-sm">
+                <img  src={post?.image}  className="w-full h-full object-cover" 
+               alt="Post image" />
+              </div>
+                </Link>
+               )}             
                <div className="flex flex-row p-2 items-center  rounded-sm  gap-2   justify-between">
                 <div className="flex flex-row   px-2     py-1    gap-3 justify-between w-32  items-center  text-center">
-                
                 <button className="flex  items-center   px-1  ">
                  <span key={post._id}  onClick={() => likedpost(post._id)}
                  className="flex items-center cursor-pointer">

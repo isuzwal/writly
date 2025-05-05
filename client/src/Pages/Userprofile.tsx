@@ -1,69 +1,103 @@
 import { useParams } from "react-router";
-import { useEffect,useState } from "react";
-import { userlist } from "./userlistType";
+import { useEffect, useState } from "react";
+import { userlist } from "../type/userlistType";
 import { SlLike } from "react-icons/sl";
-import {  FaRegComment } from "react-icons/fa";
-const UserProfile=()=>{
-    const [user ,setUser]=useState<userlist|null>(null)
-    const {username}=useParams()
-    useEffect( ()=>{
-       if(!username) return ;
-       const fetchData=async()=>{
-           try{
-           const response= await fetch (`${import.meta.env.VITE_BACKEND_URL}/blog/user/name${username}`,{
-               credentials:"include"
-           })
-           const data = await response.json();
-            setUser(data.userInfo); 
-       }catch (error) {
-           console.error("Error fetching posts:", error);
-       }
-   }
-   fetchData();
-   },[username])
-   if (!user) {
-       return <div className="text-center p-10">Loading User</div>;
-     }
-    return (
-        <div className="  p-2">
-        <div className="relative h-56  border-2 cursor-pointer  rounded-xl overflow-hidden shadow-md mb-2">
-          <img  src={user?.coverImage} alt="Cover" className="h-full w-full object-cover"/>
-          <div className="absolute -bottom-1 z-30 ">
-            <img src={user?.profileImage} alt="Profile" className="h-36 w-36 object-cover  rounded-full border-[3px] cursor-pointer  "/>
-          </div>
-        </div>
-        <div className="p-1 flex flex-col ">
-          <div className="flex    px-2 text-start  flex-col  text-sm mt-2">
-           <h1 className="text-3xl font-bold">{user?.username}</h1>
-            <span className="flex gap-3  text-gray-700 ">
-              <strong className="font-dm">Followers {user.follower?.length}</strong> 
-              <strong className="">Post {user.post?.length}</strong>
-              </span>
-          </div>
-            <div className="p-2">
-              <span className="text-slate-900 font-semibold">Bio</span>
-            <p className="text-gray-600">{user.bio}</p>
-            </div>
-        </div>
-        <div className="p-2">
-            {user.post?.map((post, index) => (
-            <div key={index} className=" border-t-[2px] border-gray-300 p-5 rounded-xl shadow-md">
-              <h2 className="text-xl font-semibold">{post.title}</h2>
-              <p className="text-gray-600 mt-2">{post.text}</p>
-              <div className="w-full border-2  h-56 overflow-hidden rounded-md">
-                <img src={post?.image} 
-                loading="lazy"
-                className="w-full h-full object-cover" />
-               </div>
-              <div className="flex  gap-5  text-xs text-gray-800 mt-4">
-                <span>{post.like?.length}<SlLike size={18} /></span>
-                <span>{post.comment?.length}<FaRegComment  size={18}/></span>
-              </div>
-            </div>
-          ))}
+import { FaRegComment } from "react-icons/fa";
+
+const UserProfile = () => {
+  const { username } = useParams();
+  const [user, setUser] = useState<userlist | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      if (!username) return;
+      setLoading(true);
+      try {
+        const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/profile/${username}`, {
+          credentials: "include",
+        });
+        
+        if (!res.ok) {
+          throw new Error(`Failed to fetch user: ${res.status}`);
+        }
+        
+        const data = await res.json();
+        if (data.userInfo) {
+          setUser(data.userInfo);
+          console.log("From user Profile", data.userInfo);
+        } else {
+          setError("User not found");
+        }
+      } catch (error) {
+        console.error("Error loading user profile:", error);
+        setError("Failed to load user profile");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUser();
+  }, [username]);
+
+  if (loading) return <p className="text-center mt-10 text-white">Loading...</p>;
+  if (error) return <p className="text-center mt-10 text-white">{error}</p>;
+  if (!user) return <p className="text-center mt-10 text-white">User not found</p>;
+
+  return (
+    <div className="max-w-3xl mx-auto bg-navabar rounded-lg shadow-md overflow-hidden mt-10 text-white">
+      <div className="relative">
+        <img 
+          src={user.coverImage || "https://via.placeholder.com/800x200"} 
+          alt="Cover" 
+          className="w-full h-48 object-cover" 
+        />
+        <img 
+          src={user.profileImage || "https://via.placeholder.com/100"} 
+          alt="Profile" 
+          className="w-28 h-28 rounded-full border-4 border-white absolute -bottom-14 left-6 object-cover" 
+        />
+      </div>
+      <div className="pt-16 px-6 pb-4">
+        <h2 className="text-2xl font-bold">{user.username}</h2>
+        <p className="text-gray-300 mt-1">{user.bio || "No bio available"}</p>
+        <div className="flex gap-4 mt-2 text-gray-300 text-sm">
+          <span><strong>{user?.follower?.length || 0}</strong> Followers</span>
+          <span><strong>{user?.post?.length || 0}</strong> Posts</span>
         </div>
       </div>
-        
-    )
-}
+      
+      {/* Posts */}
+      <div className="border-t border-gray-700">
+        {user.post && user.post.length > 0 ? (
+          user.post.map((post, idx) => (
+            <div key={idx} className="p-4 border-b border-gray-700 hover:bg-gray-800 transition">
+              <h3 className="font-semibold">{post.title}</h3>
+              <p className="text-gray-300 text-sm mt-1">{post.text}</p>
+              {post.image && (
+                <img 
+                  src={post.image} 
+                  alt="Post" 
+                  className="w-full mt-2 rounded-md max-h-60 object-cover" 
+                />
+              )}
+              <div className="flex gap-6 mt-3 text-gray-400 text-sm">
+                <span className="flex items-center gap-1">
+                  <SlLike /> {post.like?.length || 0}
+                </span>
+                <span className="flex items-center gap-1">
+                  <FaRegComment /> {post.comment?.length || 0}
+                </span>
+              </div>
+            </div>
+          ))
+        ) : (
+          <p className="p-4 text-gray-400">No posts yet</p>
+        )}
+      </div>
+    </div>
+  );
+};
+
 export default UserProfile;

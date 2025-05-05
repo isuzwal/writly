@@ -14,7 +14,7 @@ export default {
       },
       fontFamily:{
         sans: ["DM Sans", "sans-serif"], 
-        dm: ["DM Sans", "sans-serif"], 
+        dm: ["Nunito", "sans-serif"], 
       }
     },
   },

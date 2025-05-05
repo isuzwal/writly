@@ -1,7 +1,5 @@
 import { useContext, useState ,useEffect, useRef } from "react";
 import { UserContext } from "../UserAuth/User";
-import ProfiledImage from "../assets/discord.jpeg"
-import { IoIosClose } from "react-icons/io";
 import { LuImageUp } from "react-icons/lu";
 const Post=()=>{
     const  [text,settext]=useState<string>("");
@@ -13,7 +11,7 @@ const Post=()=>{
     if(!context){
         throw new Error
       }
-      const {user,uppercaseletter,ISPoped}=context
+      const {user,uppercaseletter,}=context
 
       useEffect(()=>{
         if(textref.current){
@@ -27,7 +25,7 @@ const Post=()=>{
         const formData =new FormData()
         formData.append("image",file)
             try{
-              const response=await fetch(`${import.meta.env.VITE_BACKEND_URL}/post/upload`,{
+              const response=await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/post/upload`,{
                 method:"POST",
                 credentials:"include",
                 body:formData
@@ -46,7 +44,7 @@ const Post=()=>{
        const posted=async(event:React.FormEvent)=>{
         event.preventDefault()
            try{
-           const response=await fetch(`${import.meta.env.VITE_BACKEND_URL}/post/create`,{
+           const response=await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/post/create`,{
             method:"POST",
           headers:{
            'Content-Type':'application/json',
@@ -70,56 +68,48 @@ const Post=()=>{
            }
        }
     return (
-<div className="w-full rounded-lg px-2 py-1 ">
+<div className="w-full   rounded-lg px-2 py-1 ">
    <div className="flex items-center flex-col  gap-1 px-1 py-1">
       <div className="flex   flex-row  justify-between  gap-2 px-1 py-1 rounded-sm w-full">
          <div className="flex flex-row items-center gap-1">
-          <img src={ProfiledImage} className="w-10 h-10 rounded-full object-cover" />
-           <div className="flex flex-col">
+          <img src={user?.profileImage} className="w-10 h-10 rounded-full object-cover" />
+           <div className="flex text-white  flex-col">
             <p className="text-sm font-semibold">{uppercaseletter(user?.username)}</p>
-            <p className="text-xs text-gray-500">{localDate}</p>
+            <p className="text-xs ">{localDate}</p>
           </div>
         </div>
-         <div className="items-center flex ">
-              <button className="hover:bg-slate-200 hover:bg-opacity-60    rounded-lg p-1 " 
-              onClick={ISPoped}><IoIosClose size={28}  color="black"/></button>
-             </div>
+        
       </div> 
          <form  onSubmit={posted} className="w-full  px-2  gap-3  py-1 rounded-md">
-      
            <textarea 
            ref={textref}
            value={text} cols={10} onChange={(e)=>settext(e.target.value)}
            placeholder="Write about it " 
-           className="w-full resize-none h-8 overflow-hidden border-b-2 p-3 text-base focus:outline-none   placeholder-gray-500" >
+           className="w-full resize-none h-8  bg-navabar  text-white bg-transparent  overflow-hidden  p-3 text-base focus:outline-none   placeholder-gray-500" >
            </textarea>
            <div>
             {uploadedImageUrl && (
               <div>
-
                 <img src={uploadedImageUrl} alt="uploaded" className="w-full h-44 object-cover rounded-md " />
               </div>
             )}
           </div>
-           <label className="border mt-1 w-8 h-8 cursor-pointer   flex justify-center items-center  gap-2 bg-transparent rounded-xl px-1 py-2  text-slate-950 "> 
+           <label className=" mt-1 w-8 h-8 cursor-pointer   flex justify-center items-center  gap-2 bg-transparent rounded-xl px-1 py-2  text-slate-950 "> 
              <input type="file"  
               onChange={(e)=>{
               const file = (e.target as HTMLInputElement).files?.[0];
               console.log("Image File",file)
               if (file) {
-               
                 uploadimage(file); //-- function passing parm
                 console.log("Calling upload with file:", file.name);
               }}}
               className="hidden"  />
-            <LuImageUp size={26} />
+            <LuImageUp size={26} color="white" />
             </label> 
-    <button type="submit"  className="mt-2 bg-black text-white font-semibold px-3 py-1 rounded-md">
-     Post
-  </button>
-         </form> 
-         
-      
+        <button type="submit"  className="mt-2 bg-white font-semibold px-3 py-1 rounded-md">
+         Post
+        </button>
+      </form> 
     </div>
 </div>
     )

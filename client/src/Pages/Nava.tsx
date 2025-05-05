@@ -64,7 +64,7 @@ function Nava() {
         </div>
 
         {IsOpen && (
-          <div className={`absolute bg-navabar  text-white top-[40px] right-[1px] w-full p-2 rounded-b-lg transition-all duration-300 ease-in-out ${themeStyles[theme as keyof typeof themeStyles]}`}>
+          <div className={`absolute bg-navabar  text-white top-[40px] right-[1px] h-full p-2 rounded-b-lg transition-all duration-300 ease-in-out ${themeStyles[theme as keyof typeof themeStyles]}`}>
             {user ? (
               <div className="flex flex-col items-center gap-2 px-2 py-3">
                 <div className="w-full h-20 rounded">

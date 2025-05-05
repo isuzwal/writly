@@ -3,7 +3,7 @@ import { UserContext } from "../UserAuth/User";
 import { SlLike } from "react-icons/sl";
 import {  FaRegComment } from "react-icons/fa";
 import { CiBookmarkPlus } from "react-icons/ci";
-import { PostType } from "./PostType";
+import { PostType } from "../type/PostType";
 const Profile=()=>{
 
   const context=useContext(UserContext)
@@ -57,7 +57,7 @@ const Profile=()=>{
     const getallInfo=async(event:React.FormEvent)=>{
       event.preventDefault();
       try{
-        const response=await  fetch(`${import.meta.env.VITE_BACKEND_URL}/profile/update`,{
+        const response=await  fetch(`${import.meta.env.VITE_BACKEND_URL}/api/profile`,{
           method:"POST",
           headers:{
            'Content-Type':'application/json',
