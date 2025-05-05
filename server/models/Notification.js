@@ -9,7 +9,7 @@ const NotificationSchema=new  mongoose.Schema({
         type:mongoose.Scheam.Types.ObjectId,
         ref:"User"
     },
-    post:{
+    posts:{
         type:mongoose.Scheam.Type.ObjectId,
         ref:"Post"
     },

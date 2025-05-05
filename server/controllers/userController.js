@@ -36,6 +36,7 @@ exports.register=async(req,res)=>{
        status:"Succes",
        msg: "Registered successfully. Please verify your email."
   })
+
     }catch(e){
         console.log("Error at the create user",e)
         res.status(500).json({
@@ -83,6 +84,7 @@ exports.sendVertification=async(req,res)=>{
      msg: "Email verified and logged in",
      user: safeUser,
     });
+    // console.log(user)
     
  }catch(error){
         console.log("Error sending Verifaction code",error)
@@ -145,7 +147,8 @@ exports.login=async(req,res)=>{
 // --> get User Profile
 exports.profile=async(req,res)=>{
     try{
-        const dbuser=await User.findById(req.user.id).populate('post')
+        
+        const dbuser=await User.findById(req.user.id).populate('posts')
         if(!dbuser){
            return  res.status(404).json({status:"Fail",msg:"User not Found"})
         }

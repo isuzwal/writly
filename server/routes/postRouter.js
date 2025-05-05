@@ -8,6 +8,6 @@ router.get("/post",verifytoken,getAllposts);
 router.post("/post/create",verifytoken,postcreate);
 router.post('/post/upload',verifytoken,imageupload);
 router.get("/post/id/:id",verifytoken,getPostByID);
-router.get("/post/user/:username",verifytoken,userPost);
+// router.get("/post/:username",verifytoken,userPost);
 
 module.exports=router
