@@ -6,6 +6,8 @@ import { ThemeContex } from "../Theme/Theme";
 
 import { CgMenu } from "react-icons/cg";
 import { IoIosClose } from "react-icons/io";
+import listItems from "./Links/navalist";
+
 
 function Nava() {
   const [IsOpen, setIsOpen] = useState<boolean>(false);
@@ -13,7 +15,7 @@ function Nava() {
   const context = useContext(UserContext);
   
   if (!context) {
-    throw new Error("User context is undefined");
+    throw new Error("User name is Provide ");
   }
 
   const { user } = context;
@@ -28,7 +30,7 @@ function Nava() {
   };
 
   return (
-    <section className={` bg-navabar sticky top-0 z-30  w-full ${themeStyles[theme as keyof typeof themeStyles]}`}>
+    <section className={` bg-navabar  sticky top-0 z-30  w-full ${themeStyles[theme as keyof typeof themeStyles]}`}>
       <div className=" py-1 px-2 flex relative items-center justify-between">
         <Link  to="/"
           className="  text-white hover:bg-gradient-to-t from-slate-100 via-slate-200 to-slate-300 md:text-xl hover:shadow-md   rounded-md py-1 hover:text-writly flex gap-1 text-[16px] font-semibold font-dm px-4 whitespace-nowrap">
@@ -53,7 +55,7 @@ function Nava() {
             </div>
           )}
         </div>
-        <div className="md:hidden p-1 rounded-full">
+        <div className="md:hidden   p-1 rounded-full">
           <button onClick={ToggleMenuBar} className="flex items-center">
             {IsOpen ? (
               <IoIosClose className=" text-white transition-transform duration-300 hover:rotate-180 hover:scale-110" size={24} />
@@ -64,14 +66,25 @@ function Nava() {
         </div>
 
         {IsOpen && (
-          <div className={`absolute bg-navabar  text-white top-[40px] right-[1px] h-full p-2 rounded-b-lg transition-all duration-300 ease-in-out ${themeStyles[theme as keyof typeof themeStyles]}`}>
+          <div className={` absolute right-0 h-screen  top-[2.65rem]   flex  z-20 bg-maincolor   border-l-[1px] border-zinc-700 shadow-md  text-white   w-full sm:w-72  md:w-64  p-2 transition-all duration-300 ease-in-out ${themeStyles[theme as keyof typeof themeStyles]}`}>
             {user ? (
-              <div className="flex flex-col items-center gap-2 px-2 py-3">
-                <div className="w-full h-20 rounded">
-                  <img src={user.CoverImage} className="object-cover w-full h-full rounded" />
+              <div className="flex flex-col   w-full  gap-2 px-2 py-3">
+                <div className=" relative w-full  h-32 rounded">
+                  <img src={user?.coverImage} className=" cursor-pointer object-cover w-full h-full rounded" />
+                  <img src={user?.profileImage} className=" cursor-pointer absolute top-[4.5rem]  border-[3px]  border-slate-200 w-20 aspect-square  rounded-full  object-cover " />
                 </div>
-                <img src={user.profileImage} className="absolute left-2 w-20 rounded-lg object-cover h-full" />
-                <span className="font-mono font-medium text-lg">{user.username}</span>
+                <div className=" flex mt-5  items-start   justify-start  bg-navabar rounded-md px-2 py-1 hover:bg-[#2a2929] transition-colors duration-200  cursor-pointer">
+                <span className="font-mono font-medium  text-start  text-lg">{user.username}</span>
+                </div>
+                <div className="flex flex-col gap-8 mt-5 ">
+                  {listItems.map((item,idx)=>(
+                    <Link to={item.link} key={idx}
+                    className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-[#2a2929] transition-colors duration-200" >
+                    <span className="text-white text-xl">{item.icon}</span>
+                    <span className="text-white font-medium text-[15px] ">{item.label}</span>
+                  </Link>
+                  ))}
+                </div>
               </div>
             ) : (
               <div className="flex flex-col gap-4 px-4 py-2">

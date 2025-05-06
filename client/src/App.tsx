@@ -3,9 +3,11 @@ import { Routes, Route } from "react-router";
 import Layout from "./Screen/Layout";
 import Login from "./Authpages/Login";
 import Register  from "./Authpages/Register";
-import Profile from "./Pages/Profile";
+import Setting from './Pages/Usercare/Seeting';
+import Logout from './Pages/Usercare/Logout';
+import Help from './Pages/Usercare/Help';
+import Feedback from './Pages/Usercare/Feedback';
 import Blog from "./Pages/Blog";
-import Security from "./Pages/Security";
 import Latest from "./Pages/Latest";
 import Following from "./Pages/Following";
 import Popular from "./Pages/Popluar";
@@ -78,10 +80,12 @@ try{
       <Route path="post" element={<UserPost />} />
       <Route path="bookmark" element={<Bookmark />} />
       <Route path=":username" element={<UserProfile/>} />
+      <Route path="setting" element={<Setting />} />
+      <Route path="help" element={<Help />} />
+      <Route path="feedback" element={<Feedback />} />
+      <Route path="logout" element={<Logout />} />
     </Route>
     <Route path="post" element={<Post />} />
-    <Route path ="/account/profile" element={<Profile />} />
-    <Route path ="/account/security" element={<Security />} />
     </Route>
     </Routes>
   )
