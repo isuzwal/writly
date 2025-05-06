@@ -1,4 +1,5 @@
-import { HomeIcon, InfoIcon, BellIcon, BookMarkedIcon, FileTextIcon, UserIcon} from "lucide-react";
+import { HomeIcon, InfoIcon,BellIcon, BookMarkedIcon, FileTextIcon, 
+UserIcon} from "lucide-react";
 
 import { JSX } from "react";
 export interface LinkItems{
@@ -16,4 +17,6 @@ const linklist: LinkItems[] = [
     { label: "Account", icon: <UserIcon />, link: (username)=>`/home/${username}` },
 
   ];
-  export  default linklist;
+  
+
+export  default  linklist ;
