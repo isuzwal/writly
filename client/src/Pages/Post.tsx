@@ -5,13 +5,12 @@ const Post=()=>{
     const  [text,settext]=useState<string>("");
     const  [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null); 
     const textref=useRef<HTMLTextAreaElement>(null)
-    const localDate=new Date().toLocaleDateString();
     const context=useContext(UserContext)
 
     if(!context){
         throw new Error
       }
-      const {user,uppercaseletter,}=context
+      const {user}=context
 
       useEffect(()=>{
         if(textref.current){
@@ -74,11 +73,11 @@ const Post=()=>{
          <div className="flex flex-row items-center gap-1">
           <img src={user?.profileImage} className="w-10 h-10 rounded-full object-cover" />
            <div className="flex text-white  flex-col">
-            <p className="text-sm font-semibold">{uppercaseletter(user?.username)}</p>
-            <p className="text-xs ">{localDate}</p>
+            <p className="text-sm font-semibold">{user?.username}</p>
+             <p className="text-sm text-gray-700">{new Date(user?.createdAt).toLocaleDateString()}</p>
+            </div>
           </div>
         </div>
-        
       </div> 
          <form  onSubmit={posted} className="w-full  px-2  gap-3  py-1 rounded-md">
            <textarea 
@@ -111,7 +110,7 @@ const Post=()=>{
         </button>
       </form> 
     </div>
-</div>
+
     )
 }
 export default Post;

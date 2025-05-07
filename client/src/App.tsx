@@ -7,18 +7,19 @@ import Setting from './Pages/Usercare/Seeting';
 import Logout from './Pages/Usercare/Logout';
 import Help from './Pages/Usercare/Help';
 import Feedback from './Pages/Usercare/Feedback';
-import Blog from "./Pages/Blog";
+import Blog from './Pages/Blog';
 import Latest from "./Pages/Latest";
 import Following from "./Pages/Following";
-import Popular from "./Pages/Popluar";
+import Popular from './Pages/Popluar';
 import Home from './Pages/Home';
 import Post from "./Pages/Post";
-import UserPost from './Pages/UserPost';
-import Notification from './Pages/Notification';
+import Video from "./Pages/Lelfsidebar/Video"
+import Notification from './Pages/Lelfsidebar/Notification';
 import Singelpost from "./Pages/SinglePost";
-import UserProfile from "./Pages/Userprofile";
-import Story from './Pages/Story';
-import Bookmark from './Pages/Bookmark';
+import Profile from "./Pages/Userpages/Profile";
+import Story from './Pages/Lelfsidebar/Story';
+import Bookmark from './Pages/Lelfsidebar/Bookmark';
+import PostUser from './Pages/Userpages/PostUser';
 import { UserContext } from "./UserAuth/User";
 import { useContext, useEffect } from "react";
 import { Navigate } from "react-router";
@@ -71,20 +72,21 @@ try{
     <Route path="/" element={<Layout />}>
     <Route index element={user?.username ?<Navigate to ="/home" />:<Home />} />
     <Route path="home" element={<Blog />}>
-      <Route path="latest" element={<Latest />} />
-      <Route path="popular" element={<Popular />} />
-      <Route path="following" element={<Following />} />
-      <Route path=":id" element={<Singelpost/>} />
-      <Route path="notification" element={<Notification />} />
-      <Route path="story" element={<Story />} />
-      <Route path="post" element={<UserPost />} />
-      <Route path="bookmark" element={<Bookmark />} />
-      <Route path=":username" element={<UserProfile/>} />
-      <Route path="setting" element={<Setting />} />
-      <Route path="help" element={<Help />} />
-      <Route path="feedback" element={<Feedback />} />
-      <Route path="logout" element={<Logout />} />
-    </Route>
+     <Route path="notification" element={<Notification />} />
+     <Route path="story" element={<Story />} />
+     <Route path="video" element={<Video />} />
+     <Route path="bookmark" element={<Bookmark />} />
+     <Route path="latest" element={<Latest />} />
+     <Route path="popular" element={<Popular />} />
+     <Route path="following" element={<Following />} />
+     <Route path="setting" element={<Setting />} />
+     <Route path="help" element={<Help />} />
+     <Route path="feedback" element={<Feedback />} />
+     <Route path="logout" element={<Logout />} />
+     <Route path="post/:id" element={<Singelpost />} />
+     <Route path="user/:username" element={<Profile />} />
+     <Route path="post/user/:username" element={<PostUser />}/>
+   </Route>
     <Route path="post" element={<Post />} />
     </Route>
     </Routes>

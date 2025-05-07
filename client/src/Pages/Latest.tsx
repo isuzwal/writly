@@ -1,5 +1,3 @@
-
-import ProfiledImage from "../assets/discord.jpeg"
 import { useContext } from "react";
 import { SlLike } from "react-icons/sl";
 import { AiOutlineDislike } from "react-icons/ai";
@@ -30,7 +28,7 @@ const Latest=()=>{
             <div className="flex flex-col   px-2  bg-navabar  m-3 gap-2 shadow-sm rounded-md ">
               <div className="flex flex-row justify-between p-1 items-center gap-2">
                 <div className="flex flex-row items-center font-dm font-semibold">
-                 <img src={ProfiledImage} className="object-cover rounded-full w-9 h-9" />
+                 <img src={user?.profileImage} className="object-cover rounded-full w-9 h-9" />
                    <div className="mt-4  flex-col flex  ">
                    <span className="text-[12px] ml-1 font-extrabold">{uppercaseletter(user?.username)}</span>
                    <p className="text-[9px] font-bold">{localDate}</p>
@@ -46,7 +44,7 @@ const Latest=()=>{
                </div>
               {/**Image section */}
               <div className=" w-full h-56 rounded-md overflow-hidden">
-                <img src={ProfiledImage} className="object-cover rounded-md w-full h-full " />
+                <img src={user?.profileImage} className="object-cover rounded-md w-full h-full " />
               </div>
               <div className="flex flex-row px-2 rounded-sm    items-center gap-2   justify-between">
                 <div className="flex flex-row  py-1  gap-3 justify-center items-center  text-center">

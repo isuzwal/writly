@@ -1,5 +1,5 @@
 import { useEffect,useState } from "react";
-import { userlist } from "../type/userlistType";
+import { userlist } from "../../type/userlistType";
 import { Link } from "react-router";
 
 const Userlist=()=>{
@@ -24,7 +24,7 @@ const [userlist,setUserlist]=useState<userlist[] >([])
           <span className="font-bold text-xl">Who to follow</span>
         </div>
         {userlist.map((user, index) => (
-          <Link key={index} to={`/home/${user.username}`} className="flex items-center gap-3 p-3 hover:bg-neutral-700 rounded-lg transition" >
+          <Link key={index} to={`/home/user/${user?.username}`} className="flex items-center gap-3 p-3 hover:bg-neutral-700 rounded-lg transition" >
             <img src={user.profileImage} alt="profile"  className="object-cover rounded-full h-12 w-12"/>
             <div className="flex flex-col">
               <span className="font-semibold text-sm">{user.username}</span>
