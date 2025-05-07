@@ -1,12 +1,14 @@
 import { useContext, useState ,useEffect, useRef } from "react";
 import { UserContext } from "../UserAuth/User";
-import { LuImageUp } from "react-icons/lu";
+import { LuImageUp ,} from "react-icons/lu";
+import { LoaderCircle } from 'lucide-react';
 const Post=()=>{
     const  [text,settext]=useState<string>("");
-    const  [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null); 
+    const [loading ,setLoading]=useState<boolean>(false)
+    // const [error ,setError]=useState<string>("")
+    const  [image ,setImage]=useState<File | null>(null)
     const textref=useRef<HTMLTextAreaElement>(null)
     const context=useContext(UserContext)
-
     if(!context){
         throw new Error
       }
@@ -31,17 +33,26 @@ const Post=()=>{
               })
               const data=await  response.json()
               if(response.ok){
-              setUploadedImageUrl(data.link);
+                return data.link
               }else{
-            console.log("Erorr")
+              console.log("Uploaded Fail")
+              return null;
               }
             }catch(e){
             console.log("Error at uploading",e)
+            return null;
             }
        }
        // for the post the posted
        const posted=async(event:React.FormEvent)=>{
+        setLoading(true)
         event.preventDefault()
+        let imageurl=null;
+        if(image){
+            imageurl=await uploadimage(image)
+         }else{
+          console.log("Error From Getting  Url from CLOUADY")
+         }
            try{
            const response=await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/post/create`,{
             method:"POST",
@@ -51,19 +62,23 @@ const Post=()=>{
            credentials:"include",
            body:JSON.stringify({
              text:text,
-             image:uploadedImageUrl,
+             image:imageurl
            
              }),
            })
            const data=await response.json()
            if(!response.ok){
-            console.log("Error at Post")
+             return null;
            }else{
-            console.log("Data",data)
+            settext("");
+            setImage(null);
+            return data
            }
-          }catch(e){
-            console.log("Got Error",e)
-
+          }catch(error){
+            
+            console.log("Got Error",error)
+           }finally{
+            setLoading(false)
            }
        }
     return (
@@ -74,7 +89,7 @@ const Post=()=>{
           <img src={user?.profileImage} className="w-10 h-10 rounded-full object-cover" />
            <div className="flex text-white  flex-col">
             <p className="text-sm font-semibold">{user?.username}</p>
-             <p className="text-sm text-gray-700">{new Date(user?.createdAt).toLocaleDateString()}</p>
+             <p className="text-sm text-gray-700">{new Date().toLocaleDateString()}</p>
             </div>
           </div>
         </div>
@@ -87,9 +102,9 @@ const Post=()=>{
            className="w-full resize-none h-8  bg-navabar  text-white bg-transparent  overflow-hidden  p-3 text-base focus:outline-none   placeholder-gray-500" >
            </textarea>
            <div>
-            {uploadedImageUrl && (
+            {image && (
               <div>
-                <img src={uploadedImageUrl} alt="uploaded" className="w-full h-44 object-cover rounded-md " />
+                <img src={URL.createObjectURL(image)} alt="uploaded" className="w-full h-44 object-cover rounded-md " />
               </div>
             )}
           </div>
@@ -97,16 +112,15 @@ const Post=()=>{
              <input type="file"  
               onChange={(e)=>{
               const file = (e.target as HTMLInputElement).files?.[0];
-              console.log("Image File",file)
               if (file) {
-                uploadimage(file); //-- function passing parm
-                console.log("Calling upload with file:", file.name);
+                setImage(file)
+                console.log("Calling upload with file:", file);
               }}}
               className="hidden"  />
             <LuImageUp size={26} color="white" />
             </label> 
-        <button type="submit"  className="mt-2 bg-white font-semibold px-3 py-1 rounded-md">
-         Post
+        <button type="submit"    disabled={loading} className="mt-2 bg-white font-semibold px-3 py-1 rounded-md">
+          {loading ?<LoaderCircle className="animate-spin" />:"Post"}
         </button>
       </form> 
     </div>

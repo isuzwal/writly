@@ -102,8 +102,8 @@ const Blog=()=>{
   </div>
 
   {isPoped && (
-    <div className="fixed inset-0 z-30 bg-black bg-opacity-50 flex items-center justify-center">
-      <div className="bg-navabar  bg-opacity-95 z-40 w-full max-w-xl rounded-xl p-4 shadow-xl relative">
+    <div className="fixed inset-0 z-30 bg-black bg-opacity-70 flex items-center justify-center">
+      <div className="bg-navabar  bg-opacity-100 z-40 w-full max-w-xl rounded-xl p-4 shadow-xl relative">
         <button
           className="absolute top-2 right-2 text-gray-600 hover:text-black text-2xl"
           onClick={ISPoped}>
@@ -116,17 +116,19 @@ const Blog=()=>{
 </div>
           {/*Post Section*/}
           <div className="  col-span-3 md:col-span-1 w-full flex flex-col justify-start md:h-[calc(100vh-1rem)] overflow-y-auto scroll-hidden">
-            <div className={`flex   justify-center  gap-1  p-2 `}>
-            <div className="flex     rounded-md text-white border-2">
+            <div className={`flex     justify-center  gap-1  p-2 `}>
+            <div className="flex   py-2 w-full justify-between     rounded-md text-white">
               <NavLink to="/home/latest"    className={({isActive})=>isActive
-              ? "bg-gray-600   bg-opacity-70 rounded-l-md text-center  w-24 px-4 py-1.5  border-r-2 border-slate-100  text-[14px] items-center":
-              " px-4 py-1.5 flex w-24 bg-navabar bg-opacity-80 rounded-l-md   border-r-2   border-slate-100   text-[14px] items-center"  
-            }>Latest</NavLink>
+              ? "bg-gray-600     text-[16px]  text-center justify-center bg-opacity-70 rounded-l-md  flex-1 px-4 py-1.5  border-r-[1px]    border-slate-50 ":
+              " px-4 py-1.5 flex flex-1  justify-center bg-navabar bg-opacity-80 rounded-l-md   border-r-[1px]     border-slate-50  text-[16px] "  
+             }>Latest</NavLink>
               <NavLink  to="/home/popular"  className={({isActive})=>isActive 
-              ?"bg-gray-600   bg-opacity-70 text-center px-4 py-1.5 flex   w-24  text-[14px] items-center":  " bg-navabar bg-opacity-80  w-24  px-4 py-1.5 flex   text-[14px] items-center"}
+              ?"bg-gray-600  text-[16px] bg-opacity-70 text-center px-4 py-1.5 flex-1   justify-center":  
+              " justify-center    text-[16px]   bg-navabar bg-opacity-80  flex-1  px-4 py-1.5 flex   items-center"}
               >Popular</NavLink>
               <NavLink to="/home/following"  className={({isActive})=>isActive 
-              ?"bg-gray-600    bg-opacity-70 rounded-r-md text-center  px-4 py-1.5 flexs  w-24 border-l-2 border-slate-100  text-[14px] items-center":" border-slate-100    rounded-r-md   w-24  bg-navabar bg-opacity-80   border-l-2 px-4 py-1.5 flex  text-[14px] items-center"}
+              ?"bg-gray-600   justify-center  bg-opacity-70 rounded-r-md text-center  px-4 py-1.5 flex-1    border-l-[1px]    border-slate-50 text-[16px]  ":
+              " justify-center    rounded-r-md  flex-1  bg-navabar bg-opacity-80  border-l-[1px]    border-slate-50 px-4 py-1.5 flex   text-[16px] "}
               >Follwing</NavLink>
               </div>
             </div>
