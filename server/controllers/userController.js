@@ -148,7 +148,7 @@ exports.login=async(req,res)=>{
 exports.profile=async(req,res)=>{
     try{
         
-        const dbuser=await User.findById(req.user.id).populate('posts')
+        const dbuser=await User.findById(req.user.id).populate('post')
         if(!dbuser){
            return  res.status(404).json({status:"Fail",msg:"User not Found"})
         }
@@ -156,7 +156,6 @@ exports.profile=async(req,res)=>{
         res.status(200).json({
             status:"Success",
              userInfo:userwithoutpass
-
         })
     }catch(e){
         console.log("Can't get user",e)

@@ -1,6 +1,6 @@
 const mongoose=require("mongoose")
 
-const post=new mongoose.Schema({
+const posts=new mongoose.Schema({
       text:{
          type:String,
           maxlength:200,
@@ -36,5 +36,5 @@ const post=new mongoose.Schema({
       },
        updatedAt: Date,
 },{timestamps:true})
-const Post=mongoose.model("Post",post)
+const Post=mongoose.model("Post",posts)
 module.exports=Post;

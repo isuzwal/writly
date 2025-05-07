@@ -1,15 +1,14 @@
 import { useContext, useState ,useEffect} from "react";
-import ProfiledImage from "../assets/discord.jpeg"
-import { UserContext } from "../UserAuth/User";
+import { UserContext } from "../UserAuth/User"
 import { Heart ,MessageSquareMore,PencilLineIcon,Send } from "lucide-react";
 import { CiBookmarkPlus } from "react-icons/ci";
 import { Outlet } from "react-router";
 import { useLocation } from "react-router";
 import { NavLink ,Link } from "react-router";
- import Post from "./Post";
-import Userlist from "./userlist";
-import {PostType} from "../type/PostType";
-import linklist from "./Links/links";
+ import Post from "../Pages/Post";
+import Userlist from "../Pages/Userpages/userlist";
+import {PostType} from  ".././type/PostType";
+import linklist from "../Pages/Links/links";
 const Blog=()=>{
 
   // const [loading ,setLoading]=useState<boolean>(false);
@@ -91,7 +90,7 @@ const Blog=()=>{
             </div>
     {/* Navigation Items */}
     {linklist.map((link, index) => (
-      <Link to={typeof link.link==="function" ?link.link(user?.username):link.link} key={index}
+      <Link to={typeof link.link==="function"? link.link(user?.username)||"":link.link} key={index}
         className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-[#2a2929] transition-colors duration-200" >
         <span className="text-white text-xl">{link.icon}</span>
         <span className="text-white font-medium text-[15px] hidden lg:block">{link.label}</span>
@@ -103,8 +102,8 @@ const Blog=()=>{
   </div>
 
   {isPoped && (
-    <div className="fixed inset-0 z-40 bg-black bg-opacity-50 flex items-center justify-center">
-      <div className="bg-navabar bg-opacity-60   w-full max-w-xl rounded-xl p-4 shadow-xl relative">
+    <div className="fixed inset-0 z-30 bg-black bg-opacity-50 flex items-center justify-center">
+      <div className="bg-navabar  bg-opacity-95 z-40 w-full max-w-xl rounded-xl p-4 shadow-xl relative">
         <button
           className="absolute top-2 right-2 text-gray-600 hover:text-black text-2xl"
           onClick={ISPoped}>
@@ -141,9 +140,9 @@ const Blog=()=>{
                 <div className=" p-1  cursor-pointer  hover:bg-navabar hover:bg-opacity-40  shadow rounded-lg bg-navabar text-white px-2 ">
                    <div className="flex  flex-row justify-between p-1 items-center gap-2">
                     <div className="flex flex-row items-center  font-dm font-semibold">
-                     <img src={ProfiledImage} className="object-cover rounded-full w-9 h-9" />
+                     <img src={user?.profileImage} className="object-cover rounded-full w-9 h-9" />
                      <div className="mt-4  flex-col flex  ">
-                     <span className="text-[12px] ml-1  hover:underline  font-extrabold">{post.user?.username}</span>
+                     <Link to={`/home/post/user/${post.user?.username}`} className="text-[12px] ml-1  hover:underline  font-extrabold">{post.user?.username}</Link>
                      <p className="text-[9px] font-bold">{new Date(post.createdAt).toLocaleDateString()}</p>
                     </div>
                 </div>
@@ -151,12 +150,11 @@ const Blog=()=>{
                     <button className="bg-black  md:px-4 md:py-1.5 px-3 py-1 flex font-dm font-semibold rounded-md text-white text-[14px] items-center">Follow</button>
                 </div>
                </div>
-               <Link to={`/home/${post._id}`} className="block underline:none px-2">
-                <span className="text-[15px] text-start font-dm font-semibold hover:underline">{post.title}</span>
+               <Link to={`/home/post/${post._id}`} className="block underline:none px-2">
                 <p className="text-gray-300">{post.text}</p>
                 </Link>
                 {post.image && (
-                <Link  to={`/home/${post._id}`} className="">
+                <Link  to={`/home/post/${post._id}`} className="">
                 <div className="w-full   h-72 overflow-hidden rounded-sm">
                 <img  src={post?.image}  className="w-full h-full object-cover" 
                alt="Post image" />

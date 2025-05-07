@@ -13,7 +13,7 @@ const SinglePost = () => {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/post/id/${id}`, {
+        const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/post/${id}`, {
           credentials: "include",
         });
         
@@ -74,15 +74,15 @@ const SinglePost = () => {
     <div className="flex flex-col p-1 m-2 gap-2">
       <div className="p-1 cursor-pointer hover:bg-navabar hover:bg-opacity-40 shadow rounded-lg bg-navabar text-white px-2">
         <div className="flex flex-row justify-between p-1 items-center gap-2">
-          <div className="flex flex-row items-center font-dm font-semibold">
+          <div className="flex gap-1 flex-row items-center font-dm font-semibold">
             <img 
               src={post?.user?.profileImage || "https://via.placeholder.com/36"} 
               className="object-cover rounded-full w-9 h-9" 
               alt="Profile"
             />
-            <div className="mt-4 flex-col flex">
+            <div className="mt-2 flex-col flex">
               {/* Fix the link to point to the user profile page */}
-              <Link to={`/home/${post.user?.username}`}>
+              <Link to={`/home/user/${post.user?.username}`}>
                 <span className="font-bold hover:underline">{post.user?.username}</span>
               </Link>
               <p className="text-[9px] font-bold">

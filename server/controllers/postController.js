@@ -51,7 +51,7 @@ exports.getAllposts=async(req,res)=>{
 //--> get post by id
 exports.getPostByID=async(req,res)=>{
     try{
-        const { id } = req.params;
+      
         const post = await Post.findById(req.params.id)
       .populate("user", "username profileImage follower");
         if(!post){
@@ -71,30 +71,30 @@ exports.getPostByID=async(req,res)=>{
 
 
 // --> get user post by there name 
-// exports.userPost=async(req,res)=>{
-//     try{
-//         const {username}=req.params;
-//         const userInfo=await User.findOne({username:username})
-//         .populate("posts")
-//           if(!userInfo){
-//              return   res.status(404).json({
-//                 status:'Fail',
-//                msg:"User Info can't Fetch"
-//             })
-//           }
-//           const {password ,...user}=userInfo._doc
-//          res.status(200).json({
-//              status:"Success",
-//              userInfo:user
+exports.userPost=async(req,res)=>{
+    try{
+        const {username}=req.params;
+        const userInfo=await User.findOne({username:username})
+        .populate("post")
+          if(!userInfo){
+             return   res.status(404).json({
+                status:'Fail',
+               msg:"User Info can't Fetch"
+            })
+          }
+          const {password ,...user}=userInfo._doc
+         res.status(200).json({
+             status:"Success",
+             userInfo:user
 
-//         })
-//     }catch(e){
-//         console.log("Error at Blog route ",e)
-//         res.status(500).json({
-//             status:"Fail",
-//             msg:"Internal Error"})
-//         }
-// }
+        })
+    }catch(e){
+        console.log("Error at Blog route ",e)
+        res.status(500).json({
+            status:"Fail",
+            msg:"Internal Error"})
+        }
+}
 
 //--> for the image upload
 exports.imageupload=uploadimage.single('image'),async(req,res)=>{
