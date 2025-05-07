@@ -32,4 +32,4 @@ app.use("/api",PostRoutes)
 
 app.listen(PORT,()=>{
     console.log(`Server started at Port ${PORT}`)
-})
+}) 

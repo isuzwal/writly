@@ -13,7 +13,6 @@ const storage=new CloudinaryStorage({
     cloudinary:cloud, params:{
             folder:'writly',
             allowed_formats: ['jpg', 'png', 'jpeg']
-        
     }
 })
 const uploadimage = multer({storage})

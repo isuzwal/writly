@@ -97,15 +97,21 @@ exports.userPost=async(req,res)=>{
 }
 
 //--> for the image upload
-exports.imageupload=uploadimage.single('image'),async(req,res)=>{
-    try{
-        const link=req.file.path
-        res.json({ link:link});
-       
-    }catch(e){
-        res.status(500).json({
-            status:"Fail",
-            msg:"Internal Sever Error"
-        })
+exports.imageupload = async(req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({
+          status: "Fail",
+          msg: "No file uploaded"
+        });
+      }
+      const link = req.file.path;
+      res.json({ link: link });
+      
+    } catch(e) {
+      res.status(500).json({
+        status: "Fail",
+        msg: "Internal Server Error"
+      });
     }
-}
+  };
