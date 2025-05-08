@@ -9,7 +9,6 @@ import Help from './Pages/Usercare/Help';
 import Feedback from './Pages/Usercare/Feedback';
 import Blog from './Pages/Blog';
 import Latest from "./Pages/Latest";
-import Following from "./Pages/Following";
 import Popular from './Pages/Popluar';
 import Home from './Pages/Home';
 import Post from "./Pages/Post";
@@ -20,6 +19,8 @@ import Profile from "./Pages/Userpages/Profile";
 import Story from './Pages/Lelfsidebar/Story';
 import Bookmark from './Pages/Lelfsidebar/Bookmark';
 import PostUser from './Pages/Userpages/PostUser';
+import Following from './Pages/Following';
+import Likes from './Pages/Userpages/Likes';
 import { UserContext } from "./UserAuth/User";
 import { useContext, useEffect } from "react";
 import { Navigate } from "react-router";
@@ -84,8 +85,11 @@ try{
      <Route path="feedback" element={<Feedback />} />
      <Route path="logout" element={<Logout />} />
      <Route path="post/:id" element={<Singelpost />} />
-     <Route path="user/:username" element={<Profile />} />
-     <Route path="post/user/:username" element={<PostUser />}/>
+     <Route path="post/user/:username" element={<PostUser />} />
+     <Route path="user/:username" element={<Profile />} >
+       <Route path="following" element={<Following />} />
+       <Route path="likes" element={<Likes />} />
+     </Route>
    </Route>
     <Route path="post" element={<Post />} />
     </Route>

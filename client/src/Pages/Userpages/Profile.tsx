@@ -1,8 +1,9 @@
 import {  useContext } from "react";
-import { UserContext } from "../../UserAuth/User";
-import { NavLink  } from "react-router";
+import { UserContext  } from "../../UserAuth/User";
+import { NavLink ,Outlet ,useLocation } from "react-router";
 import { PostType } from "../../type/PostType";
 import { Heart, MessageSquareMore } from "lucide-react";
+
 const Profile=()=>{
 
   const context=useContext(UserContext)
@@ -10,8 +11,9 @@ const Profile=()=>{
       throw new Error
     }
     const {user}=context
-   
-   
+    const userRouteLocation=useLocation()
+    const userNestedroute=userRouteLocation.pathname ===`/home/user/${user.username}`
+      console.log(userNestedroute)
     return (
       <div className=" bg-navabar  min-h-screen rounded-lg shadow-md overflow-y-auto scroll-hidden   text-white">
       <div className="relative">
@@ -37,27 +39,23 @@ const Profile=()=>{
       
       {/* Posts */}
       <div className="border-t border-gray-700">
-            <div className={`flex    justify-center  gap-1  p-2 `}>
-            <div className="flex  rounded-md text-white border-2">
-              <NavLink to="/home/posts"    className={({isActive})=>isActive
-              ? "bg-gray-600   bg-opacity-70 rounded-l-md text-center  w-24 px-4 py-1.5  border-r-2 border-slate-100  text-[14px] items-center":
-              " px-4 py-1.5 flex w-24 bg-navabar bg-opacity-80 rounded-l-md   border-r-2   border-slate-100   text-[14px] items-center"  
-              }>Posts</NavLink>
-              <NavLink  to="/home/following/post"  className={({isActive})=>isActive 
-              ?"bg-gray-600   bg-opacity-70 text-center px-4 py-1.5 flex   w-24  text-[14px] items-center":  " bg-navabar bg-opacity-80  w-24  px-4 py-1.5 flex   text-[14px] items-center"}
+            <div className={`flex    justify-center  gap-2  p-2 `}>
+            <div className="flex w-full justify-evenly items-center   rounded-md text-white border-2">
+              <NavLink  to={`/home/user/${user.username}/following`} className={({isActive})=>isActive 
+              ?"bg-gray-600  flex-1  bg-opacity-70 text-center px-4 py-1.5 flex    justify-center text-[14px] items-center":  "flex-1 justify-center  bg-navabar bg-opacity-80   px-4 py-1.5 flex   text-[14px] items-center"}
               >Following</NavLink>
-              <NavLink to="/home/likes/pots"  className={({isActive})=>isActive 
-              ?"bg-gray-600    bg-opacity-70 rounded-r-md text-center  px-4 py-1.5 flexs  w-24 border-l-2 border-slate-100  text-[14px] items-center":" border-slate-100    rounded-r-md   w-24  bg-navabar bg-opacity-80   border-l-2 px-4 py-1.5 flex  text-[14px] items-center"}
+              <NavLink to={`/home/user/${user.username}/likes`} className={({isActive})=>isActive 
+              ?"bg-gray-600    bg-opacity-70 rounded-r-md text-center  px-4 py-1.5 flex  justify-center border-l-2 flex-1 border-slate-100  text-[14px] items-center":" justify-center  border-slate-100  flex-1   rounded-r-md    bg-navabar bg-opacity-80   border-l-2 px-4 py-1.5 flex  text-[14px] items-center"}
               >Like</NavLink>
               </div>
           </div>
-          <div className="border-t border-gray-700">
-  {user?.post && user.post.length > 0 ? (
-    user.post.map((post: PostType) => (
-      <div key={post._id}
-        className="p-4 cursor-pointer border-b border-gray-700 hover:bg-gray-800 transition" >
-        <div className="flex gap-2 flex-row items-center font-dm font-semibold">
-          <img src={user.profileImage || "https://via.placeholder.com/36"}
+         {userNestedroute ? (
+        <div className="border-t border-gray-700">
+         {user?.post && user.post.length > 0 ? (
+            user.post.map((post: PostType) => (
+            <div key={post._id}    className="  cursor-pointer border-b-[2px] border-b-maincolor  hover:bg-navabar hover:bg-opacity-40   bg-navabar text-white px-2 ">
+             <div className="flex gap-2 flex-row items-center font-dm font-semibold">
+            <img src={user.profileImage || "https://via.placeholder.com/36"}
             className="object-cover rounded-full w-9 h-9"
             alt="Profile" />
           <div className="mt-2 flex-col flex">
@@ -73,9 +71,9 @@ const Profile=()=>{
           <p className="text-gray-300 text-sm mt-1">{post?.text}</p>
           {post?.image && (
             <img
-              src={post.image}
-              alt="Post"
-              className="w-full mt-2 rounded-md max-h-60 object-cover"
+            src={post.image}
+            alt="Post"
+            className="w-full mt-2 rounded-md max-h-60 object-cover"
             />
           )}
           <div className="flex gap-6 mt-3 text-gray-400 text-sm">
@@ -88,14 +86,16 @@ const Profile=()=>{
           </div>
         </div>
       </div>
-    ))
-  ) : (
-    <p className="p-4 text-gray-400">No posts yet</p>
+      ))
+     ) : (
+     <p className="p-4 text-gray-400">{" "}</p>
+    )}
+</div>
+    ):(
+   <Outlet />
   )}
 </div>
-
-      </div>
-     </div>
+</div>
     )
 }
 export default Profile;

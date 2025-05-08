@@ -79,33 +79,37 @@ const Blog=()=>{
 
     return (
 <section className=" bg-maincolor  min-h-screen ">
+   <div className="container mx-auto   px-2 max-w-8xl">
      <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr_1fr] px-5 py-2">
-     <div className="hidden md:block md:col-span-1 bg-[#1d1c1c] px-2 py-3">
-     <div className="flex flex-col py-14  w-full h-full gap-8">
-     <div className="flex items-center gap-3 hover:bg-navabar bg-opacity-25 rounded-md  px-4 py-2 mb-4">
+      {/*Link Section  */}
+     <div className="md:col-span-1 items-start  bg-[#1d1c1c] ">
+     <div className=" flex flex-col  gap-8">
+      <div className="flex items-center gap-3 max-w-max hover:bg-navabar bg-opacity-25 rounded-md  px-4 py-2 mb-4">
               <img src={user?.profileImage} className="w-10 h-10 rounded-full object-cover" alt="Profile" />
               <span className="text-white mt-1 font-medium text-[15px] hidden lg:block">
                 {user?.username || "User"}
               </span>
-            </div>
+      </div>
     {/* Navigation Items */}
     {linklist.map((link, index) => (
       <Link to={typeof link.link==="function"? link.link(user?.username)||"":link.link} key={index}
-        className="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-[#2a2929] transition-colors duration-200" >
+        className="flex   items-center gap-3 px-4 py-2 rounded-lg   hover:bg-[#2a2929] max-w-max transition-colors duration-200" >
         <span className="text-white text-xl">{link.icon}</span>
         <span className="text-white font-medium text-[15px] hidden lg:block">{link.label}</span>
       </Link>
     ))}
-    <button onClick={ISPoped} className="mt-4  w-1/2  flex items-center justify-center gap-2  bg-[#4f46e5] hover:bg-[#635bff] text-white px-4 py-2 rounded-xl font-semibold text-sm transition-all duration-300">
-       <PencilLineIcon />Post
+    <button onClick={ISPoped} className="mt-4   shadow-lg shadow-slate-300/40  flex-row    flex items-center justify-center gap-2  max-w-max bg-[#4f46e5] hover:bg-[#635bff] text-white px-4 py-2 rounded-xl font-semibold text-sm transition-all duration-300">
+       <PencilLineIcon />
+       <span className="hidden    lg:block">Create Post</span>
     </button>
-  </div>
-
+    </div>
+ 
+</div>
   {isPoped && (
-    <div className="fixed inset-0 z-30 bg-black bg-opacity-70 flex items-center justify-center">
-      <div className="bg-navabar  bg-opacity-100 z-40 w-full max-w-xl rounded-xl p-4 shadow-xl relative">
+    <div className="fixed inset-0 z-30 px-2  bg-black bg-opacity-70 flex items-center justify-center">
+      <div className="bg-navabar  bg-opacity-100 z-40  max-w-2xl w-full mx-auto rounded-xl p-2 shadow-xl relative">
         <button
-          className="absolute top-2 right-2 text-gray-600 hover:text-black text-2xl"
+          className="absolute top-2 right-2 text-gray-800 hover:text-white text-2xl"
           onClick={ISPoped}>
           &times;
         </button>
@@ -113,10 +117,9 @@ const Blog=()=>{
       </div>
     </div>
   )}
-</div>
           {/*Post Section*/}
-          <div className="  col-span-3 md:col-span-1 w-full flex flex-col justify-start md:h-[calc(100vh-1rem)] overflow-y-auto scroll-hidden">
-            <div className={`flex     justify-center  gap-1  p-2 `}>
+          <div className="  col-span-3 md:col-span-2  lg:col-span-1 w-full flex flex-col justify-start md:h-[calc(100vh-0.5rem)] overflow-y-auto scroll-hidden">
+            <div className={`flex justify-center  gap-1 p-2 `}>
             <div className="flex   py-2 w-full justify-between     rounded-md text-white">
               <NavLink to="/home/latest"    className={({isActive})=>isActive
               ? "bg-gray-600     text-[16px]  text-center justify-center bg-opacity-70 rounded-l-md  flex-1 px-4 py-1.5  border-r-[1px]    border-slate-50 ":
@@ -132,22 +135,20 @@ const Blog=()=>{
               >Follwing</NavLink>
               </div>
             </div>
-            
             {nestedlocation ? (
               <Outlet />
             ):(
-                 <div className="">
-              <div className="flex    flex-col  p-1 m-2 gap-2   ">
+              <div className="flex flex-col  ">
                {post.map((post) => (
-                <div className=" p-1  cursor-pointer  hover:bg-navabar hover:bg-opacity-40  shadow rounded-lg bg-navabar text-white px-2 ">
-                   <div className="flex  flex-row justify-between p-1 items-center gap-2">
-                    <div className="flex flex-row items-center  font-dm font-semibold">
-                     <img src={user?.profileImage} className="object-cover rounded-full w-9 h-9" />
-                     <div className="mt-4  flex-col flex  ">
+                <div className="  cursor-pointer border-b-[2px] border-b-maincolor  hover:bg-navabar hover:bg-opacity-40   bg-navabar text-white px-2 ">
+                   <div className="flex  flex-row justify-between p-1 items-center">
+                   <div className="flex items-center gap-3">
+                     <img src={user?.profileImage} className="object-cover rounded-full w-10 h-10" />
+                     <div className="text-start mr-2  ">
                      <Link to={`/home/post/user/${post.user?.username}`} className="text-[12px] ml-1  hover:underline  font-extrabold">{post.user?.username}</Link>
                      <p className="text-[9px] font-bold">{new Date(post.createdAt).toLocaleDateString()}</p>
                     </div>
-                </div>
+                  </div>
                 <div className="p-2">
                     <button className="bg-black  md:px-4 md:py-1.5 px-3 py-1 flex font-dm font-semibold rounded-md text-white text-[14px] items-center">Follow</button>
                 </div>
@@ -157,7 +158,7 @@ const Blog=()=>{
                 </Link>
                 {post.image && (
                 <Link  to={`/home/post/${post._id}`} className="">
-                <div className="w-full   h-72 overflow-hidden rounded-sm">
+                <div className="w-full   h-72 aspect-square  overflow-hidden rounded-sm">
                 <img  src={post?.image}  className="w-full h-full object-cover" 
                alt="Post image" />
               </div>
@@ -203,16 +204,15 @@ const Blog=()=>{
              </div>  
               ))}
             </div>
-            </div>
+           
            )}
           </div>
-          <div className="md:col-span-1 hidden  text-center  md:block">
+          <div className="md:col-span-1 hidden  lg:block text-center">
             <Userlist />
             </div>
         </div>
-
+        </div>
       </section>
     )
 }
 export default Blog;
-
