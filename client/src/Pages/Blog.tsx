@@ -13,9 +13,9 @@ const Blog=()=>{
 
   // const [loading ,setLoading]=useState<boolean>(false);
   // const [error ,setError]=useState<boolean>(false);
-  const [isliked,setLiked]=useState<{[key:string]:boolean}>({});
-  const [Iscommnet,setIsComment]=useState<{[key:string]:boolean}>({})
-  const [comment ,setComment]=useState<string>("")
+  const [isliked,setLiked]=useState<Record<string,boolean>>({})
+  const [Iscommnet,setIsComment]=useState<Record<string,boolean>>({})
+  const [comment ,setComment]=useState<Record<string ,string>>({})
   const location=useLocation()
   const nestedlocation=location.pathname !== "/home";
   const context=useContext(UserContext)
@@ -46,6 +46,7 @@ const Blog=()=>{
           });
           const data = await res.json();
           setPost(data.data.post); 
+          console.log(data.data.post)
         } catch (error) {
           console.error("Error fetching posts:", error);
         }
@@ -64,19 +65,62 @@ const Blog=()=>{
       };
     }, [isPoped]);
     //-> for liked 
-    const likedpost = (postID: string) => {
-      setLiked((prevliked) => ({
-        ...prevliked, 
-        [postID]: !prevliked[postID]
+    const likedpost = async(postID:string,userID: string) => {
+      try{
+   const response=await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/post/likes`,{
+    method:'POST',
+    headers:{
+        'Content-Type':'application/json',
+    },
+    body:JSON.stringify({
+      userId:userID,
+      postId:postID,
+    }),
+    credentials: "include",
+   })
+    const data=await response.json();
+     console.log("Liked Post Data",data)
+     setLiked((prevliked) => ({
+       ...prevliked, 
+       [postID]: !prevliked[postID]
       }));
+      }catch(e){
+        console.log("Somethin Wrong",e)
+      }
     };
     // comment show case
-    const showcommnet=(postID:string)=>{
-       setIsComment((prevcomment)=>({
+    const postcommnet=async(postID:string,userID:string)=>{
+      try{
+      const response=await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/post/comment`,{
+          method:"POST",
+          headers:{
+              'Content-Type':'application/json',
+          },
+          body:JSON.stringify({
+            text:comment[postID],
+            userId:userID,
+            postId:postID,
+          }),
+          credentials:"include"
+      })
+      const data=await response.json()
+      setComment({})
+      return data
+      }catch(e){
+        console.log("Somthing Wrong while comment ",e)
+      }
+    }
+   // commentBoxOpen
+   const showcommnet=(postID:string)=>{
+        setIsComment((prevcomment)=>({
         ...prevcomment,[postID]:!prevcomment[postID]}))
     }
-   
-
+// fixing the   when one comment  were write it show to all other comment section
+const handlechangecommnet=(postId:string,value:string)=>{
+  setComment((prev)=>({
+  ...prev,[postId]:value
+  }))
+} 
     return (
 <section className=" bg-maincolor  min-h-screen ">
    <div className="container mx-auto   px-2 max-w-8xl">
@@ -100,7 +144,7 @@ const Blog=()=>{
     ))}
     <button onClick={ISPoped} className="mt-4   shadow-lg shadow-slate-300/40  flex-row    flex items-center justify-center gap-2  max-w-max bg-[#4f46e5] hover:bg-[#635bff] text-white px-4 py-2 rounded-xl font-semibold text-sm transition-all duration-300">
        <PencilLineIcon />
-       <span className="hidden    lg:block">Create Post</span>
+       <span className="hidden lg:block">Create Post</span>
     </button>
     </div>
  
@@ -108,11 +152,11 @@ const Blog=()=>{
   {isPoped && (
     <div className="fixed inset-0 z-30 px-2  bg-black bg-opacity-70 flex items-center justify-center">
       <div className="bg-navabar  bg-opacity-100 z-40  max-w-2xl w-full mx-auto rounded-xl p-2 shadow-xl relative">
-        <button
-          className="absolute top-2 right-2 text-gray-800 hover:text-white text-2xl"
+        {/* <button
+          className="absolute top-2 right-2 text-white hover:text-white text-2xl"
           onClick={ISPoped}>
           &times;
-        </button>
+        </button> */}
         <Post />
       </div>
     </div>
@@ -165,16 +209,16 @@ const Blog=()=>{
                 </Link>
                )}             
                <div className="flex flex-row p-2 items-center  rounded-sm  gap-2   justify-between">
-                <div className="flex flex-row   px-2     py-1    gap-3 justify-between w-32  items-center  text-center">
+                <div className="flex flex-row   px-2     py-1    gap-6 justify-between w-32  items-center  text-center">
                 <button className="flex items-center gap-1">
-                          <span onClick={() => likedpost(post._id)} className="flex items-center cursor-pointer">
+                          <span onClick={() => likedpost(post._id,user._id)} className="flex items-center cursor-pointer">
                             <div className="flex p-1.5 hover:bg-rose-700 transition-colors duration-200 ease-in-out hover:text-white hover:bg-opacity-80 rounded-full items-center justify-center text-sm gap-1 cursor-pointer">
                               <Heart size={22} 
                                 className={`${isliked[post._id] ? 'fill-rose-600 text-rose-600' : 'fill-none'} transition-colors duration-200 rounded-full`} 
                               />
                             </div>
                           </span>
-                          <h3 className="font-semibold text-[15px]">{post.like?.length || 0}</h3>
+                          <h3 className="font-semibold text-[15px]">{post.likes?.length || 0}</h3>
                         </button>
                  <button 
                   onClick={()=>showcommnet(post._id)}
@@ -182,7 +226,7 @@ const Blog=()=>{
                   <div className="flex  p-1.5 hover:bg-blue-700 transition-colors duration-200 ease-in-out hover:bg-opacity-30  hover:text-blue-600 rounded-full items-center justify-center text-sm gap-1 cursor-pointer">
                     <MessageSquareMore  size={22}/>
                    </div>
-                   <h3 className="font-semibold ">{post.comment?.length || 0}</h3> 
+                   <h3 className="font-semibold ">{post.comments?.length}</h3> 
                 </button>
               </div>
                  <span className="flex text-sm cursor-pointer ">
@@ -194,9 +238,9 @@ const Blog=()=>{
                      <img src={user?.profileImage}  alt="Profile" className="w-10 h-10 rounded-full object-cover"/>
                      <div className="flex-1">
                        <div className="bg-[#2a2a2a] flex  text-white px-4 py-2 rounded-full text-sm w-full  ">
-                       <input type="text" value={comment} placeholder="Write a comment..." 
-                       onChange={(e)=>setComment(e.target.value)} className="bg-transparent  w-full outline-none" />
-                       <button className="hover:bg-maincolor  px-2 py-1 bg-opacity-40 rounded-lg duration-300 "><Send size={20} /></button>
+                       <input type="text"   value={comment[post._id] || ""} placeholder="Write a comment..." 
+                       onChange={(e)=>handlechangecommnet(post._id,e.target.value)} className="bg-transparent  w-full outline-none" />
+                       <button  onClick={()=>postcommnet(post._id,user._id)} className="hover:bg-maincolor  px-2 py-1 bg-opacity-40 rounded-lg duration-300 "><Send size={20} /></button>
                      </div>
                     </div>
                </div>

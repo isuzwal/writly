@@ -4,8 +4,8 @@ export type PostType = {
     text: string;
     image?: string;
     createdAt:string;
-    like:[];
-    comment:[];
+    likes:[];
+    comments:[];
     user?: {
       username?: string;
       _id?: string;

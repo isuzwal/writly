@@ -13,7 +13,7 @@ const Profile=()=>{
     const {user}=context
     const userRouteLocation=useLocation()
     const userNestedroute=userRouteLocation.pathname ===`/home/user/${user.username}`
-      console.log(userNestedroute)
+  
     return (
       <div className=" bg-navabar  min-h-screen rounded-lg shadow-md overflow-y-auto scroll-hidden   text-white">
       <div className="relative">
@@ -78,10 +78,10 @@ const Profile=()=>{
           )}
           <div className="flex gap-6 mt-3 text-gray-400 text-sm">
             <span className="flex items-center gap-1">
-              <Heart /> {post.like?.length || 0}
+              <Heart /> {post.likes?.length || 0}
             </span>
             <span className="flex items-center gap-1">
-              <MessageSquareMore /> {post.comment?.length || 0}
+              <MessageSquareMore /> {post.comments?.length}
             </span>
           </div>
         </div>

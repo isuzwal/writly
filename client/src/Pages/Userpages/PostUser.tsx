@@ -84,10 +84,10 @@ const PostUser = () => {
           )}
           <div className="flex gap-6 mt-3 text-gray-400 text-sm">
             <span className="flex items-center gap-1">
-              <Heart /> {post.like?.length || 0}
+              <Heart /> {post.likes?.length || 0}
             </span>
             <span className="flex items-center gap-1">
-              <MessageSquareMore /> {post.comment?.length || 0}
+              <MessageSquareMore /> {post.comments?.length}
             </span>
           </div>
         </div>
