@@ -1,21 +1,29 @@
 const mongoose=require("mongoose");
 
 const NotificationSchema=new  mongoose.Schema({
-    user:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"User"
-    },
-    targetUser:{
-        type:mongoose.Scheam.Types.ObjectId,
-        ref:"User"
-    },
-    posts:{
-        type:mongoose.Scheam.Type.ObjectId,
-        ref:"Post"
-    },
     notificationtype:{
       type:String,
-      enum:["follow","like","comment"]
+      enum:["follow","like","comment"],
+      required:true
+    },
+    sender:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"User",
+        required:true
+    },
+    receiver:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"User",
+        required:true
+    },
+    comments:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"comment",
+        // required:true,
+    },
+    post:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"Post"
     },
     notificationtime:{
      type:Date,

@@ -11,10 +11,6 @@ const posts=new mongoose.Schema({
          ref:"User",
          required:true
       },
-      userimage:{
-         type:mongoose.Schema.Types.ObjectId,
-         ref:'User'
-      },
       image:
       { 
          type:String,
@@ -29,11 +25,10 @@ const posts=new mongoose.Schema({
          type: mongoose.Schema.Types.ObjectId,
          ref: "Comment"
       }],
-      createdAt: 
-      {
-         type: Date,
-         default: Date.now,
-      },
+      notifiaction:[{
+         type:mongoose.Schema.Types.ObjectId,
+         ref:"Notification"
+      }],
        updatedAt: Date,
 },{timestamps:true})
 const Post=mongoose.model("Post",posts)

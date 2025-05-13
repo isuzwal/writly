@@ -1,22 +1,28 @@
 const mongoose=require("mongoose")
 
-const CommentSchema=new mongoose.Schema({
-    posts:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"Post"
-    },
-    author:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"User"
-    },
+const Comment=new mongoose.Schema({
     text:{
         type:String,
         required:true,
         trim:true,
     },
+    sender:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"User",
+        required:true,
+    },
+    post:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"Post",
+        required:true
+    },
+    receiver:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"User"
+    },
     commentDate:{
-        teype:Date 
+        type:Date 
     }
 })
-const comment=mongoose.model("Comment",CommentSchema)
+const comment=mongoose.model("comment",Comment)
 module.exports=comment;

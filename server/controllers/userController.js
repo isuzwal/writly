@@ -4,6 +4,7 @@ const {token}=require("../middleware/verifytoken");
 const  Sendingverfiactioncode = require("../middleware/Email");
 
 
+
 //-->user register
 exports.register=async(req,res)=>{
     try{
@@ -41,7 +42,8 @@ exports.register=async(req,res)=>{
         console.log("Error at the create user",e)
         res.status(500).json({
             status:"Fail",
-            message:"Internal Server Error"
+            message:"Can't ",
+            error: error.message
         })
     }
 }
@@ -90,7 +92,8 @@ exports.sendVertification=async(req,res)=>{
         console.log("Error sending Verifaction code",error)
         return res.status(500).json({
             status:"Fail",
-            msg:"Internal Server Error "
+            msg:"Internal Server Error ",
+            error: error.message
         })
     }
  }
@@ -140,7 +143,8 @@ exports.login=async(req,res)=>{
         console.log("Can't login",e)
         res.status(500).json({
             status:"Fail",
-            message:"Internal Server Error"
+            message:"Some went Wrong While Login Process",
+             error: error.message
         })
     }
 }
@@ -161,8 +165,9 @@ exports.profile=async(req,res)=>{
         console.log("Can't get user",e)
         res.status(500).json(
         {
-         status:"Fail",
-         msg:"Internal Server error"
+         status:false,
+         msg:"Some thing Wrong While Geeting user Profile",
+        error: error.message
         })
     }
 }
@@ -181,18 +186,20 @@ exports.getuserlist=async(req,res)=>{
             return rest;
           });
         res.status(200).json({
-            status:"Success",
+            status:true,
             user:sanitizedUsers
         })
        
     }catch(e){
         console.log("Error at Fetching user",e)
         res.status(500).json({
-             status:"Fail",
-              msg:"Internal Server Error"
+             status:false,
+             msg:"Internal Server Error",
+             error: error.message
         })
   }
 }
+
 
 //--> logout user
 exports.logout=(req, res) => {
