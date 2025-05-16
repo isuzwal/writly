@@ -1,7 +1,9 @@
-import { FaComment, FaHeart, FaUserPlus } from 'react-icons/fa'; // Importing icons for like, comment, and follow
+import { UserPlus, Heart, MessageSquarePlus,X } from 'lucide-react';
 
-type NotificationType = 'follow' | 'comment' | 'like'; // Defining the possible types
+// Notification type definition
+type NotificationType = 'follow' | 'comment' | 'like';
 
+// Interface for notification data
 interface NotificationData {
   id: string;
   postId: string;
@@ -10,80 +12,112 @@ interface NotificationData {
   profileImage: string;
   text: string;
   createdAt: string;
-  type: NotificationType; // Add type here
+  type: NotificationType;
 }
 
 const Notification = () => {
-  const dumylistdata: NotificationData[] = [
+  // Sample notification data
+  const notificationData: NotificationData[] = [
     {
-      id: 'c1',
+      id: 'n1',
       postId: 'p1',
       userId: 'u1',
-      username: 'Alice',
-      profileImage: 'https://example.com/profiles/alice.jpg',
-      text: 'This is an amazing post!',
+      username: 'Alice Johnson',
+      profileImage: '/api/placeholder/40/40',
+      text: 'liked your post about design trends',
       createdAt: '2025-05-13T10:00:00Z',
-      type: 'comment', // Comment notification type
+      type: 'like',
     },
     {
-      id: 'c2',
-      postId: 'p1',
-      userId: 'u2',
-      username: 'Bob',
-      profileImage: 'https://example.com/profiles/bob.jpg',
-      text: 'I totally agree with this.',
-      createdAt: '2025-05-13T10:05:00Z',
-      type: 'like', // Like notification type
-    },
-    {
-      id: 'c3',
+      id: 'n2',
       postId: 'p2',
+      userId: 'u2',
+      username: 'Bob Smith',
+      profileImage: '/api/placeholder/40/40',
+      text: 'commented on your photo: "Great shot!"',
+      createdAt: '2025-05-14T15:30:00Z',
+      type: 'comment',
+    },
+    {
+      id: 'n3',
+      postId: 'p3',
       userId: 'u3',
-      username: 'Charlie',
-      profileImage: 'https://example.com/profiles/charlie.jpg',
-      text: 'Thanks for sharing!',
-      createdAt: '2025-05-13T11:20:00Z',
-      type: 'follow', // Follow notification type
+      username: 'Charlie Davis',
+      profileImage: '/api/placeholder/40/40',
+      text: 'started following you',
+      createdAt: '2025-05-15T08:45:00Z',
+      type: 'follow',
+    },
+    {
+      id: 'n4',
+      postId: 'p4',
+      userId: 'u4',
+      username: 'Tech Insights',
+      profileImage: '/api/placeholder/40/40',
+      text: 'liked your post about AI',
+      createdAt: '2025-05-15T19:20:00Z',
+      type: 'like',
+    },
+    {
+      id: 'n5',
+      postId: 'p5',
+      userId: 'u5',
+      username: 'Design Trends',
+      profileImage: '/api/placeholder/40/40',
+      text: 'commented: "Would love to collaborate!"',
+      createdAt: '2025-05-16T09:15:00Z',
+      type: 'comment',
     },
   ];
 
-  // Function to render the appropriate icon based on notification type
+  // Function to render notification icon based on type
   const renderNotificationIcon = (type: NotificationType) => {
     switch (type) {
       case 'comment':
-        return <FaComment className="text-blue-500" />;
+        return <MessageSquarePlus className="text-blue-500" size={16} />;
       case 'like':
-        return <FaHeart className="text-red-500" />;
+        return <Heart className="text-red-500" size={16} />;
       case 'follow':
-        return <FaUserPlus className="text-green-500" />;
+        return <UserPlus className="text-green-500" size={16} />;
       default:
         return null;
     }
   };
 
   return (
-    <section className="bg-maincolor px-5 py-2  min-h-screen">
-      <div className=" mx-auto px-2  flex flex-col   justify-center  rounded-md">
-        {dumylistdata.map((data) => (
-          <div key={data.id} className="w-full hover:bg-gray-900 rounded-md cursor-pointer transition-all ease-in-out p-4 ">
-              <div className="ml-3">{renderNotificationIcon(data.type)}</div>
-            <div className="flex items-start gap-3">
-              <img
-                src={data.profileImage}
-                alt={data.username}
-                className="w-10 h-10 rounded-full object-cover"
+    <div className=" min-h-screen">
+      <div className="p-2  w-full  mx-auto">
+        {notificationData.map((notification) => (
+          <div key={notification.id}  className="bg-navabar  cursor-pointer p-4 mb-2 shadow rounded-lg flex  items-center ">
+            <div className="mr-2 mt-1">
+              {renderNotificationIcon(notification.type)}
+            </div>
+            <div className="mr-3">
+              <img 
+                src={notification.profileImage} 
+                alt={notification.username} 
+                className="w-10 h-10 rounded-full"
               />
-              <div className="flex-1">
-                <div className="bg-[#2a2a2a] text-white px-4 py-2 rounded-full text-sm">
-                  <p className="font-semibold">{data.username}</p>
-                  <p>{data.text}</p>
+            </div>
+            <div className="flex-1  mt-3 ">
+              <div className="flex  justify-between items-start">
+                <div className='flex gap-2'>
+                  <span className="font-semiboldn text-white hidden  sm:block md:block text-sm">{notification.username}</span>
+                  <span className="text-gray-600 ml-1 text-sm">{notification.text}</span>
                 </div>
+                <span className="text-gray-500 text-xs">
+                </span>
               </div>
             </div>
+          <div className=' mt-1'>
+            <button>
+            <X  className='text-white hover:rounded-md hover:bg-neutral-600'/>
+            </button>
+          </div>
           </div>
         ))}
       </div>
-    </section>
+    </div>
   );
 };
 

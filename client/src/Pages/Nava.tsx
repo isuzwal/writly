@@ -36,8 +36,6 @@ function Nava() {
           className=" items-center  text-white hover:bg-gradient-to-t from-slate-100 via-slate-200 to-slate-300 md:text-xl hover:shadow-md   rounded-md py-1 hover:text-writly flex gap-1 text-[16px] font-semibold font-dm px-4 whitespace-nowrap">
           <PenTool size={20} /> Writly
         </Link>
-
-      
         <div className="hidden md:flex  items-center gap-4">
           {user ? (
             <div onClick={ToggleMenuBar}
@@ -66,7 +64,7 @@ function Nava() {
         </div>
 
         {IsOpen && (
-          <div className={` absolute right-0 h-screen  top-[2.65rem]   flex  z-20 bg-maincolor   border-l-[1px] border-zinc-700 shadow-md  text-white   w-full sm:w-72  md:w-64  p-2 transition-all duration-300 ease-in-out ${themeStyles[theme as keyof typeof themeStyles]}`}>
+          <div className={` absolute  md:hidden right-0 w-full  rounded-l-md  min-h-screen  top-[2.5rem]   flex  z-20 bg-maincolor   border-zinc-700 shadow-md  text-white    sm:w-72  md:w-64  p-2 transition-all duration-300 ease-in-out ${themeStyles[theme as keyof typeof themeStyles]}`}>
             {user ? (
               <div className="flex flex-col   w-full  gap-2 px-2 py-3">
                 <div className=" relative w-full  h-32 rounded">
@@ -87,9 +85,9 @@ function Nava() {
                 </div>
               </div>
             ) : (
-              <div className="flex flex-col gap-4 px-4 py-2">
-                <Link to="/login" className="text-[16px] rounded-md  text-white  hover:bg-zinc-600  hover:bg-opacity-30 font-semibold  px-2 py-2">Login</Link>
-                <Link to="/register" className=" text-[16px]  rounded-md  text-white  hover:bg-zinc-600  hover:bg-opacity-30 font-semibold  px-2 py-2">Register</Link>
+              <div className="flex flex-col gap-4  w-full px-4 py-2">
+                <Link to="/login" className="text-[16px]  rounded-md  w-full text-white  hover:bg-zinc-600  hover:bg-opacity-30 font-semibold  px-2 py-2">Login</Link>
+                <Link to="/register" className=" text-[16px]  w-full  rounded-md  text-white  hover:bg-zinc-600  hover:bg-opacity-30 font-semibold  px-2 py-2">Register</Link>
               </div>
             )}
           </div>

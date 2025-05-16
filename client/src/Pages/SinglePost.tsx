@@ -125,7 +125,7 @@ const SinglePost = () => {
                 </div>
               </span>
               <h3 className="font-semibold text-[15px]">
-                {post.like ? post.like.length : 0}
+                {post.likes ? post.likes.length : 0}
               </h3>
             </button>
             
@@ -134,7 +134,7 @@ const SinglePost = () => {
                 <MessageSquareMore size={22} />
               </div>
               <h3 className="font-semibold">
-                {post.comment ? post.comment.length : 0}
+                {post.comments ? post.comments.length : 0}
               </h3> 
             </button>
           </div>
