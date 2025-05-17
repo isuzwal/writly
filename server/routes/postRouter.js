@@ -1,5 +1,14 @@
 const express=require('express')
-const {postcreate,getAllposts,getPostByID,imageupload,userPost,likesnotifcation,commentnotification}=require("../controllers/postController")
+const {
+    postcreate,
+    getAllposts,
+    getPostByID,
+    imageupload,
+    userPost,
+    likesnotifcation,
+    commentnotification,
+    getcomment,
+}=require("../controllers/postController")
 const {verifytoken}=require("../middleware/verifytoken")
 const uploadimage=require("../cloudStroage/cloud")
 
@@ -11,4 +20,5 @@ router.get("/post/user/:username",verifytoken,userPost);
 router.post('/post/upload', verifytoken, uploadimage.single('image'), imageupload);
 router.post("/post/likes",verifytoken,likesnotifcation)
 router.post("/post/comment",verifytoken,commentnotification)
+router.post("/post/single/commnet",verifytoken,getcomment)
 module.exports=router

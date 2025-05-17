@@ -249,4 +249,31 @@ exports.imageupload = async(req, res) => {
     })
  }
 }
-//  for Testing the route 
+//  Fetching Comment on Sinlge Post Component
+exports.getcomment=async(req,res)=>{
+    try{
+     const {postId,userId}=req.body;
+     // condition check 
+     if(!postId || !userId){
+        return res.status(400).json({
+            status:false,
+            message:"Nedd Post ID and user ID",
+        })
+     }
+   //  Search Post Id From Databse
+   const usercomment=await  comment.find({post:postId})
+   .populate("sender",'username profileImage text' )
+    return res.status(200).json({
+      status: true,
+      data: usercomment,
+    });
+    }catch(e){
+        console.log("Error at Fetching Comment ",e)
+        res.status(500).json({
+            status:false,
+            message:"Server Eror WHILE Fetching User Comment ",
+            error:error.message
+        })
+    }
+}
+
