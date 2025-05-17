@@ -3,24 +3,23 @@ import { useEffect, useState } from "react";
 import { PostType } from "../type/PostType";
 import { Heart, MessageSquareMore } from "lucide-react";
 import { CiBookmarkPlus } from "react-icons/ci";
-
+import { comment } from "../type/commenttpe";
 const SinglePost = () => {
   const { id } = useParams(); // Get post ID from the URL
   const [post, setPost] = useState<PostType | null>(null);
   const [loading, setLoading] = useState(true);
   const [isliked, setLiked] = useState<{ [key: string]: boolean }>({});
-
+  const [comment,setComment]=useState<comment[]>([])
+  const [showcomment,setShowComments]=useState<boolean>(false)
   useEffect(() => {
     const fetchPost = async () => {
       try {
         const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/post/${id}`, {
           credentials: "include",
         });
-        
         if (!res.ok) {
           throw new Error(`Failed to fetch post: ${res.status}`);
         }
-        
         const data = await res.json();
         if (data.data && data.data.post) {
           setPost(data.data.post);
@@ -56,7 +55,7 @@ const SinglePost = () => {
       //   credentials: "include",
       // });
       
-      console.log("Post liked:", postID);
+      
     } catch (error) {
       console.error("Error liking post:", error);
       // Revert UI state on error
@@ -66,10 +65,34 @@ const SinglePost = () => {
       }));
     }
   };
-
+ 
   if (loading) return <div className="text-white">Loading post...</div>;
   if (!post) return <div className="text-white">Post not found.</div>;
-
+ 
+// comment Fetching Process 
+const getcomments=async(postId?:string,userId?:string)=>{
+  try {
+        const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/post/single/commnet`, {
+       method:'POST',
+       headers:{
+       'Content-Type':'application/json',
+       },
+       body:JSON.stringify({
+             postId:postId,
+             userId:userId
+            }),
+          credentials: "include",
+        });
+        if (!res.ok) {
+          throw new Error(`Failed to fetch post: ${res.status}`);
+        }
+        // store the comment 
+        const data = await res.json();
+        setComment(data.data)
+}catch(e){
+  console.log("Faile To Load the comment ",e)
+}
+}
   return (
     <div className="flex flex-col p-1 m-2 gap-2">
       <div className="p-1 cursor-pointer hover:bg-navabar hover:bg-opacity-40 shadow rounded-lg bg-navabar text-white px-2">
@@ -109,7 +132,7 @@ const SinglePost = () => {
             />
           </div>
         )}
-        <div className="flex flex-row p-2 items-center rounded-sm gap-2 justify-between">
+        <div className="flex flex-row   p-2 items-center rounded-sm gap-2 justify-between">
           <div className="flex flex-row px-2 py-1 gap-3 justify-between w-32 items-center text-center">
             <button className="flex items-center px-1">
               <span 
@@ -128,20 +151,38 @@ const SinglePost = () => {
                 {post.likes ? post.likes.length : 0}
               </h3>
             </button>
-            
-            <button className="flex items-center p-1">
+            <button  onClick={() => {
+             getcomments(post._id, post?.user?._id);
+             setShowComments(prev => !prev);          
+             }}
+             className="flex items-center p-1">
               <div className="flex p-1.5 hover:bg-blue-700 transition-colors duration-200 ease-in-out hover:bg-opacity-30 hover:text-blue-600 rounded-full items-center justify-center text-sm gap-1 cursor-pointer">
                 <MessageSquareMore size={22} />
+                 {post?.comments?.length}
               </div>
-              <h3 className="font-semibold">
-                {post.comments ? post.comments.length : 0}
-              </h3> 
-            </button>
+              </button>
           </div>
           <span className="flex text-sm cursor-pointer">
             <CiBookmarkPlus size={20} />
           </span>
         </div>
+       <div className="flex flex-col p-2 w-full max-h-56 overflow-y-auto scroll-hidden">
+               {showcomment && comment && comment.map((items:comment,index)=>(
+                 <div key={index} className=" bg-[#2a2a2a]   flex rounded-3xl items-center   border-slate-400 gap-1 border-[2px] mb-4   text-white">
+                  <div className=" flex items-center gap-1 p-2 ">
+                 <img src={items?.sender.profileImage} 
+                alt={items?.sender.username} 
+                className="w-8 aspect-square rounded-full"/>
+                <Link to={`/home/user/${items.sender?.username}`}>
+                <span className="font-bold hover:underline">{post.user?.username}</span>
+              </Link>
+               </div>
+               <div className="flex items-center mt-2  w-auto px-2">
+                  <p className="text-gray-200 font-sans">{items.text}</p>
+                </div>
+             </div>
+               ))}
+            </div>
       </div>
     </div>
   );

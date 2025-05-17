@@ -46,7 +46,7 @@ const Blog=()=>{
           });
           const data = await res.json();
           setPost(data.data.post); 
-          console.log(data.data.post)
+         
         } catch (error) {
           console.error("Error fetching posts:", error);
         }
@@ -123,7 +123,7 @@ const handlechangecommnet=(postId:string,value:string)=>{
 } 
     return (
 <section className=" bg-maincolor  min-h-screen ">
-   <div className="container mx-auto   px-2 max-w-8xl">
+   <div className="container mx-auto    max-w-8xl">
      <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr_1fr] px-5 py-2">
       {/*Link Section  */}
      <div className="md:col-span-1 items-start  bg-[#1d1c1c] ">
@@ -182,9 +182,9 @@ const handlechangecommnet=(postId:string,value:string)=>{
             {nestedlocation ? (
               <Outlet />
             ):(
-              <div className="flex flex-col  ">
+              <div className="flex flex-col ">
                {post.map((post) => (
-                <div className="  cursor-pointer border-b-[2px] border-b-maincolor  hover:bg-navabar hover:bg-opacity-40   bg-navabar text-white px-2 ">
+                <div className="   bg-navabar cursor-pointer border-b-[2px] border-b-maincolor  w-full  hover:bg-navabar hover:bg-opacity-40    text-white px-2 ">
                    <div className="flex  flex-row justify-between p-1 items-center">
                    <div className="flex items-center gap-3">
                      <img src={user?.profileImage} className="object-cover rounded-full w-10 h-10" />
