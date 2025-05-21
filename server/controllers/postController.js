@@ -48,10 +48,9 @@ exports.getAllposts=async(req,res)=>{
         })
     }
 }
-//--> get post by id
+//--> Get post by PostId
 exports.getPostByID=async(req,res)=>{
     try{
-      
         const post = await Post.findById(req.params.id)
       .populate("user", "username profileImage follower");
         if(!post){
@@ -64,17 +63,17 @@ exports.getPostByID=async(req,res)=>{
             }
         })
     }catch(e){
-        // console.log("Error at Fetching Post",e)
+         console.log("Error at Fetching Post",e)
         res.status(500).json({"error":"Server Error"})
     }
 }
 
 
-// --> get user post by there name 
+// --> Get user post by there name 
 exports.userPost=async(req,res)=>{
     try{
         const {username}=req.params;
-        const userInfo=await User.findOne({username:username})
+        const userInfo=await User.findOne({username})
         .populate("post")
           if(!userInfo){
              return   res.status(404).json({
@@ -89,7 +88,7 @@ exports.userPost=async(req,res)=>{
 
         })
     }catch(e){
-       
+        console.log("From the username post not match ",e)
         res.status(500).json({
             status:"Fail",
             msg:"Internal Error"})
@@ -249,6 +248,8 @@ exports.imageupload = async(req, res) => {
     })
  }
 }
+
+
 //  Fetching Comment on Sinlge Post Component
 exports.getcomment=async(req,res)=>{
     try{
