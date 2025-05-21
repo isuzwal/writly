@@ -122,17 +122,17 @@ const handlechangecommnet=(postId:string,value:string)=>{
   }))
 } 
     return (
-<section className=" bg-maincolor  min-h-screen ">
+<section className=" bg-maincolor   min-h-screen ">
    <div className="container mx-auto    max-w-8xl">
      <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr_1fr] px-5 py-2">
       {/*Link Section  */}
-     <div className="md:col-span-1 items-start  bg-[#1d1c1c] ">
+     <div className="sm:col-span-1 hidden    lg:block text-center  bg-[#1d1c1c] ">
      <div className=" flex flex-col  gap-8">
       <div className="flex items-center gap-3 max-w-max hover:bg-navabar bg-opacity-25 rounded-md  px-4 py-2 mb-4">
               <img src={user?.profileImage} className="w-10 h-10 rounded-full object-cover" alt="Profile" />
               <span className="text-white mt-1 font-medium text-[15px] hidden lg:block">
                 {user?.username || "User"}
-              </span>
+              </span> 
       </div>
     {/* Navigation Items */}
     {linklist.map((link, index) => (
@@ -152,17 +152,12 @@ const handlechangecommnet=(postId:string,value:string)=>{
   {isPoped && (
     <div className="fixed inset-0 z-30 px-2  bg-black bg-opacity-70 flex items-center justify-center">
       <div className="bg-navabar  bg-opacity-100 z-40  max-w-2xl w-full mx-auto rounded-xl p-2 shadow-xl relative">
-        {/* <button
-          className="absolute top-2 right-2 text-white hover:text-white text-2xl"
-          onClick={ISPoped}>
-          &times;
-        </button> */}
         <Post />
       </div>
     </div>
   )}
           {/*Post Section*/}
-          <div className="  col-span-3 md:col-span-2  lg:col-span-1 w-full flex flex-col justify-start md:h-[calc(100vh-0.5rem)] overflow-y-auto scroll-hidden">
+          <div className="  col-span-3  sm:col-span-2   lg:col-span-1 w-full flex flex-col justify-start md:h-[calc(100vh-0.5rem)] overflow-y-auto scroll-hidden">
             <div className={`flex justify-center  gap-1 p-2 `}>
             <div className="flex   py-2 w-full justify-between     rounded-md text-white">
               <NavLink to="/home/latest"    className={({isActive})=>isActive
@@ -189,7 +184,7 @@ const handlechangecommnet=(postId:string,value:string)=>{
                    <div className="flex items-center gap-3">
                      <img src={user?.profileImage} className="object-cover rounded-full w-10 h-10" />
                      <div className="text-start mr-2  ">
-                     <Link to={`/home/post/user/${post.user?.username}`} className="text-[12px] ml-1  hover:underline  font-extrabold">{post.user?.username}</Link>
+                     <Link to={`/home/${post.user?.username}`} className="text-[12px] ml-1  hover:underline  font-extrabold">{post.user?.username}</Link>
                      <p className="text-[9px] font-bold">{new Date(post.createdAt).toLocaleDateString()}</p>
                     </div>
                   </div>

@@ -94,8 +94,8 @@ const getcomments=async(postId?:string,userId?:string)=>{
 }
 }
   return (
-    <div className="flex flex-col p-1 m-2 gap-2">
-      <div className="p-1 cursor-pointer hover:bg-navabar hover:bg-opacity-40 shadow rounded-lg bg-navabar text-white px-2">
+    <div className="flex flex-col p-1 m-2  gap-2">
+      <div className="p-1 cursor-pointer hover:bg-navabar hover:bg-opacity-80 transition-all ease-in-out duration-300  shadow rounded-lg bg-navabar text-white px-2">
         <div className="flex flex-row justify-between p-1 items-center gap-2">
           <div className="flex gap-1 flex-row items-center font-dm font-semibold">
             <img 
@@ -105,7 +105,7 @@ const getcomments=async(postId?:string,userId?:string)=>{
             />
             <div className="mt-2 flex-col flex">
               {/* Fix the link to point to the user profile page */}
-              <Link to={`/home/user/${post.user?.username}`}>
+              <Link to={`/home/${post.user?.username}`}>
                 <span className="font-bold hover:underline">{post.user?.username}</span>
               </Link>
               <p className="text-[9px] font-bold">
@@ -135,11 +135,8 @@ const getcomments=async(postId?:string,userId?:string)=>{
         <div className="flex flex-row   p-2 items-center rounded-sm gap-2 justify-between">
           <div className="flex flex-row px-2 py-1 gap-3 justify-between w-32 items-center text-center">
             <button className="flex items-center px-1">
-              <span 
-                key={post._id} 
-                onClick={() => post._id && likedpost(post._id)}
-                className="flex items-center cursor-pointer"
-              >
+              <span  key={post._id}   onClick={() => post._id && likedpost(post._id)}
+                className="flex items-center cursor-pointer">
                 <div className="flex p-1.5 hover:bg-rose-700 transition-colors duration-200 ease-in-out hover:text-white hover:bg-opacity-80 rounded-full items-center justify-center text-sm gap-1 cursor-pointer">
                   <Heart 
                     className={`${isliked[post._id] ? 'fill-rose-600 text-rose-600' : 'fill-none group-hover:text-rose-600'} transition-colors duration-200 rounded-full`} 
@@ -166,18 +163,18 @@ const getcomments=async(postId?:string,userId?:string)=>{
             <CiBookmarkPlus size={20} />
           </span>
         </div>
+        {/*Comment Section UI */}
        <div className="flex flex-col p-2 w-full max-h-56 overflow-y-auto scroll-hidden">
                {showcomment && comment && comment.map((items:comment,index)=>(
-                 <div key={index} className=" bg-[#2a2a2a]   flex rounded-3xl items-center   border-slate-400 gap-1 border-[2px] mb-4   text-white">
-                  <div className=" flex items-center gap-1 p-2 ">
-                 <img src={items?.sender.profileImage} 
-                alt={items?.sender.username} 
-                className="w-8 aspect-square rounded-full"/>
-                <Link to={`/home/user/${items.sender?.username}`}>
-                <span className="font-bold hover:underline">{post.user?.username}</span>
-              </Link>
+                 <div key={index} className=" bg-[#2a2a2a]   flex rounded-md items-center p-2 mb-2  text-white">
+                  <div className=" flex items-center ">
+                  <Link to={`/home/${items.sender?.username}`} >
+                  <img src={items?.sender.profileImage} 
+                 alt={items?.sender.username} 
+                 className="w-8 aspect-square rounded-full"/>
+                 </Link>
                </div>
-               <div className="flex items-center mt-2  w-auto px-2">
+               <div className="flex items-center   w-auto px-2">
                   <p className="text-gray-200 font-sans">{items.text}</p>
                 </div>
              </div>
