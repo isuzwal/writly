@@ -76,7 +76,7 @@ function Nava() {
                 </div>
                 <div className="flex flex-col gap-8 mt-5 ">
                   {listItems.map((item,idx)=>(
-                    <Link to={item.link} key={idx}
+                    <Link to={typeof item.link==="function"? item.link(user?.username)||"":item.link}key={idx}
                     className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-[#2a2929] transition-colors duration-200" >
                     <span className="text-white text-xl">{item.icon}</span>
                     <span className="text-white font-medium text-[15px] ">{item.label}</span>

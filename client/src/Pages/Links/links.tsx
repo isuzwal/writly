@@ -15,7 +15,7 @@ const linklist: LinkItems[] = [
     { label: "Bookmarks", icon: <BookMarkedIcon />, link: "/home/bookmark" },
     { label: "Video", icon: <Video />, link: "/home/video" },
     { label: "Story", icon: <InfoIcon />, link: "/home/story" },
-    { label: "Account", icon: <UserIcon />, link: (username)=>`/home/user/${username}` },
+    { label: "Account", icon: <UserIcon />, link: (username)=>`/home/profile/${username}` },
 
   ];
   

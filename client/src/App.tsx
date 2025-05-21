@@ -85,8 +85,8 @@ try{
      <Route path="feedback" element={<Feedback />} />
      <Route path="logout" element={<Logout />} />
      <Route path="post/:id" element={<Singelpost />} />
-     <Route path="post/user/:username" element={<PostUser />} />
-     <Route path="user/:username" element={<Profile />} >
+     <Route path=":username" element={<PostUser />} />
+     <Route path="profile/:username" element={<Profile />} >
        <Route path="following" element={<Following />} />
        <Route path="likes" element={<Likes />} />
      </Route>
