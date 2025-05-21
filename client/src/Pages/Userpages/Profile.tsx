@@ -12,10 +12,10 @@ const Profile=()=>{
     }
     const {user}=context
     const userRouteLocation=useLocation()
-    const userNestedroute=userRouteLocation.pathname ===`/home/user/${user.username}`
+    const userNestedroute=userRouteLocation.pathname ===`/home/profile/${user.username}`
   
     return (
-      <div className=" bg-navabar  min-h-screen rounded-lg shadow-md overflow-y-auto scroll-hidden   text-white">
+      <div className=" bg-navabar   rounded-lg shadow-md overflow-y-auto scroll-hidden   text-white">
       <div className="relative">
         <img 
           src={user?.coverImage || "https://via.placeholder.com/800x200"} 
@@ -38,13 +38,13 @@ const Profile=()=>{
       </div>
       
       {/* Posts */}
-      <div className="border-t border-gray-700">
+      <div className="border-t ">
             <div className={`flex    justify-center  gap-2  p-2 `}>
             <div className="flex w-full justify-evenly items-center   rounded-md text-white border-2">
-              <NavLink  to={`/home/user/${user.username}/following`} className={({isActive})=>isActive 
+              <NavLink  to={`/home/profile/${user.username}/following`} className={({isActive})=>isActive 
               ?"bg-gray-600  flex-1  bg-opacity-70 text-center px-4 py-1.5 flex    justify-center text-[14px] items-center":  "flex-1 justify-center  bg-navabar bg-opacity-80   px-4 py-1.5 flex   text-[14px] items-center"}
               >Following</NavLink>
-              <NavLink to={`/home/user/${user.username}/likes`} className={({isActive})=>isActive 
+              <NavLink to={`/home/profile/${user.username}/likes`} className={({isActive})=>isActive 
               ?"bg-gray-600    bg-opacity-70 rounded-r-md text-center  px-4 py-1.5 flex  justify-center border-l-2 flex-1 border-slate-100  text-[14px] items-center":" justify-center  border-slate-100  flex-1   rounded-r-md    bg-navabar bg-opacity-80   border-l-2 px-4 py-1.5 flex  text-[14px] items-center"}
               >Like</NavLink>
               </div>
