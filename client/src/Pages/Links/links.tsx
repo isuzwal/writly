@@ -7,7 +7,7 @@ export interface LinkItems{
     label:string,
     icon:JSX.Element,
     link:string |((username:string)=>string),
-    // isAction:boolean,
+  
 }
 const linklist: LinkItems[] = [
     { label: "Home", icon: <HomeIcon />, link: "/home" },
