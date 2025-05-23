@@ -291,8 +291,9 @@ exports.getnotification=async(req,res)=>{
     } 
    // then find notifiaction by user is which is eqaul to receiver_id 
   const notification=await  Notification.find({receiver:user._id})
-  .populate("sender","username",)
+  .populate("sender","username")
   .populate("comment","text")
+  .sort({ notificationtime: -1 }) 
   .exec()
   console.log(`${username} your copmment list is ${notification}`)
   res.status(200).json({
