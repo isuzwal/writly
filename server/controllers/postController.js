@@ -169,7 +169,6 @@ exports.imageupload = async(req, res) => {
       message:`${user.username} liked your post`,
       notifaction:savenotification
      })
-     console.log("Save Post",savenotification)
    }catch(error){
     console.error("Error at Backend Process:", error);
       res.status(500).json({
@@ -182,7 +181,7 @@ exports.imageupload = async(req, res) => {
   // comment notification
   exports.commentnotification=async(req,res)=>{
  try{
- const {postId,userId,text}=req.body
+ const {postId,userId,text,commentId}=req.body
  if(!userId||!postId||!text){
     return res.status(400).json({
         status:false,
@@ -211,6 +210,7 @@ exports.imageupload = async(req, res) => {
     sender:userId,
     receiver:post.user,
     text:text,
+    comment: commentId, 
  })
  const savecomment=await commentnotification.save()
    // Create Notifaction for Comment 
@@ -229,10 +229,6 @@ exports.imageupload = async(req, res) => {
         notifiaction:savecomment._id
     }
  })
- // user $push
-//  await User.findByIdAndUpdate(userId,{
-//     $addToSet:{comments:postId}
-//  })
  res.status(200).json({
     status:true,
     message:`${user.username} comment on your post`,
@@ -240,7 +236,6 @@ exports.imageupload = async(req, res) => {
     notifaction:savenotification
  })
  }catch(error){
-    console.log("At the Comment route",error)
     res.status(500).json({
         status:false,
         message:"Server error while comment on post",
@@ -262,14 +257,13 @@ exports.getcomment=async(req,res)=>{
         })
      }
    //  Search Post Id From Databse
-   const usercomment=await  comment.find({post:postId})
+   const usercomment=await comment.find({post:postId})
    .populate("sender",'username profileImage text' )
     return res.status(200).json({
       status: true,
       data: usercomment,
     });
     }catch(e){
-        console.log("Error at Fetching Comment ",e)
         res.status(500).json({
             status:false,
             message:"Server Eror WHILE Fetching User Comment ",
@@ -277,4 +271,40 @@ exports.getcomment=async(req,res)=>{
         })
     }
 }
-
+ /// geting notifiaction
+exports.getnotification=async(req,res)=>{
+  try{
+      const {username}=req.params
+      if(!username){
+          return res.status(400).json({
+              status:false,
+              message:"User name is required to fetch notification",
+            });
+        }
+        // check user is exits or not 
+      const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(404).json({
+        status: false,
+        message: "User not found",
+      });
+    } 
+   // then find notifiaction by user is which is eqaul to receiver_id 
+  const notification=await  Notification.find({receiver:user._id})
+  .populate("sender","username",)
+  .populate("comment","text")
+  .exec()
+  console.log(`${username} your copmment list is ${notification}`)
+  res.status(200).json({
+    status:true,
+    notification:notification
+  })
+  }catch(e){
+        console.log("Error at Fetching Comment ",e)
+        res.status(500).json({
+            status:false,
+            message:"Server Error whie Fetching User Comment ",
+            error:error.message
+      })
+}
+}

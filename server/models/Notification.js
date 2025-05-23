@@ -16,9 +16,9 @@ const NotificationSchema=new  mongoose.Schema({
         ref:"User",
         required:true
     },
-    comments:{
+    comment:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:"comment",
+        ref:"Comment",
         // required:true,
     },
     post:{

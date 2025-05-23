@@ -24,5 +24,5 @@ const Comment=new mongoose.Schema({
         type:Date 
     }
 })
-const comment=mongoose.model("comment",Comment)
+const comment=mongoose.model("Comment",Comment)
 module.exports=comment;
