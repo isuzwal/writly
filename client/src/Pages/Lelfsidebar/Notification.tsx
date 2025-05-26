@@ -1,124 +1,92 @@
-import { UserPlus, Heart, MessageSquarePlus,X } from 'lucide-react';
-
-// Notification type definition
-type NotificationType = 'follow' | 'comment' | 'like';
-
-// Interface for notification data
-interface NotificationData {
-  id: string;
-  postId: string;
-  userId: string;
-  username: string;
-  profileImage: string;
-  text: string;
-  createdAt: string;
-  type: NotificationType;
-}
-
+// import { UserPlus, Heart, MessageSquarePlus,X } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Heart,User,MessageCircleDashedIcon ,CircleAlert ,X} from 'lucide-react';
+import  type   {NotificationType ,Notification } from '../../type/notifiaction';
+import { useParams,Link } from 'react-router';
 const Notification = () => {
-  // Sample notification data
-  const notificationData: NotificationData[] = [
-    {
-      id: 'n1',
-      postId: 'p1',
-      userId: 'u1',
-      username: 'Alice Johnson',
-      profileImage: '/api/placeholder/40/40',
-      text: 'liked your post about design trends',
-      createdAt: '2025-05-13T10:00:00Z',
-      type: 'like',
-    },
-    {
-      id: 'n2',
-      postId: 'p2',
-      userId: 'u2',
-      username: 'Bob Smith',
-      profileImage: '/api/placeholder/40/40',
-      text: 'commented on your photo: "Great shot!"',
-      createdAt: '2025-05-14T15:30:00Z',
-      type: 'comment',
-    },
-    {
-      id: 'n3',
-      postId: 'p3',
-      userId: 'u3',
-      username: 'Charlie Davis',
-      profileImage: '/api/placeholder/40/40',
-      text: 'started following you',
-      createdAt: '2025-05-15T08:45:00Z',
-      type: 'follow',
-    },
-    {
-      id: 'n4',
-      postId: 'p4',
-      userId: 'u4',
-      username: 'Tech Insights',
-      profileImage: '/api/placeholder/40/40',
-      text: 'liked your post about AI',
-      createdAt: '2025-05-15T19:20:00Z',
-      type: 'like',
-    },
-    {
-      id: 'n5',
-      postId: 'p5',
-      userId: 'u5',
-      username: 'Design Trends',
-      profileImage: '/api/placeholder/40/40',
-      text: 'commented: "Would love to collaborate!"',
-      createdAt: '2025-05-16T09:15:00Z',
-      type: 'comment',
-    },
-  ];
-
-  // Function to render notification icon based on type
-  const renderNotificationIcon = (type: NotificationType) => {
-    switch (type) {
-      case 'comment':
-        return <MessageSquarePlus className="text-blue-500" size={16} />;
-      case 'like':
-        return <Heart className="text-red-500" size={16} />;
-      case 'follow':
-        return <UserPlus className="text-green-500" size={16} />;
-      default:
-        return null;
-    }
-  };
-
-  return (
-    <div className=" min-h-screen">
-      <div className="p-2  w-full  mx-auto">
-        {notificationData.map((notification) => (
-          <div key={notification.id}  className="bg-navabar  cursor-pointer p-4 mb-2 shadow rounded-lg flex  items-center ">
-            <div className="mr-2 mt-1">
-              {renderNotificationIcon(notification.type)}
-            </div>
-            <div className="mr-3">
-              <img 
-                src={notification.profileImage} 
-                alt={notification.username} 
-                className="w-10 h-10 rounded-full"
-              />
-            </div>
-            <div className="flex-1  mt-3 ">
-              <div className="flex  justify-between items-start">
-                <div className='flex gap-2'>
-                  <span className="font-semiboldn text-white hidden  sm:block md:block text-sm">{notification.username}</span>
-                  <span className="text-gray-600 ml-1 text-sm">{notification.text}</span>
-                </div>
-                <span className="text-gray-500 text-xs">
-                </span>
-              </div>
-            </div>
-          <div className=' mt-1'>
-            <button>
-            <X  className='text-white hover:rounded-md hover:bg-neutral-600'/>
-            </button>
-          </div>
-          </div>
-        ))}
-      </div>
+  // lsit of the Notification inarray 
+  const {userId}=useParams()
+  const [notifiaction,setNotification]=useState<Notification[] >([]);
+  const [error,setError]=useState<string | null>(null)
+  const [loading, setLoading] = useState(false);
+ // getting the nofiaction from backend
+useEffect(()=>{
+  const fetchPosts = async () => {
+        try {
+          setLoading(true)
+          const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/post/notification/${userId}`, {
+            credentials: "include",
+          });
+          const data = await res.json();
+          setNotification(data.notification); 
+        } catch (error:any) {
+          // set the better error handling here 
+          const msg=
+          error.response?.data?.message || "Something Went Wrong ! Try Again"
+          setError(msg)
+        }finally{
+          setLoading(false)
+        }
+      };
+      fetchPosts()
+    },[])
+  // check the notification type  && set it according it to icons
+       const getIcons=(type:NotificationType)=>{
+        switch(type){
+          case 'follow':
+            return <User />;
+          case 'comment':
+            return <MessageCircleDashedIcon  className="text-blue-500 fill-blue-500"/>;
+          case 'like':
+            return <Heart className="text-red-500 fill-red-500" />
+            default :
+            return null; 
+        }
+       }
+  if(loading){
+    return <div className='text-white font-dm '>
+      <p>It can take Some time ! </p>
     </div>
-  );
+  }
+  // Function to render notification icon based on type
+    return (
+    <div className="relative min-h-screen text-white">
+      {notifiaction.map((item, index) => (
+     <div key={index} className=' p-1 cursor-pointer hover:bg-navabar rounded-md hover:bg-opacity-95 '>
+     <div className=' rounded-full w-8'>
+     <img
+     src={item?.sender?.profileImage}
+     alt='User Profile Image'
+        className='w-8 h-8 rounded-full'
+        />
+        </div>
+        <div className='px-1 py-1'>
+        <div className='font-dm flex items-center gap-1 text-[16px]'>
+      <Link to={`/home/${item.sender.username}`} className='text-gray-500 -mt-1'>{item.sender.username}</Link>
+      <p className='flex gap-5 items-center text-[14px]  '>{item.notificationtype} on your post  <span>{getIcons(item.notificationtype)}</span> </p>
+      </div>
+      {item.comment?.text && <p className="text-md text-gray-300 flex ">{item.comment.text}
+      </p>}
+    </div>
+    <div className='h-[1px]  bg-slate-100'></div>
+    </div>
+  ))}
+<div className='absolute  top-0 right-0 w-full'>
+  { error && <p className=' flex  justify-between p-2  text-white bg-red-600  bg-opacity-50 rounded-md text-basess' role='alert'>
+   <p className='flex gap-1 items-center'>
+    <CircleAlert />
+    {error}
+    </p> 
+    <button  onClick={()=>setError(null)}
+      className='cursor-pointer hover:bg-slate-200 rounded-full   hover:bg-opacity-40'
+      >
+    <X/>  
+    </button> 
+    </p>}
+</div>
+
+</div>
+);
 };
 
-export default Notification;
+export default Notification; 
