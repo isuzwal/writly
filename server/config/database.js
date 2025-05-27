@@ -4,10 +4,7 @@ const mongourl=process.env.DATABASE_URL;
 //-> connection part
 const databaseconnection=async()=>{
     try{
-  await  mongoose.connect(mongourl,{
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    })
+  await  mongoose.connect(mongourl);
     console.log(" MongoDB Connected");
     }catch(e){
         console.error("MongoDB Connection Failed", e.message);

@@ -2,7 +2,7 @@ const Post=require("../models/PostSchema");
 const User=require("../models/Personschema");
 const Notification=require("../models/Notification")
 const Comment=require("../models/CommentSchema");
-const comment = require("../models/CommentSchema");
+
 require('dotenv').config();
 //->Post route 
 exports.postcreate=async(req,res)=>{
@@ -69,10 +69,11 @@ exports.getPostByID=async(req,res)=>{
 }
 
 
-// --> Get user post by there name 
+// --> Get user post  there name 
 exports.userPost=async(req,res)=>{
     try{
         const {username}=req.params;
+        console.log(username)
         const userInfo=await User.findOne({username})
         .populate("post")
           if(!userInfo){
@@ -223,7 +224,7 @@ exports.imageupload = async(req, res) => {
    })
    const savenotification=await notifaction.save()
  // post $push 
- await Post.findByIdAndUpdate(postId,{
+  await Post.findByIdAndUpdate(postId,{
     $push:{
         comments:notifaction._id,
         notifiaction:savecomment._id
@@ -244,7 +245,6 @@ exports.imageupload = async(req, res) => {
  }
 }
 
-
 //  Fetching Comment on Sinlge Post Component
 exports.getcomment=async(req,res)=>{
     try{
@@ -257,7 +257,7 @@ exports.getcomment=async(req,res)=>{
         })
      }
    //  Search Post Id From Databse
-   const usercomment=await comment.find({post:postId})
+   const usercomment=await Comment.find({post:postId})
    .populate("sender",'username profileImage text' )
     return res.status(200).json({
       status: true,
@@ -271,14 +271,14 @@ exports.getcomment=async(req,res)=>{
         })
     }
 }
- /// geting notifiaction
+ /// getting notifiaction
 exports.getnotification=async(req,res)=>{
   try{
       const {username}=req.params
       if(!username){
           return res.status(400).json({
               status:false,
-              message:"User name is required to fetch notification",
+              message:"User name is required.",
             });
         }
         // check user is exits or not 
@@ -291,21 +291,148 @@ exports.getnotification=async(req,res)=>{
     } 
    // then find notifiaction by user is which is eqaul to receiver_id 
   const notification=await  Notification.find({receiver:user._id})
-  .populate("sender","username")
+  .populate("sender","username profileImage") // (path ,selecte) only two arrgument 
   .populate("comment","text")
   .sort({ notificationtime: -1 }) 
   .exec()
-  console.log(`${username} your copmment list is ${notification}`)
   res.status(200).json({
     status:true,
     notification:notification
   })
-  }catch(e){
-        console.log("Error at Fetching Comment ",e)
+  }catch(error){
+        console.log("Error at Fetching Comment ",error)
         res.status(500).json({
             status:false,
-            message:"Server Error whie Fetching User Comment ",
+            message:"Internal server problem",
             error:error.message
       })
 }
+}
+
+// unfollowed route
+
+// Following and Followed logic
+exports.follow = async (req, res) => {
+  try {
+    const { followedId, followingId } = req.body;
+    if (!followedId || !followingId) {
+      return res.status(400).json({
+        status: false,
+        message: "Need both user IDs",
+      });
+    }
+    // Check if both users exist first
+    const followedUser = await User.findById(followedId);   
+    const followingUser = await User.findById(followingId);
+
+    if (!followedUser || !followingUser) {
+      return res.status(400).json({
+        status: false,
+        message: "One or both users not found.",
+      });
+    }
+    // Check if already following
+    if (followingUser.following && followingUser.following.includes(followedId)) {
+      return res.status(400).json({
+        status: false,
+        message: "Already following this user",
+      });
+    }
+    // Create notification
+    const followNotification = new Notification({
+      sender: followingUser._id,   // who followed
+      receiver: followedUser._id,  // who was followed
+      notificationtype: "follow",
+    });
+    await followNotification.save();
+
+
+    await User.findByIdAndUpdate(followedId, {
+      $addToSet: {
+        followers: followingId, 
+      },
+    });
+
+    await User.findByIdAndUpdate(followingId, {
+      $addToSet: {
+        following: followedId,  
+      },
+    });
+
+    res.status(200).json({
+      status: true,
+      message:`${followedUser.username}  follow you `,
+      data: followNotification,
+    });
+  } catch (error) {
+    console.log("Can't Follow User", error);
+    res.status(500).json({
+      status: false,
+      message: error.message || "Internal Server Error",
+    });
+  }
+};
+// Unfollow route - COMPLETELY FIXED
+exports.unfollow = async (req, res) => {
+  try {
+    const { followedId, followingId } = req.body;
+
+    if (!followedId || !followingId) {
+      return res.status(400).json({  // Changed from 404 to 400
+        status: false,
+        message: "Need both User IDs"
+      });
+    }
+
+    // Check if both users exist
+    const followedUser = await User.findById(followedId);
+    const followingUser = await User.findById(followingId);
+
+    if (!followedUser || !followingUser) {
+      return res.status(400).json({
+        status: false,
+        message: "One or both users not found.",
+      });
+    }
+
+    // Check if currently following
+    if (!followingUser.following || !followingUser.following.includes(followedId)) {
+      return res.status(400).json({
+        status: false,
+        message: "Not currently following this user",
+      });
+    }
+     await User.findByIdAndUpdate(followedId, {
+      $pull: { follower: followingId },
+    });
+   await User.findByIdAndUpdate(followingId, {
+      $pull: { following: followedId },
+    });
+ // 
+  res.status(200).json({
+   status:true,
+   message:"User unfollwed succesfully"
+  })
+
+   }catch(error){
+    console.log("Error" ,error)
+    res.status(500).json({
+      status:false,
+     message: error.message || "Internal Server Error",
+    })
+   } 
+}
+// remove the nofication from the DB
+exports.removenotification=async(req,res)=>{
+  try{
+ const {id}=req.params;
+  await Notification.findByIdAndDelete(id);
+  res.status(200).json({ message: 'Notification deleted' });
+  }catch(error){
+  console.log("Error" ,error)
+    res.status(500).json({
+      status:false,
+     message: error.message || "Internal Server Error",
+    })
+   } 
 }
