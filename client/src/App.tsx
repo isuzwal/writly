@@ -73,7 +73,7 @@ try{
     <Route path="/" element={<Layout />}>
     <Route index element={user?.username ?<Navigate to ="/home" />:<Home />} />
     <Route path="home" element={<Blog />}>
-     <Route path="notification" element={<Notification />} />
+     <Route path="notification/:userId" element={<Notification />} />
      <Route path="story" element={<Story />} />
      <Route path="video" element={<Video />} />
      <Route path="bookmark" element={<Bookmark />} />

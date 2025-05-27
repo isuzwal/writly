@@ -19,6 +19,7 @@ useEffect(()=>{
           });
           const data = await res.json();
           setNotification(data.notification); 
+          console.log(data)
         } catch (error:any) {
           // set the better error handling here 
           const msg=
@@ -34,15 +35,40 @@ useEffect(()=>{
        const getIcons=(type:NotificationType)=>{
         switch(type){
           case 'follow':
-            return <User />;
+             return  {
+              icons:<User  className='text-blue-500 fill-blue-500'/>,
+              message:"follow  you "
+               };
           case 'comment':
-            return <MessageCircleDashedIcon  className="text-blue-500 fill-blue-500"/>;
+            return { icons:<MessageCircleDashedIcon  className="text-blue-500 fill-blue-500"/>, 
+              message:"comment on your post" };
           case 'like':
-            return <Heart className="text-red-500 fill-red-500" />
+            return {
+               icons:<Heart className="text-red-500 fill-red-500" />,
+               message:"like your post"
+            }
             default :
             return null; 
         }
        }
+
+       const removenotifaction=async(removeid:string)=>{
+      try{
+        const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/post/removenotification/${removeid}`,{
+          method:"DELETE",
+          credentials:"include"
+        })
+          if(!res.ok){
+           throw new Error('Failed to Delete notification');
+          }
+          const notifaction=notifiaction.filter((notifactionId)=> notifactionId._id !==removeid)
+         setNotification(notifaction);
+      }catch (err) {
+      console.error(err);
+     setError("Failed to delete notification");
+       }
+    }
+      
   if(loading){
     return <div className='text-white font-dm '>
       <p>It can take Some time ! </p>
@@ -52,23 +78,27 @@ useEffect(()=>{
     return (
     <div className="relative min-h-screen text-white">
       {notifiaction.map((item, index) => (
-     <div key={index} className=' p-1 cursor-pointer hover:bg-navabar rounded-md hover:bg-opacity-95 '>
-     <div className=' rounded-full w-8'>
+     <div key={index} className='p-3   m-2 flex justify-between items-center gap-2  border-2 cursor-pointer  rounded-md hover:bg-opacity-95 '>
+     <div className='flex  '>
+     <div className=' rounded-full w-8 '>
      <img
-     src={item?.sender?.profileImage}
-     alt='User Profile Image'
+      src={item?.sender?.profileImage}
+      alt='User Profile Image'
         className='w-8 h-8 rounded-full'
         />
         </div>
-        <div className='px-1 py-1'>
-        <div className='font-dm flex items-center gap-1 text-[16px]'>
-      <Link to={`/home/${item.sender.username}`} className='text-gray-500 -mt-1'>{item.sender.username}</Link>
-      <p className='flex gap-5 items-center text-[14px]  '>{item.notificationtype} on your post  <span>{getIcons(item.notificationtype)}</span> </p>
-      </div>
-      {item.comment?.text && <p className="text-md text-gray-300 flex ">{item.comment.text}
-      </p>}
+      <div className='px-1 gap-2 flex-col flex py-1 items-start'>
+        <div className='font-dm flex items-start gap-1 text-[16px]'>
+         <Link to={`/home/${item.sender?.username}`} className='text-gray-500  -mt-1'>{item.sender?.username}</Link>
+         <p className='flex  gap-2 items-center text-[14px] '>{getIcons(item.notificationtype)?.message}   <span className='-mt-2'>{getIcons(item.notificationtype)?.icons}</span> </p>
+       </div>
+         {item.comment?.text && <p className="text-md text-gray-300 flex ">{item.comment.text}
+       </p>}
     </div>
-    <div className='h-[1px]  bg-slate-100'></div>
+    </div>
+       <div  onClick={()=>removenotifaction(item._id)}className='border-transparent hover:rounded-full hover:bg-neutral-600 p-2  flex items-center '>
+      <button  className=''><X /></button>
+      </div>
     </div>
   ))}
 <div className='absolute  top-0 right-0 w-full'>

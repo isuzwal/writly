@@ -32,7 +32,7 @@ const Profile=()=>{
         <h2 className="text-2xl font-bold">{user?.username}</h2>
         <p className="text-gray-300 mt-1">{user?.bio || "No bio available"}</p>
         <div className="flex gap-4 mt-2 text-gray-300 text-sm">
-          <span><strong>{user?.follower?.length || 0}</strong> Followers</span>
+          <span><strong>{user?.follower?.length}</strong> Followers</span>
           <span><strong>{user?.post?.length || 0}</strong> Posts</span>
         </div>
       </div>

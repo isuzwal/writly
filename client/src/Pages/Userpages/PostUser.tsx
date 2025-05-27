@@ -10,6 +10,7 @@ const PostUser = () => {
 
   useEffect(() => {
     if (!username) return; //check the  user first 
+    console.log("USERNAME",username)
     const fetchPosts = async () => {
       setLoading(true);
       try {

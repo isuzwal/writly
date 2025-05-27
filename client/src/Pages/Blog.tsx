@@ -1,6 +1,6 @@
 import { useContext, useState ,useEffect} from "react";
 import { UserContext } from "../UserAuth/User"
-import { Heart ,MessageSquareMore,PencilLineIcon,Send } from "lucide-react";
+import { Heart,LoaderCircle ,AlertCircle,MessageSquareMore,PencilLineIcon,Send } from "lucide-react";
 import { CiBookmarkPlus } from "react-icons/ci";
 import { Outlet } from "react-router";
 import { useLocation } from "react-router";
@@ -11,44 +11,37 @@ import {PostType} from  ".././type/PostType";
 import linklist from "../Pages/Links/links";
 const Blog=()=>{
 
-  // const [loading ,setLoading]=useState<boolean>(false);
-  // const [error ,setError]=useState<boolean>(false);
+  const [loading ,setLoading]=useState<boolean>(false);
+  const [error ,setError]=useState<string | null>(null);
   const [isliked,setLiked]=useState<Record<string,boolean>>({})
   const [Iscommnet,setIsComment]=useState<Record<string,boolean>>({})
   const [comment ,setComment]=useState<Record<string ,string>>({})
   const location=useLocation()
   const nestedlocation=location.pathname !== "/home";
   const context=useContext(UserContext)
- 
+  const [post ,setPost]=useState<PostType[]>([])
+  const [isFollowing ,setFollowing]=useState<{[userId:string]:boolean}>({})
+  
   if(!context){
-
     throw new Error
   }
   const {ISPoped,isPoped ,user}=context;
-  const [post ,setPost]=useState<PostType[]>([])
-
-  // type SocialLink = {
-    //   twitter?: string;
-    //   github?: string;
-    //   website?: string;
-    // };
-    
-    // -> for scrollbar
-    
-    //->opening the Comment Section
-  
+  const currentuserId=context.user?._id
     // for all post 
     useEffect(()=>{
       const fetchPosts = async () => {
+        setLoading(true)
         try {
           const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/post`, {
             credentials: "include",
           });
           const data = await res.json();
           setPost(data.data.post); 
-         
-        } catch (error) {
-          console.error("Error fetching posts:", error);
+        } catch (error:any) {
+       const msg=error.response?.data?.message || "Something Went Wrong Try Again"
+          setError(msg)
+        }finally{
+          setLoading(false)
         }
       };
       fetchPosts()
@@ -79,13 +72,14 @@ const Blog=()=>{
     credentials: "include",
    })
     const data=await response.json();
-     console.log("Liked Post Data",data)
-     setLiked((prevliked) => ({
-       ...prevliked, 
-       [postID]: !prevliked[postID]
-      }));
+    setLiked((prevliked) => ({
+      ...prevliked, 
+      [postID]: !prevliked[postID]
+    }));
+    return data;
       }catch(e){
-        console.log("Somethin Wrong",e)
+        // error handing in yet!
+        console.log("Something Wrong",e)
       }
     };
     // comment show case
@@ -107,6 +101,7 @@ const Blog=()=>{
       setComment({})
       return data
       }catch(e){
+        
         console.log("Somthing Wrong while comment ",e)
       }
     }
@@ -121,8 +116,71 @@ const handlechangecommnet=(postId:string,value:string)=>{
   ...prev,[postId]:value
   }))
 } 
+// this for the Following and Followed User API route
+const follow=async(followedId:string,followingId:string)=>{
+ try{
+   const res=await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/post/follow`,{
+    method:'POST',
+    headers:{
+      'Content-Type':'application/json',
+      },
+      body:JSON.stringify({
+      followedId,
+      followingId
+      }),
+      credentials:"include"
+   })
+   console.log(followedId,followingId)
+   const data= await res.json()
+  setFollowing((prevstate)=>({
+    ...prevstate,[followedId]:true
+  }))
+   console.log("Follow user",data)
+    return data
+ }catch(error){
+  console.log("Erroor at the Following")
+ }
+}
+// unfollowed Router
+const unfollow=async(followedId:string,followingId:string)=>{
+ try{
+   const res=await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/post/unfollow`,{
+    method:'POST',
+    headers:{
+      'Content-Type':'application/json',
+      },
+      body:JSON.stringify({
+      followedId,
+      followingId
+      }),
+      credentials:"include"
+   })
+   console.log(followedId,followingId)
+   const data= await res.json()
+  setFollowing((prevstate)=>({
+    ...prevstate,[followedId]:false
+  }))
+   console.log("UnFollowed data",data)
+    return data
+ }catch(error){
+  console.log("Erroor at the Following")
+ }
+}
+
+
+if(loading){
+   return <div className="flex items-center min-h-screen justify-center  bg-maincolor text-white font-dm">
+    <p className="flex gap-2  text-xl sm:text-3xl items-center">Loading Post it make take some Time <LoaderCircle  size={28 }className="animate-spin" /></p>
+  </div>
+}
+// while there is error
+if (error){
+  return <div className="flex  bg-maincolor justify-center min-h-screen items-center">
+    <h1 className="text-white  gap-2 underline  flex items-center text-xl sm:text-3xl font-dm"><AlertCircle size={28} />{error}</h1>
+  </div>
+}
     return (
-<section className=" bg-maincolor   min-h-screen ">
+<section className=" bg-maincolor   min-h-screen overflow-hidden ">
    <div className="container mx-auto    max-w-8xl">
      <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr_1fr] px-5 py-2">
       {/*Link Section  */}
@@ -136,7 +194,7 @@ const handlechangecommnet=(postId:string,value:string)=>{
       </div>
     {/* Navigation Items */}
     {linklist.map((link, index) => (
-      <Link to={typeof link.link==="function"? link.link(user?.username)||"":link.link} key={index}
+      <Link to={typeof link.link==="function"? link.link(user?.username)|| user?.id||"":link.link} key={index}
         className="flex   items-center gap-3 px-4 py-2 rounded-lg   hover:bg-[#2a2929] max-w-max transition-colors duration-200" >
         <span className="text-white text-xl">{link.icon}</span>
         <span className="text-white font-medium text-[15px] hidden lg:block">{link.label}</span>
@@ -178,8 +236,8 @@ const handlechangecommnet=(postId:string,value:string)=>{
               <Outlet />
             ):(
               <div className="flex flex-col ">
-               {post.map((post) => (
-                <div className="   bg-navabar cursor-pointer border-b-[2px] border-b-maincolor  w-full  hover:bg-navabar hover:bg-opacity-40    text-white px-2 ">
+               {post.map((post,index) => (
+                <div  key={index} className="   bg-navabar cursor-pointer border-b-[2px] border-b-maincolor w-full hover:bg-navabar hover:bg-opacity-40 text-white px-2 ">
                    <div className="flex  flex-row justify-between p-1 items-center">
                    <div className="flex items-center gap-3">
                      <img src={user?.profileImage} className="object-cover rounded-full w-10 h-10" />
@@ -189,7 +247,25 @@ const handlechangecommnet=(postId:string,value:string)=>{
                     </div>
                   </div>
                 <div className="p-2">
-                    <button className="bg-black  md:px-4 md:py-1.5 px-3 py-1 flex font-dm font-semibold rounded-md text-white text-[14px] items-center">Follow</button>
+                  {isFollowing ? (<button
+                   onClick={()=>{
+                      if (!post.user?._id) {
+                     return null; 
+                    }
+                    follow(post.user?._id,currentuserId )}}
+                    className="bg-black md:px-4 md:py-1.5 px-3 py-1 flex font-dm font-semibold rounded-md text-white text-[14px] items-center"
+                   >
+                    Follow
+                  </button> ) :(<button onClick={()=>{
+                    if(!post.user?._id){
+                      return null;
+                    }
+                    unfollow(post.user?._id,currentuserId)
+                  }}
+                  className="bg-gray-700 md:px-4 md:py-1.5 px-3 py-1 flex font-dm font-semibold rounded-md text-white text-[14px] items-center"
+                  >
+                    Following
+                    </button>)}
                 </div>
                </div>
                <Link to={`/home/post/${post._id}`} className="block underline:none px-2">
@@ -197,7 +273,7 @@ const handlechangecommnet=(postId:string,value:string)=>{
                 </Link>
                 {post.image && (
                 <Link  to={`/home/post/${post._id}`} className="">
-                <div className="w-full   h-72 aspect-square  overflow-hidden rounded-sm">
+                <div className="w-full   h-aspect-square  overflow-hidden rounded-sm">
                 <img  src={post?.image}  className="w-full h-full object-cover" 
                alt="Post image" />
               </div>

@@ -3,11 +3,10 @@ import { useContext, useState } from "react";
 import { UserContext } from "../UserAuth/User";
 import { PenTool } from "lucide-react";
 import { ThemeContex } from "../Theme/Theme";
-
 import { CgMenu } from "react-icons/cg";
 import { IoIosClose } from "react-icons/io";
 import listItems from "./Links/navalist";
-
+import { Bell } from "lucide-react";
 
 function Nava() {
   const [IsOpen, setIsOpen] = useState<boolean>(false);
@@ -30,16 +29,22 @@ function Nava() {
   };
 
   return (
-    <section className={` bg-navabar  sticky top-0 z-30  w-full ${themeStyles[theme as keyof typeof themeStyles]}`}>
-      <div className=" py-1 px-2 flex relative items-center justify-between">
+    <section className={` bg-navabar  sticky top-0 z-30   w-full ${themeStyles[theme as keyof typeof themeStyles]}`}>
+      <div className=" py-1 px-2 flex relative items-center   boder-2 justify-between">
         <Link  to="/"
           className=" items-center  text-white hover:bg-gradient-to-t from-slate-100 via-slate-200 to-slate-300 md:text-xl hover:shadow-md   rounded-md py-1 hover:text-writly flex gap-1 text-[16px] font-semibold font-dm px-4 whitespace-nowrap">
           <PenTool size={20} /> Writly
         </Link>
         <div className="hidden md:flex  items-center gap-4">
+          <Link to={`/home/notification/${user?.username}`} className="relative p-2 group">
+        <div className="relative">
+          <Bell size={28}
+           className="text-blue-600 bg-neutral-800 bg-opacity-60 rounded-xl p-1 shadow-md transition-transform group-hover:scale-105"/>
+       </div>
+      </Link>
           {user ? (
             <div onClick={ToggleMenuBar}
-              className={`cursor-pointer flex items-center gap-2 px-4 py-1.5 rounded-lg ${themeStyles[theme as keyof typeof themeStyles]}`}>
+            className={`cursor-pointer flex items-center gap-2 px-4 py-1.5 rounded-lg ${themeStyles[theme as keyof typeof themeStyles]}`}>
               <img src={user.profileImage} className="object-cover w-7 h-7 rounded-lg" />
             </div>
           ) : (
@@ -53,7 +58,14 @@ function Nava() {
             </div>
           )}
         </div>
-        <div className="md:hidden   p-1 rounded-full">
+        
+    <div className="md:hidden   flex  items-center gap-6  p-1 rounded-full">
+      <Link to={`/home/notification/${user?.username}`} className="relative p-2 group">
+        <div className="relative">
+          <Bell size={28}
+           className="text-blue-600 bg-neutral-800 bg-opacity-60 rounded-xl p-1 shadow-md transition-transform group-hover:scale-105"/>
+       </div>
+      </Link>
           <button onClick={ToggleMenuBar} className="flex items-center">
             {IsOpen ? (
               <IoIosClose className=" text-white transition-transform duration-300 hover:rotate-180 hover:scale-110" size={24} />
