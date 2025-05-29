@@ -11,8 +11,8 @@ const route=express.Router()
 app.use(cors({
     origin:"https://writly-dot.vercel.app",
     credentials:true,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    // methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    // allowedHeaders: ['Content-Type', 'Authorization']
 })); // allowing the origins
 
 const PORT=process.env.PORT || 8000;
