@@ -4,6 +4,7 @@ const cookieParser = require("cookie-parser");
 const databaseconnection=require("../config/database")
 const UserRoutes=require("../routes/userRouter")
 const PostRoutes=require("../routes/postRouter")
+const serverless = require('serverless-http');
 const app=express()
 const route=express.Router()
 
@@ -25,13 +26,12 @@ route.get("/",(req,res)=>{
     res.send("Welcome to Sever")
 })
 
-app.use("/", route);
+
 app.use("/api",UserRoutes);
 app.use("/api",PostRoutes)
 
 const serverless = require("serverless-http");
 module.exports.handler = serverless(app);
-
-// app.listen(PORT,()=>{
-//     console.log(`Server started at Port ${PORT}`)
-// }) 
+app.listen(PORT,()=>{
+    console.log(`Server started at Port ${PORT}`)
+}) 
