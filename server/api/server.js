@@ -1,10 +1,9 @@
 const express=require("express")
 const cors=require("cors")
 const cookieParser = require("cookie-parser");
-const databaseconnection=require("./config/database")
-const UserRoutes=require("./routes/userRouter")
-const PostRoutes=require("./routes/postRouter")
-
+const databaseconnection=require("../config/database")
+const UserRoutes=require("../routes/userRouter")
+const PostRoutes=require("../routes/postRouter")
 const app=express()
 const route=express.Router()
 
@@ -30,6 +29,9 @@ app.use("/", route);
 app.use("/api",UserRoutes);
 app.use("/api",PostRoutes)
 
-app.listen(PORT,()=>{
-    console.log(`Server started at Port ${PORT}`)
-}) 
+const serverless = require("serverless-http");
+module.exports.handler = serverless(app);
+
+// app.listen(PORT,()=>{
+//     console.log(`Server started at Port ${PORT}`)
+// }) 
