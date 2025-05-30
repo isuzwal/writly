@@ -11,7 +11,8 @@ const route=express.Router()
 app.use(cors({
     origin:"https://writly-dot.vercel.app",
     credentials:true,
-    // methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    
     // allowedHeaders: ['Content-Type', 'Authorization']
 })); // allowing the origins
 
@@ -32,7 +33,8 @@ app.use("/api",PostRoutes)
 
 // const serverless = require("serverless-http");
 // module.exports.handler = serverless(app);
+module.exports=app;
 
-app.listen(PORT,()=>{
-    console.log(`Server started at Port ${PORT}`)
-}) 
+// app.listen(PORT,()=>{
+//     console.log(`Server started at Port ${PORT}`)
+ // }) 
