@@ -33,8 +33,8 @@ app.use("/api",PostRoutes)
 
 // const serverless = require("serverless-http");
 // module.exports.handler = serverless(app);
-module.exports=app;
+// module.exports=app;
 
-// app.listen(PORT,()=>{
-//     console.log(`Server started at Port ${PORT}`)
- // }) 
+app.listen(PORT,()=>{
+    console.log(`Server started at Port ${PORT}`)
+ }) 
