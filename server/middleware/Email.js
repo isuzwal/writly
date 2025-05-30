@@ -9,7 +9,7 @@ const transporter  =require("./Email.confi")
               text: "Verify your  Email to access writly", 
               html: Verification_Email_Template.replace("{username}",username).replace("{verificationCode}",verificationCode), 
             });
-            console.log("Email send",response)
+            
              return response
     }catch(e){
         console.log("Error",e)
