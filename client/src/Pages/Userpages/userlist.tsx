@@ -11,10 +11,9 @@ const [userlist,setUserlist]=useState<userlist[] >([])
             credentials:"include"
            })
            const data=await response.json()
-             console.log(data.user[0].username)
            setUserlist(data.user)
             }catch(e){
-                console.log("Something wrog  user lsit",e)
+            console.log("Something wrog  user lsit",e)
             }
         }
         userFetch()

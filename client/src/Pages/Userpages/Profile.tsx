@@ -33,6 +33,7 @@ const Profile=()=>{
         <p className="text-gray-300 mt-1">{user?.bio || "No bio available"}</p>
         <div className="flex gap-4 mt-2 text-gray-300 text-sm">
           <span><strong>{user?.follower?.length}</strong> Followers</span>
+          <span><strong>{user?.following.length}</strong> Following</span>
           <span><strong>{user?.post?.length || 0}</strong> Posts</span>
         </div>
       </div>

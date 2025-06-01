@@ -77,9 +77,8 @@ const Blog=()=>{
       [postID]: !prevliked[postID]
     }));
     return data;
-      }catch(e){
-        // error handing in yet!
-        console.log("Something Wrong",e)
+      }catch(error){
+       setError((error as Error ).message|| "Something Went Wrong ")
       }
     };
     // comment show case
@@ -100,9 +99,8 @@ const Blog=()=>{
       const data=await response.json()
       setComment({})
       return data
-      }catch(e){
-        
-        console.log("Somthing Wrong while comment ",e)
+      }catch(error){
+       setError((error as Error ).message|| "Something Went Wrong ")
       }
     }
    // commentBoxOpen
@@ -116,57 +114,63 @@ const handlechangecommnet=(postId:string,value:string)=>{
   ...prev,[postId]:value
   }))
 } 
+useEffect(()=>{})
 // this for the Following and Followed User API route
-const follow=async(followedId:string,followingId:string)=>{
- try{
-   const res=await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/post/follow`,{
-    method:'POST',
-    headers:{
-      'Content-Type':'application/json',
+const follow = async (followedId: string, followingId: string) => {
+  try {
+    const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/post/follow`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
       },
-      body:JSON.stringify({
-      followedId,
-      followingId
+      body: JSON.stringify({
+        followedId,
+        followingId
       }),
-      credentials:"include"
-   })
-   console.log(followedId,followingId)
-   const data= await res.json()
-  setFollowing((prevstate)=>({
-    ...prevstate,[followedId]:true
-  }))
-   console.log("Follow user",data)
-    return data
- }catch(error){
-  console.log("Erroor at the Following")
- }
+      credentials: "include"
+    });
+    if (!res.ok) {
+      throw new Error('Failed to follow user');
+    }
+    const data = await res.json();
+    setFollowing((prevState) => ({
+      ...prevState,
+      [followedId]: true
+    }));
+    return data;
+  } catch (error) {
+    setError((error as Error ).message|| "Something Went Wrong ")
+  }
 }
 // unfollowed Router
-const unfollow=async(followedId:string,followingId:string)=>{
- try{
-   const res=await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/post/unfollow`,{
-    method:'POST',
-    headers:{
-      'Content-Type':'application/json',
+const unfollow = async (followedId: string, followingId: string) => {
+  try {
+    const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/post/unfollow`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
       },
-      body:JSON.stringify({
-      followedId,
-      followingId
+      body: JSON.stringify({
+        followedId,
+        followingId
       }),
-      credentials:"include"
-   })
-   console.log(followedId,followingId)
-   const data= await res.json()
-  setFollowing((prevstate)=>({
-    ...prevstate,[followedId]:false
-  }))
-   console.log("UnFollowed data",data)
-    return data
- }catch(error){
-  console.log("Erroor at the Following")
- }
+      credentials: "include"
+    });
+    
+    if (!res.ok) {
+      throw new Error('Failed to unfollow user');
+    }
+    const data = await res.json();
+    setFollowing((prevState) => ({
+      ...prevState,
+      [followedId]: false
+    }));
+    return data;
+  } catch (error) {
+    setError((error as Error ).message|| "Something Went Wrong ")
+ 
+  }
 }
-
 
 if(loading){
    return <div className="flex items-center min-h-screen justify-center  bg-maincolor text-white font-dm">
@@ -246,27 +250,28 @@ if (error){
                      <p className="text-[9px] font-bold">{new Date(post.createdAt).toLocaleDateString()}</p>
                     </div>
                   </div>
-                <div className="p-2">
-                  {isFollowing ? (<button
-                   onClick={()=>{
-                      if (!post.user?._id) {
-                     return null; 
-                    }
-                    follow(post.user?._id,currentuserId )}}
-                    className="bg-black md:px-4 md:py-1.5 px-3 py-1 flex font-dm font-semibold rounded-md text-white text-[14px] items-center"
-                   >
-                    Follow
-                  </button> ) :(<button onClick={()=>{
-                    if(!post.user?._id){
-                      return null;
-                    }
-                    unfollow(post.user?._id,currentuserId)
-                  }}
-                  className="bg-gray-700 md:px-4 md:py-1.5 px-3 py-1 flex font-dm font-semibold rounded-md text-white text-[14px] items-center"
-                  >
-                    Following
-                    </button>)}
-                </div>
+            <div className="p-2">
+          {/* Only show follow button if it's not the current user's own post */}
+          {post.user?._id !== currentuserId && (
+            isFollowing[post.user?._id || " "] ? (
+              <button
+                onClick={() => unfollow(post.user?._id || " ", currentuserId)} // Call unfollow if already following
+                className="bg-gray-700 hover:bg-gray-600 px-2 py-1 rounded-lg"
+              >
+                Following
+              </button>
+            ) : (
+              <button     
+                onClick={() => {follow(post.user?._id || " ", currentuserId)
+               
+                }} // Call follow if not following
+                className="bg-blue-600 hover:bg-blue-700 px-2 py-1 rounded-lg"
+              >
+                Follow
+              </button>
+            )
+          )}
+          </div>
                </div>
                <Link to={`/home/post/${post._id}`} className="block underline:none px-2">
                 <p className="text-gray-300">{post.text}</p>

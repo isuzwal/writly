@@ -6,5 +6,6 @@ export type userlist ={
     coverImage?:string;
     bio?:string;
     follower:[];
+    following:[];
     post:PostType[];
 }
