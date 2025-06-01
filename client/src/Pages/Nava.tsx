@@ -6,7 +6,7 @@ import { ThemeContex } from "../Theme/Theme";
 import { CgMenu } from "react-icons/cg";
 import { IoIosClose } from "react-icons/io";
 import listItems from "./Links/navalist";
-import { Bell } from "lucide-react";
+
 
 function Nava() {
   const [IsOpen, setIsOpen] = useState<boolean>(false);
@@ -29,22 +29,16 @@ function Nava() {
   };
 
   return (
-    <section className={` bg-navabar  sticky top-0 z-30   w-full ${themeStyles[theme as keyof typeof themeStyles]}`}>
+    <section className={` bg-navabar  sticky top-0 z-30   w-full `}>
       <div className=" py-1 px-2 flex relative items-center   boder-2 justify-between">
         <Link  to="/"
           className=" items-center  text-white hover:bg-gradient-to-t from-slate-100 via-slate-200 to-slate-300 md:text-xl hover:shadow-md   rounded-md py-1 hover:text-writly flex gap-1 text-[16px] font-semibold font-dm px-4 whitespace-nowrap">
           <PenTool size={20} /> Writly
         </Link>
         <div className="hidden md:flex  items-center gap-4">
-          <Link to={`/home/notification/${user?.username}`} className="relative p-2 group">
-        <div className="relative">
-          <Bell size={28}
-           className="text-blue-600 bg-neutral-800 bg-opacity-60 rounded-xl p-1 shadow-md transition-transform group-hover:scale-105"/>
-       </div>
-      </Link>
           {user ? (
             <div onClick={ToggleMenuBar}
-            className={`cursor-pointer flex items-center gap-2 px-4 py-1.5 rounded-lg ${themeStyles[theme as keyof typeof themeStyles]}`}>
+            className={`cursor-pointer flex items-center gap-2 px-4 py-1.5 rounded-lg`}>
               <img src={user.profileImage} className="object-cover w-7 h-7 rounded-lg" />
             </div>
           ) : (
@@ -60,23 +54,17 @@ function Nava() {
         </div>
         
     <div className="md:hidden   flex  items-center gap-6  p-1 rounded-full">
-      <Link to={`/home/notification/${user?.username}`} className="relative p-2 group">
-        <div className="relative">
-          <Bell size={28}
-           className="text-blue-600 bg-neutral-800 bg-opacity-60 rounded-xl p-1 shadow-md transition-transform group-hover:scale-105"/>
-       </div>
-      </Link>
           <button onClick={ToggleMenuBar} className="flex items-center">
             {IsOpen ? (
-              <IoIosClose className=" text-white transition-transform duration-300 hover:rotate-180 hover:scale-110" size={24} />
+              <IoIosClose size={28} className=" text-white transition-transform duration-300 hover:rotate-180 hover:scale-110"  />
             ) : (
-              <CgMenu className=" text-white transition-transform duration-300 hover:rotate-180 hover:scale-110" size={23} />
+              <CgMenu size={28} className=" text-white transition-transform duration-300 hover:rotate-180 hover:scale-110"  />
             )}
           </button>
         </div>
 
         {IsOpen && (
-          <div className={` absolute  md:hidden right-0 w-full  rounded-l-md  min-h-screen  top-[2.5rem]   flex  z-20 bg-maincolor   border-zinc-700 shadow-md  text-white    sm:w-72  md:w-64  p-2 transition-all duration-300 ease-in-out ${themeStyles[theme as keyof typeof themeStyles]}`}>
+          <div className={`absolute   md:hidden right-0 w-full  rounded-l-md  min-h-screen  top-[2.5rem]   flex  z-20 bg-maincolor   border-zinc-700 shadow-md  text-white    sm:w-72  md:w-64  p-2 transition-all duration-300 ease-in-out ${themeStyles[theme as keyof typeof themeStyles]}`}>
             {user ? (
               <div className="flex flex-col   w-full  gap-2 px-2 py-3">
                 <div className=" relative w-full  h-32 rounded">
