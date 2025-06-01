@@ -11,28 +11,31 @@ const {
     follow,
     getnotification,
     unfollow,
-    removenotification
+    removenotification,
+    i
 }=require("../controllers/postController")
 const {verifytoken}=require("../middleware/verifytoken")
 const uploadimage=require("../cloudStroage/cloud")
 
-const router=express.Router()
-router.get("/post",verifytoken,getAllposts);
-router.post("/post/create",verifytoken,postcreate);
+const router = express.Router();
 
-// fgor notification
-router.get("/post/notification/:username",verifytoken,getnotification)
-router.delete("/post/removenotification/:id",verifytoken,removenotification)
-router.get("/post/user/:username",verifytoken,userPost);
 
-// for the post vy ID 
-router.get("/post/:id",verifytoken,getPostByID);
-
-// for action on the post 
 router.post('/post/upload', verifytoken, uploadimage.single('image'), imageupload);
-router.post('/post/follow',verifytoken,follow);
-router.post('/post/unfollow',verifytoken,unfollow)
-router.post("/post/likes",verifytoken,likesnotifcation)
-router.post("/post/comment",verifytoken,commentnotification)
-router.post("/post/single/commnet",verifytoken,getcomment)
+router.post('/post/follow', verifytoken, follow);
+router.post('/post/unfollow', verifytoken, unfollow);
+router.post("/post/likes", verifytoken, likesnotifcation);
+router.post("/post/comment", verifytoken, commentnotification);
+router.post("/post/single/commnet", verifytoken, getcomment);
+router.get("/post/notification/:username", verifytoken, getnotification);
+router.delete("/post/removenotification/:id", verifytoken, removenotification);
+router.get("/post/user/:username", verifytoken, userPost);
+
+
+router.get("/post/:id", verifytoken, getPostByID);
+router.get("/post/if")
+
+router.get("/post", verifytoken, getAllposts);
+router.post("/post/create", verifytoken, postcreate);
+
+
 module.exports=router

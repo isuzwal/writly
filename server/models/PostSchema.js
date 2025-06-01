@@ -29,6 +29,10 @@ const posts=new mongoose.Schema({
          type:mongoose.Schema.Types.ObjectId,
          ref:"Notification"
       }],
+      postTime:{
+     type:Date,
+     default:Date.now
+    },
        updatedAt: Date,
 },{timestamps:true})
 const Post=mongoose.model("Post",posts)

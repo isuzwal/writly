@@ -139,12 +139,12 @@ exports.login=async(req,res)=>{
         data:{user},
         message:"Login Successfully"
      })
-    }catch(e){
-        console.log("Can't login",e)
+    }catch(error){
+        console.log("Can't login",error)
         res.status(500).json({
             status:"Fail",
             message:"Some went Wrong While Login Process",
-             error: error.message
+            // error: error.message
         })
     }
 }
@@ -171,6 +171,7 @@ exports.profile=async(req,res)=>{
         })
     }
 }
+
 //--> get userslist
 exports.getuserlist=async(req,res)=>{
     try{
@@ -199,6 +200,10 @@ exports.getuserlist=async(req,res)=>{
         })
   }
 }
+// Get list of users the current user is following
+// GET /api/user/following/:userId
+
+
 
 
 //--> logout user

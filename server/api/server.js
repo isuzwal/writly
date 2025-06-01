@@ -5,16 +5,17 @@ const databaseconnection=require("../config/database")
 const UserRoutes=require("../routes/userRouter")
 const PostRoutes=require("../routes/postRouter")
 const app=express()
+require("dotenv").config();
 
 
 app.use(cors({
-    origin:"https://writly-dot.vercel.app",
+    origin:["https://writly-dot.vercel.app","http://localhost:5173"],
     methods: [ 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials:true,
 })); // allowing the origins
 
-// const PORT=process.env.PORT || 8000;
+const PORT=process.env.PORT || 8000;
 app.options('*', cors());
 app.use(express.json())
 app.use(cookieParser());

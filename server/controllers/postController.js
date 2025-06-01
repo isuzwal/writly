@@ -13,6 +13,9 @@ exports.postcreate=async(req,res)=>{
         image:image,
         user:req.user.id,   
     })
+   if (!text && !image) {
+  return res.status(400).json({ error: "Post must have either text or image." });
+}
     const postsaved=await newPost.save()
     await postsaved.populate('user', 'username');
     // adding the user post to userScheama
@@ -22,9 +25,10 @@ exports.postcreate=async(req,res)=>{
     res.status(200).json({
         status:"Post Create",
         data:{
-            postsaved
+        postsaved
         }
     })
+
     }catch(e){
         res.status(500).json({
         error:"Server error"
@@ -35,12 +39,12 @@ exports.postcreate=async(req,res)=>{
 exports.getAllposts=async(req,res)=>{
     try{
         const allpost= await Post.find({})
-           .populate('user', 'username image likes comments');
-            res.status(200).json({
-               status:"sucess",
-               data:{
-                post:allpost
-               }
+            .populate('user', 'username image likes comments').sort({ postTime: -1 }) ;
+              res.status(200).json({
+                status:"sucess",
+                data:{
+                  post:allpost
+            }
         })
     }catch(e){
         res.status(500).json({
@@ -345,8 +349,6 @@ exports.follow = async (req, res) => {
       notificationtype: "follow",
     });
     await followNotification.save();
-
-
     await User.findByIdAndUpdate(followedId, {
       $addToSet: {
         followers: followingId, 
@@ -365,7 +367,6 @@ exports.follow = async (req, res) => {
       data: followNotification,
     });
   } catch (error) {
-    console.log("Can't Follow User", error);
     res.status(500).json({
       status: false,
       message: error.message || "Internal Server Error",
@@ -408,7 +409,9 @@ exports.unfollow = async (req, res) => {
    await User.findByIdAndUpdate(followingId, {
       $pull: { following: followedId },
     });
- // 
+ //  
+ 
+ console.log("Done")
   res.status(200).json({
    status:true,
    message:"User unfollwed succesfully"
