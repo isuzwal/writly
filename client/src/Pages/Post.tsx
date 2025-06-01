@@ -14,13 +14,24 @@ const Post=()=>{
         throw new Error
       }
       const {user ,ISPoped}=context
+      // for the comment section height change on the base of text
       useEffect(()=>{
         if(textref.current){
           textref.current.style.height='auto';
           textref.current.style.height = `${textref.current.scrollHeight}px`;
         }
       },[text])
-    
+        /// make that setSucess or SetError remove after 3000 second
+      useEffect(()=>{
+            if(success || error){
+              const timerNotification=setTimeout(()=>{
+                setSuccess(null);
+                setError(null)
+              },3000)
+              return ()=>clearTimeout(timerNotification)
+            }
+          },[success,error])
+          
       // uploaded image function
        const uploadimage=async(file:File)=>{
         const formData =new FormData()
@@ -44,17 +55,22 @@ const Post=()=>{
        // for the post the posted
        const posted=async(event:React.FormEvent)=>{
         setLoading(true)
+        setSuccess(null);
         event.preventDefault()
         let imageurl=null;
-        if(image){
-            imageurl=await uploadimage(image)
-         }else{
-          return null;
-         }
+           if (image) {
+         imageurl = await uploadimage(image);
+       }
+         // for both vaidation 
+        if (!text && !imageurl) {
+        setError("You must provide text or an image.");
+        setLoading(false);
+        return;
+       }
            try{
            const response=await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/post/create`,{
             method:"POST",
-          headers:{
+            headers:{
            'Content-Type':'application/json',
           },
            credentials:"include",
@@ -64,23 +80,23 @@ const Post=()=>{
            
              }),
            })
+           console.log("text",text)
            const data=await response.json()
            if(!response.ok){
-             return null;
+          setError(data.error || 'Failed to create post.');
            }else{
             settext("");
             setImage(null);
-            setSuccess(data.message)
+            setSuccess(data.status || 'Post Created!');
             return data
            }
           }catch(error){
            setError((error as Error ).message|| "Something Went Wrong ")
-           }
+           }finally{
+            setLoading(false)
           }
-          //-> reomve the Image from current  Image set
-          const removepic=()=>{
-            setImage(null)
           }
+         
           return (
 <div className="w-full  relative  rounded-lg px-2 py-1 ">
    <div className="flex items-center flex-col  gap-1 px-1 py-1">
@@ -110,7 +126,7 @@ const Post=()=>{
            <div>
             {image && (
               <div className="relative  ">
-              <button onClick={removepic} className=" absolute  right-1   bg-opacity-20"><X /></button>
+              <button onClick={()=>setImage(null)} className=" absolute  right-1  hover:bg-neutral-300/80   rounded-full  p-2  bg-opacity-20"><X /></button>
               <img src={URL.createObjectURL(image)} alt="uploaded" className="w-full h-80 object-cover rounded-md " />
               </div>
             )}
@@ -126,11 +142,11 @@ const Post=()=>{
             <LuImageUp size={26} color="white" />
             </label> 
         <button type="submit"    disabled={loading} className="mt-2 bg-white font-semibold px-3 py-1 rounded-md">
-          {loading ?<LoaderCircle className="animate-spin" />:"Post"}
+          {loading ? `Posting${<LoaderCircle className="animate-spin" />}`:"Post"}
         </button>
       </form> 
       {success && (
-         <div className="absolute bottom-4 right-3 border-2 border-green-500 bg-green-100 text-green-700 px-4 rounded-3xl py-1 shadow-md">
+         <div className="absolute bottom-4 right-3 text-white bg-green-500/70 px-4 rounded-3xl py-1 shadow-md">
               <span className="flex items-center gap-2">
                  <CheckCircle /> 
             <p className="font-semibold ">{success}</p>
@@ -138,9 +154,9 @@ const Post=()=>{
         </div>
       )}
       {error && (
-          <div className=" absolute bottom-4 right-3   bg-red-600 text-white   border-2 px-4  rounded-3xl py-1">
-            <span className="flex gap-2 "><CircleAlert />
-              { <p className="font-semibold ">{error}</p> }
+          <div className="absolute bottom-4 right-3  text-white  text-[12px] items-center flex    bg-red-600/70    px-4  rounded-3xl py-1">
+            <span className="flex  items-center gap-2 "><CircleAlert size={18} />
+              { <p className=" gap-3  font-semibold flex items-center justify-between">{error}</p> }
               </span>
             </div> 
           )}
