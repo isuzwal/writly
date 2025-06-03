@@ -87,7 +87,7 @@ const Post=()=>{
            }else{
             settext("");
             setImage(null);
-            setSuccess(data.status || 'Post Created!');
+            setSuccess('Post Created!');
             return data
            }
           }catch(error){
