@@ -86,10 +86,9 @@ exports.sendVertification=async(req,res)=>{
      msg: "Email verified and logged in",
      user: safeUser,
     });
-    // console.log(user)
+  
     
  }catch(error){
-        console.log("Error sending Verifaction code",error)
         return res.status(500).json({
             status:"Fail",
             msg:"Internal Server Error ",
@@ -126,8 +125,7 @@ exports.login=async(req,res)=>{
      const tokenValue=token({id:user._id})
      res.cookie("auth_token",tokenValue,{
         httpOnly:true,
-        //  secure: process.env.NODE_ENV === "production",
-        secure:false,
+        secure:true,
         maxAge:10*24*60*60*1000,
         sameSite:"None",
         path:"/"
@@ -140,11 +138,9 @@ exports.login=async(req,res)=>{
         message:"Login Successfully"
      })
     }catch(error){
-        console.log("Can't login",error)
         res.status(500).json({
             status:"Fail",
-            message:"Some went Wrong While Login Process",
-            // error: error.message
+            error: error.message || "Some went Wrong While Login Process",
         })
     }
 }
@@ -167,7 +163,7 @@ exports.profile=async(req,res)=>{
         {
          status:false,
          msg:"Some thing Wrong While Geeting user Profile",
-        error: error.message
+         error: error.message
         })
     }
 }
