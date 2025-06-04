@@ -49,7 +49,7 @@ exports.getAllposts=async(req,res)=>{
            post:allpost
            }
           })
-          await client.setEx('allPosts',60,JSON.stringify(allpost))
+         
     }catch(e){
         res.status(500).json({
             error:"Interanl Server Error"
