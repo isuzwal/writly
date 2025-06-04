@@ -1,4 +1,4 @@
-import {  useState } from "react";
+import {  useEffect, useState } from "react";
 import { BiLoaderAlt } from 'react-icons/bi';
 import { Link } from "react-router";
 import { useNavigate } from "react-router";
@@ -11,11 +11,22 @@ function Login(){
    const [Isshow,setIsShow]=useState<boolean>(false)
    const [success, setSuccess]=useState<string|null>(null);
    const navgation=useNavigate()
+
+
+  useEffect(()=>{
+    if(success || error){
+       const Remove=setTimeout(()=>{
+        setError(null)
+        setSuccess(null)
+      },3000)
+      return ()=> clearTimeout(Remove)
+    }
+  },[success,error])
+
    const login=async(event:React.FormEvent)=>{
     event.preventDefault()
         try{
             setLoading(true)
-            
            const response=await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/login`,{
             method:'POST',
             headers:{
@@ -34,13 +45,15 @@ function Login(){
            const data=await response.json()
            setUserName(data.user);
            setSuccess(data.message);
-            navgation("/home")
+           setTimeout(()=>{
+             navgation("/home")
+           },2000)
             setPassword("")
             setUserName("")
         }catch(error){
           setError((error as Error).message || "Something went wrong. Please try again.");
         }finally{
-            setLoading(false)
+          setLoading(false)
         }
    }
    const showEyes=()=>{
@@ -72,11 +85,10 @@ function Login(){
               </label>
              </div>
               <button  type="submit"
-               className="bg-black rounded-md font-serif text-white py-1">
+               className={`bg-black rounded-md font-serif text-white py-1 ${loading ? "disabled:" :""}`}>
                 {loading ? (  
-              <p className=" flex items-center  justify-center gap-2"> 
-                
-                <BiLoaderAlt  size={23} className="animate-spin" /></p> 
+              <p className=" flex  hitems-center  justify-center gap-2"> 
+                 Loging<BiLoaderAlt  size={23} className="animate-spin" /></p> 
              ):(
              <p className="flex items-center justify-center"> Login </p>
              )

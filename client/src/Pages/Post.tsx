@@ -1,13 +1,16 @@
 import { useContext, useState ,useEffect, useRef } from "react";
 import { UserContext } from "../UserAuth/User";
 import { LuImageUp ,} from "react-icons/lu";
-import { LoaderCircle,CircleAlert ,CheckCircle ,X } from 'lucide-react';
+import { LoaderCircle,CircleAlert ,CheckCircle ,X , SmilePlus} from 'lucide-react';
+import  Picker from "@emoji-mart/react"
+import data from "@emoji-mart/data"
 const Post=()=>{
     const  [text,settext]=useState<string>("");
     const  [loading ,setLoading]=useState<boolean>(false)
     const  [error ,setError]=useState<string|null>(null)
     const  [success,setSuccess]=useState<string|null>(null);
     const  [image ,setImage]=useState<File | null>(null)
+    const  [IsshowEmoji ,setShowEmoji]=useState<boolean>(false)
     const textref=useRef<HTMLTextAreaElement>(null)
     const context=useContext(UserContext)
     if(!context){
@@ -66,7 +69,7 @@ const Post=()=>{
         setError("You must provide text or an image.");
         setLoading(false);
         return;
-       }
+          }
            try{
            const response=await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/post/create`,{
             method:"POST",
@@ -77,7 +80,6 @@ const Post=()=>{
            body:JSON.stringify({
              text:text,
              image:imageurl
-           
              }),
            })
            console.log("text",text)
@@ -116,7 +118,7 @@ const Post=()=>{
         </div>
       </div> 
         {/* Post From Section */}
-         <form  onSubmit={posted} className="w-full  px-2  gap-3  py-1 rounded-md">
+         <form   className="w-full  px-2  gap-3  py-1 rounded-md">
            <textarea 
            ref={textref}
            value={text} cols={10} onChange={(e)=>settext(e.target.value)}
@@ -131,19 +133,28 @@ const Post=()=>{
               </div>
             )}
           </div>
-           <label className=" mt-1 w-8 h-8 cursor-pointer   flex justify-center items-center  gap-2 bg-transparent rounded-xl px-1 py-2  text-slate-950 "> 
+          <div className="flex gap-2 p-1 border-2 mb-2   items-center">
+           <label className="  mt-1 w-8 h-8 cursor-pointer   flex justify-center items-center  gap-2 bg-transparent rounded-xl px-1 py-2  text-slate-950 "> 
              <input type="file"  
               onChange={(e)=>{
-              const file = (e.target as HTMLInputElement).files?.[0];
-              if (file) {
-                setImage(file)
-              }}}
-              className="hidden"  />
+                const file = (e.target as HTMLInputElement).files?.[0];
+                if (file) {
+                  setImage(file)
+                }}}
+                className="hidden"  />
             <LuImageUp size={26} color="white" />
             </label> 
-        <button type="submit"    disabled={loading} className="mt-2 bg-white font-semibold px-3 py-1 rounded-md">
+               <button onClick={()=>setShowEmoji(!IsshowEmoji)}>
+                  <SmilePlus className=" text-white" />
+               </button>
+                </div>
+                {IsshowEmoji && <Picker data={data}  onEmojiSelect={(emoji:any)=>settext((prev)=>prev+emoji.native)} className="h-32"/> }
+
+         <div className="border-2 flex items-center p-1">
+          <button  onClick={posted} type="submit"  disabled={loading} className=" bg-white font-semibold px-3 py-1 rounded-md">
           {loading ? `Posting${<LoaderCircle className="animate-spin" />}`:"Post"}
-        </button>
+          </button>
+          </div>
       </form> 
       {success && (
          <div className="absolute bottom-4 right-3 text-white bg-green-500/70 px-4 rounded-3xl py-1 shadow-md">

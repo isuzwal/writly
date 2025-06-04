@@ -51,8 +51,6 @@ try{
   context.setUser(data.userInfo); 
 
 }catch(error){
- console.log("Error",error)
- console.log("From the user APP,tsx",error)
  setUser(null);
 }finally{
   setLoading(false);
@@ -93,7 +91,7 @@ try{
    </Route>
     <Route path="post" element={<Post />} />
     </Route>
-    </Routes>
+  </Routes>
   )
 }
 

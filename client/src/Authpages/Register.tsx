@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { BiLoaderAlt } from 'react-icons/bi';
 import { Link } from "react-router";
 import { UserContext } from "../UserAuth/User"
@@ -19,6 +19,15 @@ function Register(){
     if(!context){
       throw new Error
     }
+    useEffect(()=>{
+   if(success || error){
+    const Remove=setTimeout(()=>{
+     setError(null)
+     setSuccess(null)
+    },3000)
+    return ()=>clearTimeout(Remove)
+   }
+    },[success,error])
     // nagavation
     const navigation=useNavigate()
     const {setUser}=context
@@ -50,7 +59,6 @@ function Register(){
              const data=await response.json()
              setSuccess(data.message);
         }catch(error){
-            console.log("Error",error)
             setError((error as Error).message || "Something went wrong. Please try again.");
         }finally{
             setLoading(false)

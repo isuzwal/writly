@@ -1,5 +1,5 @@
 import { PostType } from "./PostType";
-export type userlist ={
+export interface userlist {
     username?: string;
     _id?: string;
     profileImage:string;

@@ -1,33 +1,42 @@
 import { Link } from "react-router";
-import { useContext, useState } from "react";
+import { useContext,  useState } from "react";
 import { UserContext } from "../UserAuth/User";
-import { PenTool } from "lucide-react";
-import { ThemeContex } from "../Theme/Theme";
+import { PenTool,LogOut ,LoaderCircle } from "lucide-react";
 import { CgMenu } from "react-icons/cg";
 import { IoIosClose } from "react-icons/io";
 import listItems from "./Links/navalist";
 
-
 function Nava() {
   const [IsOpen, setIsOpen] = useState<boolean>(false);
-  const { theme } = useContext(ThemeContex);
+  const [IsLodaing,setLoading]=useState<boolean>(false)
   const context = useContext(UserContext);
-  
   if (!context) {
     throw new Error("User name is Provide ");
   }
 
+  // Logout route
+  
+  const logoutuser=async()=>{
+   try{
+    setLoading(true)
+   const response=await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/logout`,{
+    method:"POST",
+    credentials:"include"
+   })
+    if(!response.ok){
+      console.log("Logout Process Fail")
+    }else{
+      console.log("Logout succcessfull")
+      setTimeout(()=>{
+        window.location.href = "/";
+      },3000)
+    }
+   }catch(error){
+     console.log("Error",error)
+   }
+  } 
   const { user } = context;
-
-  // Toggle function
   const ToggleMenuBar = () => setIsOpen((prev) => !prev);
-
-  // Theme styles
-  const themeStyles = {
-    light: "bg-white text-black",
-    // Add dark/system themes as needed
-  };
-
   return (
     <section className={` bg-navabar  sticky top-0 z-30   w-full `}>
       <div className=" py-1 px-2 flex relative items-center   boder-2 justify-between">
@@ -62,9 +71,8 @@ function Nava() {
             )}
           </button>
         </div>
-
         {IsOpen && (
-          <div className={`absolute   md:hidden right-0 w-full  rounded-l-md  min-h-screen  top-[2.5rem]   flex  z-20 bg-maincolor   border-zinc-700 shadow-md  text-white    sm:w-72  md:w-64  p-2 transition-all duration-300 ease-in-out ${themeStyles[theme as keyof typeof themeStyles]}`}>
+          <div className={`absolute   md:hidden right-0 w-full  rounded-l-md  min-h-screen  top-[2.5rem]   flex  z-20 bg-maincolor   border-zinc-700 shadow-md  text-white    sm:w-72  md:w-64  p-2 transition-all duration-300 ease-in-out`}>
             {user ? (
               <div className="flex flex-col   w-full  gap-2 px-2 py-3">
                 <div className=" relative w-full  h-32 rounded">
@@ -74,7 +82,7 @@ function Nava() {
                 <div className=" flex mt-5  items-start   justify-start  bg-navabar rounded-md px-2 py-1 hover:bg-[#2a2929] transition-colors duration-200  cursor-pointer">
                 <span className="font-mono font-medium  text-start  text-lg">{user.username}</span>
                 </div>
-                <div className="flex flex-col gap-8 mt-5 ">
+                <div className="flex  border-2  p-1 flex-col gap-8 mt-5 ">
                   {listItems.map((item,idx)=>(
                     <Link to={typeof item.link==="function"? item.link(user?.username)||"":item.link}key={idx}
                     className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-[#2a2929] transition-colors duration-200" >
@@ -82,6 +90,14 @@ function Nava() {
                     <span className="text-white font-medium text-[15px] ">{item.label}</span>
                   </Link>
                   ))}
+                  <button 
+                  onClick={logoutuser}
+                  className="flex items-center gap-1 px-4 py-2 rounded-lg  hover:bg-red-500/50 transition-colors duration-200">
+                   {IsLodaing ? 
+                   <span className="flex gap-2  items-center">Logout<LoaderCircle className="animate-spin" /></span>
+                   :
+                   <span className="flex gap-2  items-center"><LogOut /> Logout</span>
+                      }</button>
                 </div>
               </div>
             ) : (

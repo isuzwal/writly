@@ -1,7 +1,7 @@
 // import { UserPlus, Heart, MessageSquarePlus,X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Heart,User,MessageCircleDashedIcon ,CircleAlert ,X} from 'lucide-react';
-import  type   {NotificationType ,Notification } from '../../type/notifiaction';
+import type { Notification,NotificationType } from '../../type/notification';
 import { useParams,Link } from 'react-router';
 const Notification = () => {
   // lsit of the Notification inarray 

@@ -1,4 +1,4 @@
-export type PostType = {
+export interface PostType{
     _id: string;
     title: string;
     text: string;
