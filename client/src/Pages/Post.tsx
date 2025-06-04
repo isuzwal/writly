@@ -118,7 +118,7 @@ const Post=()=>{
         </div>
       </div> 
         {/* Post From Section */}
-         <form   className="w-full  px-2  gap-3  py-1 rounded-md">
+         <form  onSubmit={posted} className="w-full  px-2  gap-3  py-1 rounded-md">
            <textarea 
            ref={textref}
            value={text} cols={10} onChange={(e)=>settext(e.target.value)}
@@ -133,7 +133,7 @@ const Post=()=>{
               </div>
             )}
           </div>
-          <div className="flex gap-2 p-1 border-2 mb-2   items-center">
+          <div className="flex gap-2 p-1  mb-2   items-center">
            <label className="  mt-1 w-8 h-8 cursor-pointer   flex justify-center items-center  gap-2 bg-transparent rounded-xl px-1 py-2  text-slate-950 "> 
              <input type="file"  
               onChange={(e)=>{
@@ -144,15 +144,20 @@ const Post=()=>{
                 className="hidden"  />
             <LuImageUp size={26} color="white" />
             </label> 
-               <button onClick={()=>setShowEmoji(!IsshowEmoji)}>
+               <button onClick={(e)=>{
+                e.preventDefault()
+                setShowEmoji(!IsshowEmoji)}}
+                className="hover:bg-neutral-600 p-1 rounded-full  hover:bg-opacity-45">
                   <SmilePlus className=" text-white" />
                </button>
                 </div>
-                {IsshowEmoji && <Picker data={data}  onEmojiSelect={(emoji:any)=>settext((prev)=>prev+emoji.native)} className="h-32"/> }
-
-         <div className="border-2 flex items-center p-1">
-          <button  onClick={posted} type="submit"  disabled={loading} className=" bg-white font-semibold px-3 py-1 rounded-md">
-          {loading ? `Posting${<LoaderCircle className="animate-spin" />}`:"Post"}
+                {IsshowEmoji && <Picker data={data}  onEmojiSelect={(emoji:any)=>settext((prev)=>prev+emoji.native)} /> }
+         <div className=" flex items-center p-1">
+          <button  type="submit"  disabled={loading} className=" bg-white font-semibold px-3 py-1 rounded-md">
+          {loading ? <span className="flex items-center gap-1 ">Posting
+            <LoaderCircle className="animate-spin" />
+            </span>
+            :"Post"}
           </button>
           </div>
       </form> 

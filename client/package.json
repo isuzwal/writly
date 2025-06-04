@@ -14,14 +14,13 @@
     "@emoji-mart/react": "^1.1.1",
     "@reduxjs/toolkit": "^2.8.2",
     "axios": "^1.8.4",
-    "draft-js": "^0.11.7",
     "lucide-react": "^0.503.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-froala-wysiwyg": "^4.5.1",
     "react-icons": "^5.5.0",
-    "react-redux": "^9.2.0",
-    "react-router": "^7.4.1"
+    "react-router": "^7.4.1",
+    "zustand": "^5.0.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",

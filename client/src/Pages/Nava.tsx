@@ -82,7 +82,7 @@ function Nava() {
                 <div className=" flex mt-5  items-start   justify-start  bg-navabar rounded-md px-2 py-1 hover:bg-[#2a2929] transition-colors duration-200  cursor-pointer">
                 <span className="font-mono font-medium  text-start  text-lg">{user.username}</span>
                 </div>
-                <div className="flex  border-2  p-1 flex-col gap-8 mt-5 ">
+                <div className="flex p-1 flex-col gap-8 mt-5 ">
                   {listItems.map((item,idx)=>(
                     <Link to={typeof item.link==="function"? item.link(user?.username)||"":item.link}key={idx}
                     className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-[#2a2929] transition-colors duration-200" >
@@ -92,11 +92,11 @@ function Nava() {
                   ))}
                   <button 
                   onClick={logoutuser}
-                  className="flex items-center gap-1 px-4 py-2 rounded-lg  hover:bg-red-500/50 transition-colors duration-200">
+                  className="flex items-center gap-1 px-4 py-2 rounded-lg  text-red-600/70 hover:text-white  hover:bg-red-500/50 transition-colors duration-200">
                    {IsLodaing ? 
                    <span className="flex gap-2  items-center">Logout<LoaderCircle className="animate-spin" /></span>
                    :
-                   <span className="flex gap-2  items-center"><LogOut /> Logout</span>
+                   <span className="flex gap-2  items-center"><LogOut className="" /> Logout</span>
                       }</button>
                 </div>
               </div>
