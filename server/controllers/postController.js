@@ -2,8 +2,11 @@ const Post=require("../models/PostSchema");
 const User=require("../models/Personschema");
 const Notification=require("../models/Notification")
 const Comment=require("../models/CommentSchema");
-
 require('dotenv').config();
+
+
+
+
 //->Post route 
 exports.postcreate=async(req,res)=>{
     try{
@@ -38,14 +41,15 @@ exports.postcreate=async(req,res)=>{
 // -->for all post
 exports.getAllposts=async(req,res)=>{
     try{
-        const allpost= await Post.find({})
-            .populate('user', 'username image likes comments').sort({ postTime: -1 }) ;
-              res.status(200).json({
-                status:"sucess",
-                data:{
-                  post:allpost
-            }
-        })
+    const allpost= await Post.find({})
+      .populate('user', 'username image likes comments').sort({ postTime: -1 }) ;
+           res.status(200).json({
+           status:"sucess",
+           data:{
+           post:allpost
+           }
+          })
+          await client.setEx('allPosts',60,JSON.stringify(allpost))
     }catch(e){
         res.status(500).json({
             error:"Interanl Server Error"
@@ -77,7 +81,6 @@ exports.getPostByID=async(req,res)=>{
 exports.userPost=async(req,res)=>{
     try{
         const {username}=req.params;
-        console.log(username)
         const userInfo=await User.findOne({username})
         .populate("post")
           if(!userInfo){
@@ -439,3 +442,5 @@ exports.removenotification=async(req,res)=>{
     })
    } 
 }
+
+// post delete 

@@ -9,6 +9,7 @@ router.post('/login', login);
 router.post('/logout', logout);
 router.get('/profile', verifytoken, profile);
 router.get('/user',verifytoken,getuserlist);
+router.delete('/user/:username',verifytoken,delteaccount)
 
 
 

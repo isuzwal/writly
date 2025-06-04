@@ -14,7 +14,6 @@ const verifytoken=(req,res,next)=>{
         res.status(403).json({ message: "Invalid or expired token" });
       }
     };
-    console.log("JWT_SECRET:", "12BSC123");
 
 // function to genertae token
   const token=(userdata)=>{

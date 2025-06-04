@@ -2,6 +2,7 @@ const User=require("../models/Personschema");
 const bcrypt=require("bcryptjs");
 const {token}=require("../middleware/verifytoken");
 const  Sendingverfiactioncode = require("../middleware/Email");
+const { findByIdAndDelete } = require("../models/PostSchema");
 
 
 
@@ -201,7 +202,28 @@ exports.getuserlist=async(req,res)=>{
 
 
 
-
+// delete the account from the Data Base
+exports.deleteaccount=async(req,res)=>{
+    try{
+    const userId=req.prams.id
+    console.log("User id is ",userId)
+    const deleteUser= await findByIdAndDelete(userId)
+     if(!deleteUser){
+      return res.status(404).json({
+        status:false,
+        error:"User Not Found"
+        })
+     }
+     res.clearCookie("token")
+     res.status(200).json({message:"Account delete successfully"})
+    }catch(error){
+       res.status(500).json({
+             status:false,
+             msg:"Fail to delete Account",
+             error: error.message
+        }) 
+    }
+}
 //--> logout user
 exports.logout=(req, res) => {
     res
