@@ -1,0 +1,181 @@
+# Writly
+
+Writly is a full-fledged social media application designed to foster seamless
+connection and content sharing among users. Built with a modern and scalable
+technology stack, Writly provides a dynamic platform for creating, sharing, and
+engaging with a diverse range of multimedia content.
+
+
+
+## Features
+
+- **User Authentication & Authorization:** Robust user registration, login, and
+  secure session management.
+- **Content Creation & Management:** Users can create posts with rich text and
+  image support.
+- **Multimedia Integration:** Seamless image uploads and display powered by
+  Cloudinary.
+- **Real-time Interactions:** Dynamic interactions including likes, comments,
+  and follows.
+- **User Profiles:** Personalized user profiles displaying posts, followers,
+  and following.
+- **Responsive UI/UX:** A modern and intuitive user interface designed with
+  Tailwind CSS for a consistent experience across devices.
+- **State Management:** Efficient and predictable client-side state management
+  using Zustand.
+
+## Technologies Used
+
+### Backend
+
+- **TypeScript:** Superset of JavaScript for enhanced type safety and code
+  maintainability.
+- **Node.js:** Asynchronous, event-driven JavaScript runtime for building
+  scalable network applications.
+- **Express.js:** Fast, unopinionated, minimalist web framework for Node.js.
+- **MongoDB:** NoSQL database for flexible and scalable data storage.
+- **Mongoose:** MongoDB object data modeling (ODM) library for Node.js.
+- **Cloudinary:** Cloud-based image and video management service for efficient
+  media storage and delivery.
+
+### Frontend
+
+- **React:** A declarative, component-based JavaScript library for building user
+  interfaces.
+- **TypeScript:** For type-safe frontend development.
+- **Zustand:** A small, fast, and scalable bear-necessities state management
+  solution for React.
+- **Tailwind CSS:** A utility-first CSS framework for rapidly building custom
+  designs.
+- **Axios:** Promise-based HTTP client for the browser and Node.js for making
+  API requests.
+
+## Architecture
+
+Writly employs a **client-server architecture**.
+
+-   The **frontend** (React, TypeScript, Zustand, Tailwind CSS) consumes RESTful
+    APIs provided by the backend.
+-   The **backend** (Node.js, Express.js, TypeScript) handles API requests,
+    interacts with the MongoDB database for data persistence, and leverages
+    Cloudinary for efficient asset management.
+
+Data flow is primarily unidirectional from the backend to the frontend, with
+user interactions triggering API calls for data modification and retrieval.
+State management on the client-side is meticulously handled by Zustand, ensuring
+optimal performance and predictable UI updates.
+
+## Installation
+
+To set up Writly locally, follow these steps:
+
+1.  **Clone the repository:**
+
+    ```bash
+    git clone https://github.com/your-username/writly.git
+    cd writly
+    ```
+
+2.  **Install backend dependencies:**
+
+    ```bash
+    cd backend
+    npm install
+    # or yarn install
+    ```
+
+3.  **Install frontend dependencies:**
+
+    ```bash
+    cd ../frontend
+    npm install
+    # or yarn install
+    ```
+
+## Configuration
+
+Before running the application, you need to configure environment variables for
+both the backend and frontend.
+
+### Backend Configuration (`backend/.env`)
+
+Create a `.env` file in the `backend` directory and add the following:
+
+```env
+PORT=5000
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret_key
+CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
+CLOUDINARY_API_KEY=your_cloudinary_api_key
+CLOUDINARY_API_SECRET=your_cloudinary_api_secret
+```
+
+-   `MONGO_URI`: Your MongoDB connection string (e.g.,
+    `mongodb://localhost:27017/writly` or a MongoDB Atlas URI).
+-   `JWT_SECRET`: A strong, random string used for signing JSON Web Tokens.
+-   `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`: Your
+    credentials from your Cloudinary account.
+
+### Frontend Configuration (`frontend/.env.local`)
+
+Create a `.env.local` file in the `frontend` directory and add the following:
+
+```env
+VITE_API_BASE_URL=http://localhost:5000/api
+```
+
+-   `VITE_API_BASE_URL`: The base URL of your backend API.
+
+## Usage
+
+### Running the Backend
+
+Navigate to the `backend` directory and start the server:
+
+```bash
+cd backend
+npm run dev
+# or yarn dev
+```
+
+The backend server will typically run on `http://localhost:5000` (or the port
+you configured).
+
+### Running the Frontend
+
+Navigate to the `frontend` directory and start the development server:
+
+```bash
+cd frontend
+npm run dev
+# or yarn dev
+```
+
+The frontend application will typically open in your browser at
+`http://localhost:5173` (or the port specified by Vite).
+
+## API Endpoints
+
+(This section is a placeholder. You should document your key API endpoints here.)
+
+### User Endpoints
+
+-   `POST /api/auth/register`: Register a new user.
+-   `POST /api/auth/login`: Log in a user.
+-   `GET /api/users/:username`: Get user profile by ID.
+-   `PUT /api/users/:id`: Update user profile.
+-   `POST /api/users/follow/:id`: Follow a user.
+-   `POST /api/users/unfollow/:id`: Unfollow a user.
+
+### Post Endpoints
+
+-   `POST /api/posts`: Create a new post.
+-   `GET /api/posts`: Get all posts (or posts for feed).
+-   `GET /api/posts/:id`: Get a post by ID.
+-   `PUT /api/posts/:id`: Update a post.
+-   `DELETE /api/posts/:id`: Delete a post.
+-   `POST /api/posts/like/:id`: Like a post.
+-   `POST /api/posts/unlike/:id`: Unlike a post.
+-   `POST /api/posts/comment/:id`: Add a comment to a post.
+
+
