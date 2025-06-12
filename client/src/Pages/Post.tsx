@@ -61,7 +61,7 @@ const Post=()=>{
         setSuccess(null);
         event.preventDefault()
         let imageurl=null;
-           if (image) {
+        if (image) {
          imageurl = await uploadimage(image);
        }
          // for both vaidation 
@@ -128,7 +128,7 @@ const Post=()=>{
            <div>
             {image && (
               <div className="relative  ">
-              <button onClick={()=>setImage(null)} className=" absolute  right-1  hover:bg-neutral-300/80   rounded-full  p-2  bg-opacity-20"><X /></button>
+              <button onClick={()=>setImage(null)} className=" absolute  right-1  hover:bg-neutral-300/80   rounded-full  p-2  bg-opacity-20"><X  /></button>
               <img src={URL.createObjectURL(image)} alt="uploaded" className="w-full h-80 object-cover rounded-md " />
               </div>
             )}

@@ -3,10 +3,10 @@ import { useEffect,} from 'react';
 import { Heart,User,MessageCircleDashedIcon ,CircleAlert ,X} from 'lucide-react';
 import type {NotificationType } from '../../type/notification';
 import { useParams,Link } from 'react-router';
-import  useNotification from  '../../store/store'
+import  useNotification from  '../../store/Notificationstore'
 
 const Notification = () => {
-  // lsit of the Notification inarray 
+  // lsit of the Notification in array 
   const {userId}=useParams()
   const {notifications,loading,error,fetchNotificationdata,removeNotifaction}=useNotification()
  // getting the nofiaction from backend
@@ -68,7 +68,7 @@ const Notification = () => {
       </div>
     </div>
   )) ) :(
-    <p className=' p-2 '>Not yet notifiaction yet !</p>
+    <p className=' p-2 '>{" "}</p>
   )}
 <div className='absolute  top-0 right-0 w-full'>
   { error && <p className=' flex  justify-between p-2  text-white bg-red-600  bg-opacity-50 rounded-md text-basess' role='alert'>

@@ -5,28 +5,32 @@ import { CiBookmarkPlus } from "react-icons/ci";
 import { Outlet } from "react-router";
 import { useLocation } from "react-router";
 import { NavLink ,Link } from "react-router";
- import Post from "../Pages/Post";
+import Post from "../Pages/Post";
 import Userlist from "../Pages/Userpages/userlist";
 import {PostType} from  ".././type/PostType";
 import linklist from "../Pages/Links/links";
-const Blog=()=>{
+import LikedStore from "../store/Likestore"
+import CommentStore from "../store/Commentstore"
 
+const Blog=()=>{
   const [loading ,setLoading]=useState<boolean>(false);
   const [error ,setError]=useState<string | null>(null);
-  const [isliked,setLiked]=useState<Record<string,boolean>>({})
   const [Iscommnet,setIsComment]=useState<Record<string,boolean>>({})
   const [comment ,setComment]=useState<Record<string ,string>>({})
   const location=useLocation()
   const nestedlocation=location.pathname !== "/home";
   const context=useContext(UserContext)
   const [post ,setPost]=useState<PostType[]>([])
+
   const [isFollowing ,setFollowing]=useState<{[userId:string]:boolean}>({})
-  
+  const {likedPost,liked}=LikedStore()
+  const {postcomment}=CommentStore()
+
   if(!context){
     throw new Error
   }
   const {ISPoped,isPoped ,user}=context;
-  const currentuserId=context.user?._id
+  const currentuserId=context.user?._id || " ";
     // for all post 
     useEffect(()=>{
       const fetchPosts = async () => {
@@ -57,53 +61,10 @@ const Blog=()=>{
         document.body.style.overflow = "auto";
       };
     }, [isPoped]);
-    //-> for liked 
-    const likedpost = async(postID:string,userID: string) => {
-      try{
-   const response=await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/post/likes`,{
-    method:'POST',
-    headers:{
-        'Content-Type':'application/json',
-    },
-    body:JSON.stringify({
-      userId:userID,
-      postId:postID,
-    }),
-    credentials: "include",
-   })
-    const data=await response.json();
-    setLiked((prevliked) => ({
-      ...prevliked, 
-      [postID]: !prevliked[postID]
-    }));
-    return data;
-      }catch(error){
-       setError((error as Error ).message|| "Something Went Wrong ")
-      }
-    };
-    // comment show case
-    const postcommnet=async(postID:string,userID:string)=>{
-      try{
-      const response=await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/post/comment`,{
-          method:"POST",
-          headers:{
-              'Content-Type':'application/json',
-          },
-          body:JSON.stringify({
-            text:comment[postID],
-            userId:userID,
-            postId:postID,
-          }),
-          credentials:"include"
-      })
-      const data=await response.json()
-      setComment({})
-      return data
-      }catch(error){
-       setError((error as Error ).message|| "Something Went Wrong ")
-      }
-    }
-   // commentBoxOpen
+   
+   
+
+  //  // commentBoxOpen
    const showcommnet=(postID:string)=>{
         setIsComment((prevcomment)=>({
         ...prevcomment,[postID]:!prevcomment[postID]}))
@@ -198,7 +159,8 @@ if (error){
       </div>
     {/* Navigation Items */}
     {linklist.map((link, index) => (
-      <Link to={typeof link.link==="function"? link.link(user?.username)|| user?.id||"":link.link} key={index}
+      <Link to={typeof link.link==="function"? `${link.link((user?.username ||"").trim()) || user?._id}`:`${link.link|| " "}` }
+        key={index}
         className="flex   items-center gap-3 px-4 py-2 rounded-lg   hover:bg-[#2a2929] max-w-max transition-colors duration-200" >
         <span className="text-white text-xl">{link.icon}</span>
         <span className="text-white font-medium text-[15px] hidden lg:block">{link.label}</span>
@@ -244,7 +206,7 @@ if (error){
                 <div  key={index} className="   bg-navabar cursor-pointer border-b-[2px] border-b-maincolor w-full hover:bg-navabar hover:bg-opacity-40 text-white px-2 ">
                    <div className="flex  flex-row justify-between p-1 items-center">
                    <div className="flex items-center gap-3">
-                     <img src={user?.profileImage} className="object-cover rounded-full w-10 h-10" />
+                     <img src={post.user?.profileImage} className="object-cover rounded-full w-10 h-10" />
                      <div className="text-start mr-2  ">
                      <Link to={`/home/${post.user?.username}`} className="text-[12px] ml-1  hover:underline  font-extrabold">{post.user?.username}</Link>
                      <p className="text-[9px] font-bold">{new Date(post.createdAt).toLocaleDateString()}</p>
@@ -263,7 +225,6 @@ if (error){
             ) : (
               <button     
                 onClick={() => {follow(post.user?._id || " ", currentuserId)
-               
                 }} // Call follow if not following
                 className="bg-blue-600 hover:bg-blue-700 px-2 py-1 rounded-lg"
               >
@@ -287,10 +248,10 @@ if (error){
                <div className="flex flex-row p-2 items-center  rounded-sm  gap-2   justify-between">
                 <div className="flex flex-row   px-2     py-1    gap-6 justify-between w-32  items-center  text-center">
                 <button className="flex items-center gap-1">
-                          <span onClick={() => likedpost(post._id,user._id)} className="flex items-center cursor-pointer">
+                          <span onClick={() => likedPost(post._id,user?._id|| " ")} className="flex items-center cursor-pointer">
                             <div className="flex p-1.5 hover:bg-rose-700 transition-colors duration-200 ease-in-out hover:text-white hover:bg-opacity-80 rounded-full items-center justify-center text-sm gap-1 cursor-pointer">
                               <Heart size={22} 
-                                className={`${isliked[post._id] ? 'fill-rose-600 text-rose-600' : 'fill-none'} transition-colors duration-200 rounded-full`} 
+                                className={`${liked[post._id] ? 'fill-rose-600 text-rose-600' : 'fill-none'} transition-colors duration-200 rounded-full`} 
                               />
                             </div>
                           </span>
@@ -316,7 +277,10 @@ if (error){
                        <div className="bg-[#2a2a2a] flex  text-white px-4 py-2 rounded-full text-sm w-full  ">
                        <input type="text"   value={comment[post._id] || ""} placeholder="Write a comment..." 
                        onChange={(e)=>handlechangecommnet(post._id,e.target.value)} className="bg-transparent  w-full outline-none" />
-                       <button  onClick={()=>postcommnet(post._id,user._id)} className="hover:bg-maincolor  px-2 py-1 bg-opacity-40 rounded-lg duration-300 "><Send size={20} /></button>
+                       <button  onClick={()=>{
+                        setComment({ })
+                        postcomment(post._id,user?._id || " ",comment[post._id]) || " "} 
+                        }className="hover:bg-maincolor  px-2 py-1 bg-opacity-40 rounded-lg duration-300 "><Send size={20} /></button>
                      </div>
                     </div>
                </div>
@@ -324,7 +288,6 @@ if (error){
              </div>  
               ))}
             </div>
-           
            )}
           </div>
           <div className="md:col-span-1 hidden  lg:block text-center">

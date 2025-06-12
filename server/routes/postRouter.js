@@ -12,10 +12,10 @@ const {
     getnotification,
     unfollow,
     removenotification,
-    i
+    deletePost
 }=require("../controllers/postController")
 const {verifytoken}=require("../middleware/verifytoken")
-const uploadimage=require("../cloudStroage/cloud")
+const {uploadimage}=require("../cloudStroage/cloud")
 
 const router = express.Router();
 
@@ -28,6 +28,7 @@ router.post("/post/comment", verifytoken, commentnotification);
 router.post("/post/single/commnet", verifytoken, getcomment);
 router.get("/post/notification/:username", verifytoken, getnotification);
 router.delete("/post/removenotification/:id", verifytoken, removenotification);
+router.delete("/post/deletepost/:postId",verifytoken,deletePost)
 router.get("/post/user/:username", verifytoken, userPost);
 
 

@@ -6,7 +6,7 @@ import { JSX } from "react";
 export interface LinkItems{
     label:string,
     icon:JSX.Element,
-      link: string | ((param: string | number) => string | number);
+    link: string | ((param: string | number) => string | number);
   
 }
 const linklist: LinkItems[] = [

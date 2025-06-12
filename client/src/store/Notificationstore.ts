@@ -39,10 +39,10 @@ interface NotificationSate{
     loading:false,
     error:null,
  // Fetch  the data from the DB
-   fetchNotificationdata:async (userId:string)=>{
+   fetchNotificationdata:async (username:string)=>{
     set({loading:true,error:null});
     try{
-      const response= await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/post/notification/${userId}`, {
+      const response= await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/post/notification/${username}`, {
             credentials: "include",
           });
           if(!response.ok){

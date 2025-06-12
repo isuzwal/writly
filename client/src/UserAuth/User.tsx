@@ -1,8 +1,20 @@
 import  {createContext ,ReactNode,useState} from "react"
+import {PostType} from "../type/PostType"
 
 // for he user COotext API
+interface UserType {
+  _id: string;
+  username: string;
+  email: string;
+  profileImage?: string; 
+  coverImage?: string;  
+  bio?: string;         
+  follower: string[];    
+  following: string[];   
+  post: PostType[];      
+}
 interface User{
-    user:any;
+    user:UserType | null;
     isPoped:boolean;
     setUser:(user:any)=>void
     uppercaseletter:(text:string |null)=>string
@@ -14,7 +26,7 @@ interface ContextProps{
 }
 const UserContext=createContext<User |undefined >(undefined)
 export const UserProvider=({children}:ContextProps)=>{
-    const [user,setUser]=useState<string|null>(null)
+    const [user,setUser]=useState<UserType | null >(null)
     const [isPoped,setPoped]=useState<boolean>(false)
     const ISPoped=()=>{
         setPoped((prevstated)=>!prevstated)

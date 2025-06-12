@@ -2,7 +2,7 @@ const User=require("../models/Personschema");
 const bcrypt=require("bcryptjs");
 const {token}=require("../middleware/verifytoken");
 const  Sendingverfiactioncode = require("../middleware/Email");
-const { findByIdAndDelete } = require("../models/PostSchema");
+
 
 
 
@@ -207,7 +207,7 @@ exports.deleteaccount=async(req,res)=>{
     try{
     const userId=req.prams.id
     console.log("User id is ",userId)
-    const deleteUser= await findByIdAndDelete(userId)
+    const deleteUser= await User.findByIdAndDelete(userId)
      if(!deleteUser){
       return res.status(404).json({
         status:false,
@@ -231,3 +231,78 @@ exports.logout=(req, res) => {
       .status(200)
       .json({ status: 'Success', msg: 'Logged out successfully' });
   };
+
+
+  // upadate for coverImage
+  exports.updatecoverImage=async(req,res)=>{
+  const {id}=req.params;
+  try{
+      const imageUrl = req.file?.path;
+         if (!imageUrl) {
+        return res.status(400).json({ status: false, message: "No image uploaded" });
+       }
+         const updateCoverImage=await User.findByIdAndUpdate(id,
+        {coverImage:imageUrl},{new:true});
+
+        res.status(200).json({
+            status:true,
+             message: "Cover image updated successfully",
+             user:updateCoverImage
+        })
+    }catch (err) {
+    res.status(500).json({ message: "Something went wrong", error: err.message });
+  }}
+  // for the Prfoile Image
+  exports.profile_image=async(req,res)=>{
+    const {id}=req.params;
+    try{
+        const profileImageurl=req.file?.path;
+      if(!profileImageurl){
+        return res.status(400).json({
+            status:false,
+            message:"No image upload"
+        })
+      }
+      const updateprofile_Image=await User.findByIdAndUpdate(id,
+        {profileImage:profileImageurl},
+        {new:true})
+        res.status(200).json({
+            status:true,
+            message:"Profile Image update successfully",
+            user:updateprofile_Image
+        })
+    }catch(err){
+     res.status(500).json({ message: "Something went wrong", error: err.message });
+    }
+    
+  }
+  /// update the Profile Route
+  exports.updateprofile=async(req,res)=>{
+    const {id}=req.params
+    const {username ,bio}=req.body; 
+    try{
+    const updateuser= await User.findById(id);
+        if(!updateuser){
+        return res.status(404).json({
+            status:false,
+            error:"User Not Found"
+        })
+    }
+     const Updates={username,bio}; // user Info Upadate
+     if(username)  Updates.username=username;
+     if(bio) Updates.bio=bio ;
+     const UpdateUser=await User.findByIdAndUpdate(id,Updates,{new:true})
+     res.status(200).json({
+       status:true,
+       message:"User Upadate Successfully",
+        user:UpdateUser
+   })
+   console.log("Update",updateuser)
+    }catch(error){
+       res.status(500).json({
+             status:false,
+             msg:"Fail to Upadate Profile",
+             error: error.message
+        }) 
+    }
+    }

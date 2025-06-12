@@ -4,9 +4,6 @@ const Notification=require("../models/Notification")
 const Comment=require("../models/CommentSchema");
 require('dotenv').config();
 
-
-
-
 //->Post route 
 exports.postcreate=async(req,res)=>{
     try{
@@ -31,7 +28,6 @@ exports.postcreate=async(req,res)=>{
         postsaved
         }
     })
-
     }catch(e){
         res.status(500).json({
         error:"Server error"
@@ -42,14 +38,14 @@ exports.postcreate=async(req,res)=>{
 exports.getAllposts=async(req,res)=>{
     try{
     const allpost= await Post.find({})
-      .populate('user', 'username image likes comments').sort({ postTime: -1 }) ;
+      .populate('user', 'username image likes comments profileImage').sort({ postTime: -1 }) ;
            res.status(200).json({
            status:"sucess",
            data:{
            post:allpost
            }
           })
-         
+          
     }catch(e){
         res.status(500).json({
             error:"Interanl Server Error"
@@ -62,7 +58,7 @@ exports.getPostByID=async(req,res)=>{
         const post = await Post.findById(req.params.id)
       .populate("user", "username profileImage follower");
         if(!post){
-            return  res.status(404).json({error:"Post not found"})
+          return  res.status(404).json({error:"Post not found"})
         }
         res.status(200).json({
             status:"success",
@@ -71,8 +67,9 @@ exports.getPostByID=async(req,res)=>{
             }
         })
     }catch(e){
-         console.log("Error at Fetching Post",e)
-        res.status(500).json({"error":"Server Error"})
+        res.status(500).json({
+        status:false,
+        message:"Server Error"})
     }
 }
 
@@ -93,10 +90,8 @@ exports.userPost=async(req,res)=>{
          res.status(200).json({
              status:"Success",
              userInfo:user
-
         })
     }catch(e){
-        console.log("From the username post not match ",e)
         res.status(500).json({
             status:"Fail",
             msg:"Internal Error"})
@@ -114,7 +109,6 @@ exports.imageupload = async(req, res) => {
       }
       const link = req.file.path;
       res.json({ link: link });
-      
     } catch(e) {
       res.status(500).json({
         status: "Fail",
@@ -281,15 +275,16 @@ exports.getcomment=async(req,res)=>{
  /// getting notifiaction
 exports.getnotification=async(req,res)=>{
   try{
-      const {username}=req.params
-      if(!username){
-          return res.status(400).json({
-              status:false,
-              message:"User name is required.",
-            });
-        }
+     const { username } = req.params;
+
+    if (!username || username.trim() === '') { 
+      return res.status(400).json({
+        status: false,
+        message: "Username is required.",
+      });
+    }
         // check user is exits or not 
-      const user = await User.findOne({ username });
+      const user = await User.findOne({ username:username });
     if (!user) {
       return res.status(404).json({
         status: false,
@@ -414,7 +409,6 @@ exports.unfollow = async (req, res) => {
     });
  //  
  
- console.log("Done")
   res.status(200).json({
    status:true,
    message:"User unfollwed succesfully"
@@ -435,7 +429,6 @@ exports.removenotification=async(req,res)=>{
   await Notification.findByIdAndDelete(id);
   res.status(200).json({ message: 'Notification deleted' });
   }catch(error){
-  console.log("Error" ,error)
     res.status(500).json({
       status:false,
      message: error.message || "Internal Server Error",
@@ -444,3 +437,34 @@ exports.removenotification=async(req,res)=>{
 }
 
 // post delete 
+exports.deletePost=async(req,res)=>{
+ try{
+  const {postId}=req.params
+  console.log(postId)
+  if(!postId){
+    return res.status(400).json({
+      status:false,
+      message:"UserId & PostId  need "
+    })
+  }
+  // check if post in Data base or not 
+   const post=Post.findById(postId);
+   if(!post){
+    return res.status(400).json({
+      status:false,
+      message:"Post not Found "
+    })
+   }
+  await Post.findByIdAndDelete(postId);
+  res.status(200).json({
+    message:"Post Delete "
+  })
+  }catch(error){
+    console.log("Errro from the ",error)
+    res.status(500).json({
+      status:false,
+     message: error.message || "Internal Server Error",
+    })
+
+  }
+}
