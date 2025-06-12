@@ -137,7 +137,7 @@ if (error) {
         <div className="flex flex-row   p-2 items-center rounded-sm gap-2 justify-between">
           <div className="flex flex-row px-2 py-1 gap-3 justify-between w-32 items-center text-center">
             <button className="flex items-center px-1">
-              <span  key={post._id}   onClick={() => post._id && likedPost(post._id,user._id)}
+              <span  key={post._id}   onClick={() => post._id && likedPost(post._id,user?._id || " ")}
                 className="flex items-center cursor-pointer">
                 <div className="flex p-1.5 hover:bg-rose-700 transition-colors duration-200 ease-in-out hover:text-white hover:bg-opacity-80 rounded-full items-center justify-center text-sm gap-1 cursor-pointer">
                   <Heart 
