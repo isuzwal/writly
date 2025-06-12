@@ -11,17 +11,7 @@ const Latest=()=>{
     throw new Error
   }
   const {user}=context
-    const uppercaseletter=(text:string|null)=>{
-        if (!text) return "";
-        if(text.charAt(0)===text.charAt(0).toUpperCase()){
-          return text
-        }else{
-          return text.charAt(0).toUpperCase() + text.slice(1);
-       
-        }
-      }
-      const localDate=new Date().toLocaleDateString();
-    
+   
     return(
 
         <section className=" items-center text-white bg-maincolor">
@@ -30,8 +20,7 @@ const Latest=()=>{
                 <div className="flex flex-row items-center font-dm font-semibold">
                  <img src={user?.profileImage} className="object-cover rounded-full w-9 h-9" />
                    <div className="mt-4  flex-col flex  ">
-                   <span className="text-[12px] ml-1 font-extrabold">{uppercaseletter(user?.username)}</span>
-                   <p className="text-[9px] font-bold">{localDate}</p>
+             
                    </div>
                 </div>
                 <div className="p-2">
