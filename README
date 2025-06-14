@@ -1,37 +1,38 @@
-# ✍️ Writly
+ # Writly
+ ## Overview
 
-**Writly** is a full-featured social media application that fosters seamless user connections and rich content sharing. Built with a modern and scalable tech stack, it enables users to create, engage with, and manage multimedia posts in a sleek, responsive interface.
+ Writly is a full-featured social media application that fosters seamless user connections and rich content sharing. Built with a modern and
+  scalable tech stack, it enables users to create, engage with, and manage multimedia posts in a sleek, responsive interface.
 
----
 
-## 🚀 Features
+##  Features
 
-- 🔐 **Authentication & Authorization**  
+-  **Authentication & Authorization**  
   Secure user registration, login, and session management via JWT.
 
-- 📝 **Content Creation**  
+-  **Content Creation**  
   Rich-text posts with image uploads and editing capabilities.
 
 - 🖼️ **Multimedia Integration**  
   Cloudinary-powered image handling for smooth media delivery.
 
-- 💬 **Real-time Interactions**  
+-  **Real-time Interactions**  
   Users can like, comment on, and follow others in real time.
 
-- 🙍 **User Profiles**  
+-  **User Profiles**  
   Personalized profiles with follower/following stats and post history.
 
-- 📱 **Responsive Design**  
+-  **Responsive Design**  
   Mobile-first UI/UX crafted with Tailwind CSS for all screen sizes.
 
-- 🧠 **Global State Management**  
+-  **Global State Management**  
   Efficient state handling using Zustand for a responsive and predictable UI.
 
 ---
 
-## 🧰 Tech Stack
+##  Tech Stack
 
-### 🖥️ Frontend
+###  Frontend
 
 - **React** – Component-based UI
 - **TypeScript** – Type-safe code
@@ -39,7 +40,7 @@
 - **Tailwind CSS** – Utility-first styling
 
 
-### ⚙️ Backend
+###  Backend
 
 - **Node.js + Express.js** – RESTful API development
 - **TypeScript** – Scalable server-side code
@@ -47,9 +48,9 @@
 - **Cloudinary** – Cloud-based image storage and transformation
 - **JWT** – Secure token-based authentication
 
----
 
-## 🏗️ Architecture
+
+
 
 
 
