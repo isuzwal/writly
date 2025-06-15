@@ -21,16 +21,23 @@ const Blog=()=>{
   const nestedlocation=location.pathname !== "/home";
   const context=useContext(UserContext)
   const [post ,setPost]=useState<PostType[]>([])
-
   const [isFollowing ,setFollowing]=useState<{[userId:string]:boolean}>({})
-  const {likedPost,liked}=LikedStore()
-  const {postcomment}=CommentStore()
+  const {likedPost,liked,setInitialLikedStatus}=LikedStore()
 
+  const {postcomment}=CommentStore()
+  
   if(!context){
     throw new Error
   }
-  const {ISPoped,isPoped ,user}=context;
   const currentuserId=context.user?._id || " ";
+  const {ISPoped,isPoped ,user}=context;
+  
+    useEffect(() => {
+    post.forEach((post) => {
+      setInitialLikedStatus(post._id, post.likes.includes(currentuserId), post.likes.length);
+    });
+  }, [post]);
+
     // for all post 
     useEffect(()=>{
       const fetchPosts = async () => {
@@ -247,15 +254,15 @@ if (error){
                )}             
                <div className="flex flex-row p-2 items-center  rounded-sm  gap-2   justify-between">
                 <div className="flex flex-row   px-2     py-1    gap-6 justify-between w-32  items-center  text-center">
-                <button className="flex items-center gap-1">
-                          <span onClick={() => likedPost(post._id,user?._id|| " ")} className="flex items-center cursor-pointer">
-                            <div className="flex p-1.5 hover:bg-rose-700 transition-colors duration-200 ease-in-out hover:text-white hover:bg-opacity-80 rounded-full items-center justify-center text-sm gap-1 cursor-pointer">
+                <button className="flex items-center gap-2">
+                          <span onClick={() => likedPost(post._id,user?._id|| " ")} className="flex    gap-2 items-center cursor-pointer">
                               <Heart size={22} 
-                                className={`${liked[post._id] ? 'fill-rose-600 text-rose-600' : 'fill-none'} transition-colors duration-200 rounded-full`} 
+                              className={`
+                              ${liked[post._id] ? "fill-rose-500 text-rose-500" :"fill-none"}
+                              transition-colors duration-200 rounded-full "  `}
                               />
-                            </div>
+                            <h3 className="font-semibold text-[16px]">{post.likes.length}</h3>
                           </span>
-                          <h3 className="font-semibold text-[15px]">{post.likes?.length || 0}</h3>
                         </button>
                  <button 
                   onClick={()=>showcommnet(post._id)}

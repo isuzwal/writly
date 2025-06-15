@@ -4,7 +4,7 @@ export interface PostType{
     text: string;
     image?: string;
     createdAt:string;
-    likes:[];
+    likes:string[];
     comments:[];
     user?: {
       username?: string;
