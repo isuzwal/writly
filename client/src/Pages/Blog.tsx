@@ -145,9 +145,28 @@ if(loading){
 }
 // while there is error
 if (error){
-  return <div className="flex  bg-maincolor justify-center min-h-screen items-center">
+  return <div className=" relative flex bg-maincolor justify-center min-h-screen items-center">
     <h1 className="text-white  gap-2 underline  flex items-center text-xl sm:text-3xl font-dm"><AlertCircle size={28} />{error}</h1>
   </div>
+}
+function formatTimeAgo(date:Date) {
+  const now = new Date();
+  const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+ const timeUnits=[
+    { name: "year", seconds: 31536000 }, 
+    { name: "month", seconds: 2592000 }, 
+    { name: "day", seconds: 86400 },     
+    { name: "hour", seconds: 3600 },      
+    { name: "minute", seconds: 60 },    
+ ]
+ for(const u of timeUnits){
+  const interval=seconds/u.seconds
+  if(interval >=1){
+    const v=Math.floor(interval);
+    return `${v} ${u.name}${v>1?"s":""} ago`
+  }
+ }
+ return `${seconds} seconds ago`
 }
     return (
 <section className=" bg-maincolor   min-h-screen overflow-hidden ">
@@ -185,6 +204,12 @@ if (error){
       </div>
     </div>
   )}
+
+     <button onClick={ISPoped} className="md:hidden fixed  right-8  bottom-2   mt-4   shadow-lg shadow-slate-300/40  flex-row flex items-center justify-center gap-2  max-w-max bg-[#4f46e5] hover:bg-[#635bff] text-white px-4 py-2  font-semibold text-sm transition-all duration-300 rounded-2xl ">
+       <PencilLineIcon />
+       <span className="hidden lg:block">Create Post</span>
+    </button>
+         
           {/*Post Section*/}
           <div className="  col-span-3  sm:col-span-2   lg:col-span-1 w-full flex flex-col justify-start md:h-[calc(100vh-0.5rem)] overflow-y-auto scroll-hidden">
             <div className={`flex justify-center  gap-1 p-2 `}>
@@ -214,7 +239,7 @@ if (error){
                      <img src={post.user?.profileImage} className="object-cover rounded-full w-10 h-10" />
                      <div className="text-start mr-2  ">
                      <Link to={`/home/${post.user?.username}`} className="text-[12px] ml-1  hover:underline  font-extrabold">{post.user?.username}</Link>
-                     <p className="text-[9px] font-bold">{new Date(post.createdAt).toLocaleDateString()}</p>
+                     <p className="text-[9px] font-bold">{formatTimeAgo(new Date(post.createdAt))}</p>
                     </div>
                   </div>
             <div className="p-2">
