@@ -24,7 +24,8 @@ const Profile=()=>{
   const {user,setUser}=context
   const userRouteLocation=useLocation()
   const userNestedroute=userRouteLocation.pathname ===`/home/profile/${user?.username}`
-  console.log(user)
+
+  
   useEffect(() => {
     if (user) {
       setEditedName(user.username ?? null);

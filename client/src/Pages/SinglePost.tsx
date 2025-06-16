@@ -122,7 +122,6 @@ if (error) {
           </div>
         </div>
         <div className="px-2">
-          <span className="text-[15px] text-start font-dm">{post.title}</span>
           <p>{post.text}</p>
         </div>
         {post.image && (

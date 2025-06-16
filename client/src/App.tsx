@@ -74,7 +74,7 @@ try{
      <Route path="notification/:userId" element={<Notification />} />
      <Route path="story" element={<Story />} />
      <Route path="video" element={<Video />} />
-     <Route path="bookmark" element={<Bookmark />} />
+     <Route path="bookmark/:username" element={<Bookmark />} />
      <Route path="latest" element={<Latest />} />
      <Route path="popular" element={<Popular />} />
      <Route path="following" element={<Following />} />

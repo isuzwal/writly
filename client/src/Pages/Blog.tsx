@@ -11,7 +11,7 @@ import {PostType} from  ".././type/PostType";
 import linklist from "../Pages/Links/links";
 import LikedStore from "../store/Likestore"
 import CommentStore from "../store/Commentstore"
-
+import bookmarkState from "../store/Bookmarks";
 const Blog=()=>{
   const [loading ,setLoading]=useState<boolean>(false);
   const [error ,setError]=useState<string | null>(null);
@@ -23,7 +23,7 @@ const Blog=()=>{
   const [post ,setPost]=useState<PostType[]>([])
   const [isFollowing ,setFollowing]=useState<{[userId:string]:boolean}>({})
   const {likedPost,liked,setInitialLikedStatus}=LikedStore()
-
+  const {setbookmark ,bookmarks} =bookmarkState()
   const {postcomment}=CommentStore()
   
   if(!context){
@@ -69,8 +69,6 @@ const Blog=()=>{
       };
     }, [isPoped]);
    
-   
-
   //  // commentBoxOpen
    const showcommnet=(postID:string)=>{
         setIsComment((prevcomment)=>({
@@ -273,9 +271,12 @@ if (error){
                    <h3 className="font-semibold ">{post.comments?.length}</h3> 
                 </button>
               </div>
-                 <span className="flex text-sm cursor-pointer ">
-                <CiBookmarkPlus  size={20}/>
-                </span>
+                 <span onClick={()  =>{
+                   setbookmark(post._id, currentuserId)}}
+                   className={`${
+                   bookmarks.some((bookmarks) => bookmarks._id === post._id) ? "text-blue-500 fill-blue-500" : ""}flex text-sm cursor-pointer transition-colors duration-200 `}>
+                 <CiBookmarkPlus size={20} />
+               </span>
                 </div>
                 {Iscommnet[post._id] && (
                   <div className="flex items-start gap-3 px-4 py-3 bg-maincolor bg-opacity-50 border border-gray-700 rounded-xl shadow-sm w-full">

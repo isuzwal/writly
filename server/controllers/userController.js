@@ -2,6 +2,7 @@ const User=require("../models/Personschema");
 const bcrypt=require("bcryptjs");
 const {token}=require("../middleware/verifytoken");
 const  Sendingverfiactioncode = require("../middleware/Email");
+const Post = require("../models/PostSchema");
 
 
 
@@ -40,7 +41,6 @@ exports.register=async(req,res)=>{
   })
 
     }catch(e){
-        console.log("Error at the create user",e)
         res.status(500).json({
             status:"Fail",
             message:"Can't ",
@@ -86,9 +86,7 @@ exports.sendVertification=async(req,res)=>{
      status: "Success",
      msg: "Email verified and logged in",
      user: safeUser,
-    });
-  
-    
+    });  
  }catch(error){
         return res.status(500).json({
             status:"Fail",
@@ -113,7 +111,6 @@ exports.login=async(req,res)=>{
             status:"Fail",
             message:"User not found"
         })
-      
     } 
     // comapring the userpassword 
     const isMatchpassword=await bcrypt.compare(password,user.password) 
@@ -155,11 +152,10 @@ exports.profile=async(req,res)=>{
         }
         const {password ,...userwithoutpass}=dbuser._doc
         res.status(200).json({
-            status:"Success",
-             userInfo:userwithoutpass
+            status:true,
+            userInfo:userwithoutpass
         })
     }catch(e){
-        console.log("Can't get user",e)
         res.status(500).json(
         {
          status:false,
@@ -189,11 +185,10 @@ exports.getuserlist=async(req,res)=>{
         })
        
     }catch(e){
-        console.log("Error at Fetching user",e)
         res.status(500).json({
              status:false,
              msg:"Internal Server Error",
-             error: error.message
+             error: error.msg
         })
   }
 }
@@ -206,7 +201,6 @@ exports.getuserlist=async(req,res)=>{
 exports.deleteaccount=async(req,res)=>{
     try{
     const userId=req.prams.id
-    console.log("User id is ",userId)
     const deleteUser= await User.findByIdAndDelete(userId)
      if(!deleteUser){
       return res.status(404).json({
@@ -220,7 +214,7 @@ exports.deleteaccount=async(req,res)=>{
        res.status(500).json({
              status:false,
              msg:"Fail to delete Account",
-             error: error.message
+             error: error.msg
         }) 
     }
 }
@@ -297,12 +291,77 @@ exports.logout=(req, res) => {
        message:"User Upadate Successfully",
         user:UpdateUser
    })
-   console.log("Update",updateuser)
+  
     }catch(error){
        res.status(500).json({
              status:false,
              msg:"Fail to Upadate Profile",
-             error: error.message
+             error: error.msg
         }) 
     }
     }
+    // bookmarks 
+exports.bookmarks=async(req,res)=>{
+    try{
+        const {postId,userId}=req.body;
+     // find that post in PostDB it presnt or not 
+      const isPostDb=await Post.findById(postId);
+      if(!isPostDb){
+        return res.status(400).json({
+            status:false,
+            message:"Post is not Find "
+        })
+      }
+      // psuh to bookmars array 
+      const updateres= await User.findByIdAndUpdate(userId,{
+        $addToSet:{
+         bookmarks:isPostDb    
+        }
+      }, { new: true } )
+      res.status(200).json({
+        status:true,
+        message:"Bookmars Save",
+        bookmarks: updateres.bookmarks,
+      })
+         
+    }catch(error){
+      res.status(500).json({
+             status:false,
+             msg:"Fail to Save",
+             error:error.msg
+        }) 
+    }
+}
+// get bookamraks
+exports.getbookmarks=async(req,res)=>{
+    try{
+   const {username}=req.params
+   if(!username){
+    return res.status(400).json({
+        status:false,
+        msg:"Username is Missing"
+    })  
+   }
+   const user_bookmarks=await User.findOne({username})
+   /// to get nested data from the db
+      .populate({
+        path:"bookmarks",
+        select:"text image likes comments users",
+        populate:{
+            path:"user",
+            select:"username profileImage"
+        }
+      })
+      res.status(200).json({
+            status:true,
+             bookmarks:user_bookmarks.bookmarks
+        })
+    }catch(error){
+        res.status(500).json({
+            status:false,
+            msg:"Fail to get Your Bookmarks",
+            error:error.msg
+        })
+    }
+
+}

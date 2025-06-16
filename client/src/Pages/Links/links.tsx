@@ -12,7 +12,7 @@ export interface LinkItems{
 const linklist: LinkItems[] = [
     { label: "Home", icon: <HomeIcon />, link: "/home" },
     { label: "Notifications", icon: <BellIcon />, link:(userId)=> `/home/notification/${userId}` },
-    { label: "Bookmarks", icon: <BookMarkedIcon />, link: "/home/bookmark" },
+    { label: "Bookmarks", icon: <BookMarkedIcon />, link: (username)=>`/home/bookmark/${username}` },
     { label: "Video", icon: <Video />, link: "/home/video" },
     { label: "Story", icon: <InfoIcon />, link: "/home/story" },
     { label: "Account", icon: <UserIcon />, link: (username)=>`/home/profile/${username}` },

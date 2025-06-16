@@ -172,7 +172,7 @@ exports.imageupload = async(req, res) => {
       notifaction:savenotification
      })
    }catch(error){
-    console.error("Error at Backend Process:", error);
+   
       res.status(500).json({
         success: false,
         message: "Server error while processing like notification",
@@ -302,7 +302,7 @@ exports.getnotification=async(req,res)=>{
     notification:notification
   })
   }catch(error){
-        console.log("Error at Fetching Comment ",error)
+     
         res.status(500).json({
             status:false,
             message:"Internal server problem",
@@ -415,7 +415,7 @@ exports.unfollow = async (req, res) => {
   })
 
    }catch(error){
-    console.log("Error" ,error)
+   
     res.status(500).json({
       status:false,
      message: error.message || "Internal Server Error",
@@ -440,7 +440,7 @@ exports.removenotification=async(req,res)=>{
 exports.deletePost=async(req,res)=>{
  try{
   const {postId}=req.params
-  console.log(postId)
+ 
   if(!postId){
     return res.status(400).json({
       status:false,
@@ -460,11 +460,11 @@ exports.deletePost=async(req,res)=>{
     message:"Post Delete "
   })
   }catch(error){
-    console.log("Errro from the ",error)
+    
     res.status(500).json({
       status:false,
      message: error.message || "Internal Server Error",
     })
-
+  
   }
 }
