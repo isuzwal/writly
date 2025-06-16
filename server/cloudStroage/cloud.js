@@ -5,7 +5,6 @@ const multer = require("multer");
 require('dotenv').config();
 
 cloud.config({
-
     cloud_name:process.env.NAME,
     api_key:process.env.API_KEY,
     api_secret:process.env.API_SECRET

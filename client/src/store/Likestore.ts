@@ -30,8 +30,8 @@ const LikedStore=create<LikeState>((set,get)=>({
         }))
      try{
      const res=await  fetch(`${import.meta.env.VITE_BACKEND_URL}/api/post/likes`,{
-    method:'POST',
-    headers:{
+     method:'POST',
+     headers:{
         'Content-Type':'application/json',
     },
     body:JSON.stringify({
