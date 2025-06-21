@@ -3,6 +3,7 @@ import { Heart, MessageSquareMore } from "lucide-react";
 import { Link,useParams} from "react-router";
 import { PostType } from "../../type/PostType";
 import {userlist} from "../../type/userlistType"
+import { Mail } from "lucide-react";
 const PostUser = () => {
   const { username } = useParams<{ username: string }>(); 
   const [user, setUser] = useState<userlist | null>(null);
@@ -52,8 +53,13 @@ const PostUser = () => {
         />
       </div>
       <div className="pt-16 px-6 pb-4">
-        <h2 className="text-2xl font-bold">{user?.username}</h2>
-        <p className="text-gray-300 mt-1">{user?.bio || "No bio available"}</p>
+        <div className="flex gap-3   ">
+         <div>
+         <h2 className="text-2xl font-bold">{user?.username}</h2>
+         <p className="text-gray-300 mt-1">{user?.bio || "No bio available"}</p>
+        </div>
+        <Link to={"/home/message"} className="mt-1 h-6 rounded-full hover:bg-neutral-700" ><Mail  size={26} className=" p-1.5"/></Link>
+        </div>
         <div className="flex gap-4 mt-2 text-gray-300 text-sm">
           <span><strong>{user?.follower?.length || 0}</strong> Followers</span>
            <span><strong>{user?.following.length}</strong> Following</span>
