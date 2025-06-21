@@ -57,6 +57,8 @@ const Blog=()=>{
       };
       fetchPosts()
     },[])
+       
+
     useEffect(() => {
       if (isPoped) {
         document.body.style.overflow = "hidden";
@@ -80,7 +82,7 @@ const handlechangecommnet=(postId:string,value:string)=>{
   ...prev,[postId]:value
   }))
 } 
-useEffect(()=>{})
+
 // this for the Following and Followed User API route
 const follow = async (followedId: string, followingId: string) => {
   try {
@@ -198,8 +200,8 @@ function formatTimeAgo(date:Date) {
  
 </div>
   {isPoped && (
-    <div className="fixed inset-0 z-30 px-2  bg-black bg-opacity-70 flex items-center justify-center">
-      <div className="bg-navabar  bg-opacity-100 z-40  max-w-2xl w-full mx-auto rounded-xl p-2 shadow-xl relative">
+    <div className="fixed inset-0  z-50 px-2  bg-black bg-opacity-70 flex items-center justify-center">
+      <div className="bg-navabar   bg-opacity-100   max-w-2xl w-full mx-auto rounded-xl p-2 shadow-xl relative">
         <Post />
       </div>
     </div>
@@ -211,7 +213,7 @@ function formatTimeAgo(date:Date) {
     </button>
          
           {/*Post Section*/}
-          <div className="  col-span-3  sm:col-span-2   lg:col-span-1 w-full flex flex-col justify-start md:h-[calc(100vh-0.5rem)] overflow-y-auto scroll-hidden">
+          <div className="  col-span-3  sm:col-span-2   lg:col-span-1 w-full  flex flex-col justify-start md:h-[calc(100vh-0.5rem)] overflow-y-auto scroll-hidden">
             <div className={`flex justify-center  gap-1 p-2 `}>
             <div className="flex   py-2 w-full justify-between     rounded-md text-white">
               <NavLink to="/home/latest"    className={({isActive})=>isActive

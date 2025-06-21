@@ -11,26 +11,9 @@ interface message{
 const Message=()=>{
     const [text ,setText]=useState("")
     const [allmessage,setAllmessage]=useState<message []>(
-        [  { text: "hello", sender: "server" },
-        { text: "hi", sender: "me" },
-        {text:"yes bro",sender:"server"},
-        {text:"yes bro",sender:"server"},
-        {text:"What are you doing?",sender:"me"},
-        {text:"Nothing much just chill ",sender:"server"},
-        {text:"Ohh",sender:"me"},
-        { text: "hi", sender: "me" },
-        {text:"yes bro",sender:"server"},
-        {text:"yes bro",sender:"server"},
-        {text:"What are you doing?",sender:"me"},
-        {text:"Nothing much just chill ",sender:"server"},
-        {text:"Ohh",sender:"me"},
-        { text: "hi", sender: "me" },
-        {text:"yes bro",sender:"server"},
-        {text:"yes bro",sender:"server"},
-        {text:"What are you doing?",sender:"me"},
-        {text:"Nothing much just chill ",sender:"server"},
-        {text:"Ohh",sender:"me"},
-        
+        [{ text: "hello", sender: "server" },
+        { text: "hi", sender: "me" }, 
+        {text:" i am current learning the webscoket so it may take some time to build  chat section",sender:"me"},    
     ]);
     // 
     function sendMessagehandler(){
@@ -38,7 +21,7 @@ const Message=()=>{
        setText("");  
     }
     return (
- <section className="h-svh sm:p-4   p-0">
+ <section className="min-h-screen sm:p-4  z-0 p-0">
    <div className="relative h-full p-0">
      <div className="h-[calc(100%-30px)]  overflow-auto scroll-hidden p-4  relative rounded-l-lg rounded-r-lg bg-navabar">
        {allmessage.map((msg,idx)=>(
