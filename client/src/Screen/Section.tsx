@@ -21,7 +21,7 @@ const Section=({children}:ContextProps)=>{
 }
     },[theme])
     return (
-        <div className="flex flex-col min-h-screen ">
+        <div className="flex flex-col min-h-screen   ">
         {children}
         </div>
     )

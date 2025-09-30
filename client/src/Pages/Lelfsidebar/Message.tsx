@@ -21,7 +21,7 @@ const Message=()=>{
        setText("");  
     }
     return (
- <section className="min-h-screen sm:p-4  z-0 p-0">
+ <section className="h-screen sm:p-2  z-0 p-0">
    <div className="relative h-full p-0">
      <div className="h-[calc(100%-30px)]  overflow-auto scroll-hidden p-4  relative rounded-l-lg rounded-r-lg bg-navabar">
        {allmessage.map((msg,idx)=>(

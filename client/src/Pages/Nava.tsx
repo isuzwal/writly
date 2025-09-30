@@ -38,10 +38,10 @@ function Nava() {
   const { user } = context;
   const ToggleMenuBar = () => setIsOpen((prev) => !prev);
   return (
-    <section className={` bg-navabar  sticky top-0 z-30   w-full `}>
-      <div className=" py-1 px-2 flex relative items-center   boder-2 justify-between">
+    <section className={` bg-navabar   sticky top-0 z-30    `}>
+      <div className=" py-1 px-2  max-w-7xl mx-auto w-full   flex relative items-center   boder-2 justify-between">
         <Link  to="/"
-          className=" items-center  text-white hover:bg-gradient-to-t from-slate-100 via-slate-200 to-slate-300 md:text-xl hover:shadow-md   rounded-md py-1 hover:text-writly flex gap-1 text-[16px] font-semibold font-dm px-4 whitespace-nowrap">
+          className=" items-center  text-white hover:bg-gradient-to-t from-slate-100 via-slate-200 to-slate-300 md:text-xl hover:shadow-md   rounded-md py-1 hover:text-writly flex gap-1 text-[16px] font-medium px-4 whitespace-nowrap">
           <PenTool size={20} /> Writly
         </Link>
         <div className="hidden md:flex  items-center gap-4">
@@ -62,17 +62,17 @@ function Nava() {
           )}
         </div>
         
-    <div className="md:hidden   flex  items-center gap-6  p-1 rounded-full">
+    <div className="md:hidden   flex   items-center gap-6  p-1 rounded-full">
           <button onClick={ToggleMenuBar} className="flex items-center">
             {IsOpen ? (
-              <IoIosClose size={28} className=" text-white transition-transform duration-300 hover:rotate-180 hover:scale-110"  />
+              <IoIosClose size={28} className=" text-white transition-transform duration-300  "  />
             ) : (
-              <CgMenu size={28} className=" text-white transition-transform duration-300 hover:rotate-180 hover:scale-110"  />
+              <CgMenu size={28} className=" text-white transition-transform duration-300"  />
             )}
           </button>
         </div>
         {IsOpen && (
-          <div className={`absolute   md:hidden right-0 w-full  rounded-l-md  min-h-screen  top-[2.5rem]   flex  z-20 bg-maincolor   border-zinc-700 shadow-md  text-white    sm:w-72  md:w-64  p-2 transition-all duration-300 ease-in-out`}>
+          <div className={`absolute bg-maincolor  md:hidden right-0 w-full  rounded-l-md   top-[2.5rem]   flex     border-zinc-700 shadow-md  text-white      p-2 transition-all duration-300 ease-in-out`}>
             {user ? (
               <div className="flex flex-col   w-full  gap-2 px-2 py-3">
                 <div className=" relative w-full  h-32 rounded">
@@ -101,9 +101,9 @@ function Nava() {
                 </div>
               </div>
             ) : (
-              <div className="flex flex-col gap-4  w-full px-4 py-2">
-                <Link to="/login" className="text-[16px]  rounded-md  w-full text-white  hover:bg-zinc-600  hover:bg-opacity-30 font-semibold  px-2 py-2">Login</Link>
-                <Link to="/register" className=" text-[16px]  w-full  rounded-md  text-white  hover:bg-zinc-600  hover:bg-opacity-30 font-semibold  px-2 py-2">Register</Link>
+              <div className="flex flex-col gap-4  w-full  justify-center items-center">
+                <Link to="/login" className="text-[16px]  rounded-md  w-full mx-auto  text-white  hover:bg-zinc-600  hover:bg-opacity-30 font-semibold  px-2 py-2">Login</Link>
+                <Link to="/register" className=" text-[16px] w-full  mx-auto rounded-md  text-white  hover:bg-zinc-600  hover:bg-opacity-30 font-semibold  px-2 py-2">Register</Link>
               </div>
             )}
           </div>

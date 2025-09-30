@@ -4,9 +4,9 @@ import { Heart,LoaderCircle ,AlertCircle,MessageSquareMore,PencilLineIcon,Send }
 import { CiBookmarkPlus } from "react-icons/ci";
 import { Outlet } from "react-router";
 import { useLocation } from "react-router";
-import { NavLink ,Link } from "react-router";
+import { Link } from "react-router";
 import Post from "../Pages/Post";
-import Userlist from "../Pages/Userpages/userlist";
+import Pages from "./Userpages/pages";
 import {PostType} from  ".././type/PostType";
 import linklist from "../Pages/Links/links";
 import LikedStore from "../store/Likestore"
@@ -44,10 +44,11 @@ const Blog=()=>{
         setLoading(true)
         try {
           const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/post`, {
-            credentials: "include",
+           credentials: "include",
           });
           const data = await res.json();
           setPost(data.data.post); 
+          console.log(post)
         } catch (error:any) {
        const msg=error.response?.data?.message || "Something Went Wrong Try Again"
           setError(msg)
@@ -172,7 +173,7 @@ function formatTimeAgo(date:Date) {
 }
     return (
 <section className=" bg-maincolor   min-h-screen overflow-hidden ">
-   <div className="container mx-auto    max-w-8xl">
+   <div className="container mx-auto    max-w-7xl w-full">
      <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr_1fr] px-5 py-2">
       {/*Link Section  */}
      <div className="sm:col-span-1 hidden    lg:block text-center  bg-[#1d1c1c] ">
@@ -214,22 +215,7 @@ function formatTimeAgo(date:Date) {
          
           {/*Post Section*/}
           <div className="  col-span-3  sm:col-span-2   lg:col-span-1 w-full  flex flex-col justify-start md:h-[calc(100vh-0.5rem)] overflow-y-auto scroll-hidden">
-            <div className={`flex justify-center  gap-1 p-2 `}>
-            <div className="flex   py-2 w-full justify-between     rounded-md text-white">
-              <NavLink to="/home/latest"    className={({isActive})=>isActive
-              ? "bg-gray-600     text-[16px]  text-center justify-center bg-opacity-70 rounded-l-md  flex-1 px-4 py-1.5  border-r-[1px]    border-slate-50 ":
-              " px-4 py-1.5 flex flex-1  justify-center bg-navabar bg-opacity-80 rounded-l-md   border-r-[1px]     border-slate-50  text-[16px] "  
-             }>Latest</NavLink>
-              <NavLink  to="/home/popular"  className={({isActive})=>isActive 
-              ?"bg-gray-600  text-[16px] bg-opacity-70 text-center px-4 py-1.5 flex-1   justify-center":  
-              " justify-center    text-[16px]   bg-navabar bg-opacity-80  flex-1  px-4 py-1.5 flex   items-center"}
-              >Popular</NavLink>
-              <NavLink to="/home/following"  className={({isActive})=>isActive 
-              ?"bg-gray-600   justify-center  bg-opacity-70 rounded-r-md text-center  px-4 py-1.5 flex-1    border-l-[1px]    border-slate-50 text-[16px]  ":
-              " justify-center    rounded-r-md  flex-1  bg-navabar bg-opacity-80  border-l-[1px]    border-slate-50 px-4 py-1.5 flex   text-[16px] "}
-              >Follwing</NavLink>
-              </div>
-            </div>
+          
             {nestedlocation ? (
               <Outlet />
             ):(
@@ -325,8 +311,8 @@ function formatTimeAgo(date:Date) {
             </div>
            )}
           </div>
-          <div className="md:col-span-1 hidden  lg:block text-center">
-            <Userlist />
+          <div className="md:col-span-1 hidden p-3  lg:block text-center">
+            <Pages />
             </div>
         </div>
         </div>

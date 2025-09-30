@@ -25,6 +25,7 @@ import { UserContext } from "./UserAuth/User";
 import { useContext, useEffect } from "react";
 import { Navigate } from "react-router";
 import { useState } from "react";
+import Authlesspage from './Pages/Userpages/Authlesspage';
 function App() {
   const context=useContext(UserContext)
   if(!context){
@@ -90,6 +91,7 @@ try{
      </Route>
    </Route>
     <Route path="post" element={<Post />} />
+     <Route path=":username" element={<Authlesspage />} />
     </Route>
   </Routes>
   )

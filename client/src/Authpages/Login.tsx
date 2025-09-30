@@ -2,7 +2,7 @@ import {  useEffect, useState } from "react";
 import { BiLoaderAlt } from 'react-icons/bi';
 import { Link } from "react-router";
 import { useNavigate } from "react-router";
-import { Eye ,EyeClosed,CircleAlert,CheckCircle,PenTool} from 'lucide-react';
+import { Eye ,EyeClosed,CircleAlert,CheckCircle,PenTool, ArrowLeft} from 'lucide-react';
 function Login(){
    const [username,setUserName]=useState<string>("")
    const [password,setPassword]=useState<string>("")
@@ -60,9 +60,16 @@ function Login(){
     setIsShow((prevstate)=>!prevstate)
    }
     return (
-        <section className='relative min-h-screen flex items-center justify-center    p-4'>
+        <section className='relative min-h-screen flex flex-col items-center max-w-7xl mx-auto w-full justify-center    p-4'>
+           <div className="flex flex-col p-0 gap-2    w-full justify-center items-center ">        
+          <div className="w-full  flex justify-center">
+
+           <button onClick={()=>{
+             navgation("/")
+            }} className="flex w-1/2 gap-1   text-start  text-neutral-700 hover:text-neutral-500  transition duration-300 cursor-pointer items-center"><ArrowLeft size={16} className="" />Back</button>
+            </div>
             <form  onSubmit={login}
-            className="flex flex-col gap-2 max-w-sm border w-full rounded-md  px-3 py-12">
+            className="flex flex-col gap-2 max-w-sm border shadow-sm w-full rounded-lg px-3 py-12">
               <h1 className="  justify-center md:justify-start  text-3xl  sm:text-4xl font-semibold font-serif text-writly flex items-center gap-2">
                  <PenTool size={40} />
                  Writly
@@ -100,6 +107,7 @@ function Login(){
             <div>
               </div>
             </form>
+             </div>
             {success && (
               <div className="absolute bottom-4 right-3 border-2 border-green-500 bg-green-100 text-green-700 px-4 rounded-3xl py-1 shadow-md">
               <span className="flex items-center gap-2">
