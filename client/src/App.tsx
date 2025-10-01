@@ -8,11 +8,11 @@ import Logout from './Pages/Usercare/Logout';
 import Help from './Pages/Usercare/Help';
 import Feedback from './Pages/Usercare/Feedback';
 import Blog from './Pages/Blog';
-import Latest from "./Pages/Latest";
+
 import Popular from './Pages/Popluar';
 import Home from './Pages/Home';
 import Post from "./Pages/Post";
-import Message from './Pages/Lelfsidebar/Message';
+
 import Notification from './Pages/Lelfsidebar/Notification';
 import Singelpost from "./Pages/SinglePost";
 import Profile from "./Pages/Userpages/Profile";
@@ -74,9 +74,8 @@ try{
     <Route path="home" element={<Blog />}>
      <Route path="notification/:userId" element={<Notification />} />
      <Route path="story" element={<Story />} />
-     <Route path="message" element={<Message />} />
      <Route path="bookmark/:username" element={<Bookmark />} />
-     <Route path="latest" element={<Latest />} />
+     
      <Route path="popular" element={<Popular />} />
      <Route path="following" element={<Following />} />
      <Route path="setting" element={<Setting />} />

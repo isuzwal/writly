@@ -39,7 +39,7 @@ const Authlesspage = () => {
     return <div>Error: user not found</div>;
   }
   return (
-    <div className="w-full bg-maincolor min-h-screen ">
+    <div className="w-full py-0 bg-maincolor min-h-screen ">
     <div className=" bg-navabar max-w-4xl mx-auto w-full border rounded-md border-neutral-900/60    text-white">
       <div className="relative">
         <img 

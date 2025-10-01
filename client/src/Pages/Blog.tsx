@@ -1,322 +1,353 @@
-import { useContext, useState ,useEffect} from "react";
-import { UserContext } from "../UserAuth/User"
-import { Heart,LoaderCircle ,AlertCircle,MessageSquareMore,PencilLineIcon,Send } from "lucide-react";
+import { useContext, useState, useEffect} from "react";
+import { UserContext } from "../UserAuth/User";
+import {
+  Heart,
+  LoaderCircle,
+  AlertCircle,
+  MessageSquareMore,
+  PencilLineIcon,
+  Send,
+  LogOut,
+} from "lucide-react";
 import { CiBookmarkPlus } from "react-icons/ci";
 import { Outlet } from "react-router";
 import { useLocation } from "react-router";
 import { Link } from "react-router";
 import Post from "../Pages/Post";
 import Pages from "./Userpages/pages";
-import {PostType} from  ".././type/PostType";
+import { PostType } from ".././type/PostType";
 import linklist from "../Pages/Links/links";
-import LikedStore from "../store/Likestore"
-import CommentStore from "../store/Commentstore"
+import LikedStore from "../store/Likestore";
+import CommentStore from "../store/Commentstore";
 import bookmarkState from "../store/Bookmarks";
-const Blog=()=>{
-  const [loading ,setLoading]=useState<boolean>(false);
-  const [error ,setError]=useState<string | null>(null);
-  const [Iscommnet,setIsComment]=useState<Record<string,boolean>>({})
-  const [comment ,setComment]=useState<Record<string ,string>>({})
-  const location=useLocation()
-  const nestedlocation=location.pathname !== "/home";
-  const context=useContext(UserContext)
-  const [post ,setPost]=useState<PostType[]>([])
-  const [isFollowing ,setFollowing]=useState<{[userId:string]:boolean}>({})
-  const {likedPost,liked,setInitialLikedStatus}=LikedStore()
-  const {setbookmark ,bookmarks} =bookmarkState()
-  const {postcomment}=CommentStore()
-  
-  if(!context){
-    throw new Error
+const Blog = () => {
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const [Iscommnet, setIsComment] = useState<Record<string, boolean>>({});
+  const [comment, setComment] = useState<Record<string, string>>({});
+  const location = useLocation();
+  const nestedlocation = location.pathname !== "/home";
+  const context = useContext(UserContext);
+  const [post, setPost] = useState<PostType[]>([]);
+
+  const { likedPost, liked, setInitialLikedStatus } = LikedStore();
+  const { setbookmark, bookmarks } = bookmarkState();
+  const { postcomment } = CommentStore();
+
+  if (!context) {
+    throw new Error();
   }
-  const currentuserId=context.user?._id || " ";
-  const {ISPoped,isPoped ,user}=context;
-  
-    useEffect(() => {
+  const currentuserId = context.user?._id || " ";
+  const { ISPoped, isPoped, user } = context;
+
+  useEffect(() => {
     post.forEach((post) => {
       setInitialLikedStatus(post._id, post.likes.includes(currentuserId), post.likes.length);
     });
   }, [post]);
 
-    // for all post 
-    useEffect(()=>{
-      const fetchPosts = async () => {
-        setLoading(true)
-        try {
-          const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/post`, {
-           credentials: "include",
-          });
-          const data = await res.json();
-          setPost(data.data.post); 
-          console.log(post)
-        } catch (error:any) {
-       const msg=error.response?.data?.message || "Something Went Wrong Try Again"
-          setError(msg)
-        }finally{
-          setLoading(false)
-        }
-      };
-      fetchPosts()
-    },[])
-       
-
-    useEffect(() => {
-      if (isPoped) {
-        document.body.style.overflow = "hidden";
-      } else {
-        document.body.style.overflow = "auto";
+  // for all post
+  useEffect(() => {
+    const fetchPosts = async () => {
+      setLoading(true);
+      try {
+        const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/post`, {
+          credentials: "include",
+        });
+        const data = await res.json();
+        setPost(data.data.post);
+        
+      } catch (error: any) {
+        const msg = error.response?.data?.message || "Something Went Wrong Try Again";
+        setError(msg);
+      } finally {
+        setLoading(false);
       }
-    
-      return () => {
-        document.body.style.overflow = "auto";
-      };
-    }, [isPoped]);
-   
+    };
+    fetchPosts();
+  }, []);
+
+  useEffect(() => {
+    if (isPoped) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isPoped]);
+
   //  // commentBoxOpen
-   const showcommnet=(postID:string)=>{
-        setIsComment((prevcomment)=>({
-        ...prevcomment,[postID]:!prevcomment[postID]}))
-    }
-// fixing the   when one comment  were write it show to all other comment section
-const handlechangecommnet=(postId:string,value:string)=>{
-  setComment((prev)=>({
-  ...prev,[postId]:value
-  }))
-} 
+  const showcommnet = (postID: string) => {
+    setIsComment((prevcomment) => ({
+      ...prevcomment,
+      [postID]: !prevcomment[postID],
+    }));
+  };
+  // fixing the   when one comment  were write it show to all other comment section
+  const handlechangecommnet = (postId: string, value: string) => {
+    setComment((prev) => ({
+      ...prev,
+      [postId]: value,
+    }));
+  };
 
-// this for the Following and Followed User API route
-const follow = async (followedId: string, followingId: string) => {
-  try {
-    const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/post/follow`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        followedId,
-        followingId
-      }),
-      credentials: "include"
-    });
-    if (!res.ok) {
-      throw new Error('Failed to follow user');
-    }
-    const data = await res.json();
-    setFollowing((prevState) => ({
-      ...prevState,
-      [followedId]: true
-    }));
-    return data;
-  } catch (error) {
-    setError((error as Error ).message|| "Something Went Wrong ")
-  }
-}
-// unfollowed Router
-const unfollow = async (followedId: string, followingId: string) => {
-  try {
-    const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/post/unfollow`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        followedId,
-        followingId
-      }),
-      credentials: "include"
-    });
-    
-    if (!res.ok) {
-      throw new Error('Failed to unfollow user');
-    }
-    const data = await res.json();
-    setFollowing((prevState) => ({
-      ...prevState,
-      [followedId]: false
-    }));
-    return data;
-  } catch (error) {
-    setError((error as Error ).message|| "Something Went Wrong ")
  
-  }
-}
 
-if(loading){
-   return <div className="flex items-center min-h-screen justify-center  bg-maincolor text-white font-dm">
-    <p className="flex gap-2  text-xl sm:text-3xl items-center">Loading Post it make take some Time <LoaderCircle  size={28 }className="animate-spin" /></p>
-  </div>
-}
-// while there is error
-if (error){
-  return <div className=" relative flex bg-maincolor justify-center min-h-screen items-center">
-    <h1 className="text-white  gap-2 underline  flex items-center text-xl sm:text-3xl font-dm"><AlertCircle size={28} />{error}</h1>
-  </div>
-}
-function formatTimeAgo(date:Date) {
-  const now = new Date();
-  const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
- const timeUnits=[
-    { name: "year", seconds: 31536000 }, 
-    { name: "month", seconds: 2592000 }, 
-    { name: "day", seconds: 86400 },     
-    { name: "hour", seconds: 3600 },      
-    { name: "minute", seconds: 60 },    
- ]
- for(const u of timeUnits){
-  const interval=seconds/u.seconds
-  if(interval >=1){
-    const v=Math.floor(interval);
-    return `${v} ${u.name}${v>1?"s":""} ago`
-  }
- }
- return `${seconds} seconds ago`
-}
+
+  if (loading) {
     return (
-<section className=" bg-maincolor   min-h-screen overflow-hidden ">
-   <div className="container mx-auto    max-w-7xl w-full">
-     <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr_1fr] px-5 py-2">
-      {/*Link Section  */}
-     <div className="sm:col-span-1 hidden    lg:block text-center  bg-[#1d1c1c] ">
-     <div className=" flex flex-col  gap-8">
-      <div className="flex items-center gap-3 max-w-max hover:bg-navabar bg-opacity-25 rounded-md  px-4 py-2 mb-4">
-              <img src={user?.profileImage} className="w-10 h-10 rounded-full object-cover" alt="Profile" />
-              <span className="text-white mt-1 font-medium text-[15px] hidden lg:block">
-                {user?.username || "User"}
-              </span> 
+      <div className="flex items-center min-h-screen justify-center  bg-maincolor text-white font-dm">
+        <p className="flex gap-2  text-xl sm:text-3xl items-center">
+          Loading Post it make take some Time <LoaderCircle size={28} className="animate-spin" />
+        </p>
       </div>
-    {/* Navigation Items */}
-    {linklist.map((link, index) => (
-      <Link to={typeof link.link==="function"? `${link.link((user?.username ||"").trim()) || user?._id}`:`${link.link|| " "}` }
-        key={index}
-        className="flex   items-center gap-3 px-4 py-2 rounded-lg   hover:bg-[#2a2929] max-w-max transition-colors duration-200" >
-        <span className="text-white text-xl">{link.icon}</span>
-        <span className="text-white font-medium text-[15px] hidden lg:block">{link.label}</span>
-      </Link>
-    ))}
-    <button onClick={ISPoped} className="mt-4   shadow-lg shadow-slate-300/40  flex-row    flex items-center justify-center gap-2  max-w-max bg-[#4f46e5] hover:bg-[#635bff] text-white px-4 py-2 rounded-xl font-semibold text-sm transition-all duration-300">
-       <PencilLineIcon />
-       <span className="hidden lg:block">Create Post</span>
-    </button>
-    </div>
- 
-</div>
-  {isPoped && (
-    <div className="fixed inset-0  z-50 px-2  bg-black bg-opacity-70 flex items-center justify-center">
-      <div className="bg-navabar   bg-opacity-100   max-w-2xl w-full mx-auto rounded-xl p-2 shadow-xl relative">
-        <Post />
+    );
+  }
+  // while there is error
+  if (error) {
+    return (
+      <div className=" relative flex bg-maincolor justify-center min-h-screen items-center">
+        <h1 className="text-white  gap-2 underline  flex items-center text-xl sm:text-3xl font-dm">
+          <AlertCircle size={28} />
+          {error}
+        </h1>
       </div>
-    </div>
-  )}
+    );
+  }
+ const handleLogout = async (event: React.MouseEvent<HTMLButtonElement>) => {
+  event.preventDefault()
+    try {
+      setLoading(true);
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/logout`, {
+        method: "POST",
+        credentials: "include",
+      });
+      if (!response.ok) {
+        setError("Logot fail");
+      } else {
+        console.log("Logout succcessfull");
+        setTimeout(() => {
+          window.location.href = "/";
+        }, 3000);
+      }
+    } catch (error: any) {
+      const msg = error.message || "Logout fail !";
+      setError(msg);
+    }
+  };
+  function formatTimeAgo(date: Date) {
+    const now = new Date();
+    const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+    const timeUnits = [
+      { name: "year", seconds: 31536000 },
+      { name: "month", seconds: 2592000 },
+      { name: "day", seconds: 86400 },
+      { name: "hour", seconds: 3600 },
+      { name: "minute", seconds: 60 },
+    ];
+    for (const u of timeUnits) {
+      const interval = seconds / u.seconds;
+      if (interval >= 1) {
+        const v = Math.floor(interval);
+        return `${v} ${u.name}${v > 1 ? "s" : ""} ago`;
+      }
+    }
+    return `${seconds} seconds ago`;
+  }
+  return (
+    <section className=" bg-maincolor   min-h-screen overflow-hidden ">
+      <div className="container mx-auto    max-w-7xl w-full">
+        <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr_1fr] px-5 py-2">
+          {/*Link Section  */}
+          <div className="sm:col-span-1 hidden    lg:block text-center  bg-[#1d1c1c] ">
+            <div className=" flex flex-col  gap-8">
+              <div className="flex items-center gap-3 max-w-max hover:bg-navabar bg-opacity-25 rounded-md  px-4 py-2 mb-4">
+                <img
+                  src={user?.profileImage}
+                  className="w-10 h-10 rounded-full object-cover"
+                  alt="Profile"
+                />
+                <span className="text-white mt-1 font-medium text-[15px] hidden lg:block">
+                  {user?.username || "User"}
+                </span>
+              </div>
+              {/* Navigation Items */}
+              {linklist.map((link, index) => (
+                <Link
+                  to={
+                    typeof link.link === "function"
+                      ? `${link.link((user?.username || "").trim()) || user?._id}`
+                      : `${link.link || " "}`
+                  }
+                  key={index}
+                  className="flex   items-center gap-3 px-4 py-2 rounded-lg   hover:bg-[#2a2929] max-w-max transition-colors duration-200">
+                  <span className="text-white text-xl">{link.icon}</span>
+                  <span className="text-white font-medium text-[15px] hidden lg:block">
+                    {link.label}
+                  </span>
+                </Link>
+              ))}
+              <div className=" flex flex-col items-start gap-2 ">
+                <button
+                  onClick={handleLogout}
+                  className="bg-red-500 text-white rounded-md border flex gap-2  flex-row justify-center items-center  border-red-500 px-7 py-2  hover:bg-red-600 transition-all duration-300">
+                  {loading ? (
+                    <span className="flex gap-2  items-center">
+                      Logout
+                      <LoaderCircle className="animate-spin" />
+                    </span>
+                  ) : (
+                    <span className="flex gap-2  items-center">
+                      <LogOut className="" /> Logout
+                    </span>
+                  )}
+                </button>
+                <button
+                  onClick={ISPoped}
+                  className="mt-4   shadow-lg shadow-slate-300/40  flex-row    flex items-center justify-center gap-2  max-w-max
+     bg-[#4f46e5] hover:bg-[#635bff] text-white px-4 py-2 rounded-md font-semibold text-sm transition-all duration-300">
+                  <PencilLineIcon />
+                  <span className="hidden lg:block">Create Post</span>
+                </button>
+              </div>
+            </div>
+          </div>
+          {isPoped && (
+            <div className="fixed inset-0  z-50 px-2  bg-black bg-opacity-70 flex items-center justify-center">
+              <div className="bg-navabar   bg-opacity-100   max-w-2xl w-full mx-auto rounded-xl p-2 shadow-xl relative">
+                <Post />
+              </div>
+            </div>
+          )}
 
-     <button onClick={ISPoped} className="md:hidden fixed  right-8  bottom-2   mt-4   shadow-lg shadow-slate-300/40  flex-row flex items-center justify-center gap-2  max-w-max bg-[#4f46e5] hover:bg-[#635bff] text-white px-4 py-2  font-semibold text-sm transition-all duration-300 rounded-2xl ">
-       <PencilLineIcon />
-       <span className="hidden lg:block">Create Post</span>
-    </button>
-         
+          <button
+            onClick={ISPoped}
+            className="md:hidden fixed  right-8  bottom-2   mt-4   shadow-lg shadow-slate-300/40  flex-row flex items-center justify-center gap-2  max-w-max bg-[#4f46e5] hover:bg-[#635bff] text-white px-4 py-2  font-semibold text-sm transition-all duration-300 rounded-2xl ">
+            <PencilLineIcon />
+            <span className="hidden lg:block">Create Post</span>
+          </button>
+
           {/*Post Section*/}
           <div className="  col-span-3  sm:col-span-2   lg:col-span-1 w-full  flex flex-col justify-start md:h-[calc(100vh-0.5rem)] overflow-y-auto scroll-hidden">
-          
             {nestedlocation ? (
               <Outlet />
-            ):(
-              <div className="flex flex-col ">
-               {post.map((post,index) => (
-                <div  key={index} className="   bg-navabar cursor-pointer border-b-[2px] border-b-maincolor w-full hover:bg-navabar hover:bg-opacity-40 text-white px-2 ">
-                   <div className="flex  flex-row justify-between p-1 items-center">
-                   <div className="flex items-center gap-3">
-                     <img src={post.user?.profileImage} className="object-cover rounded-full w-10 h-10" />
-                     <div className="text-start mr-2  ">
-                     <Link to={`/home/${post.user?.username}`} className="text-[12px] ml-1  hover:underline  font-extrabold">{post.user?.username}</Link>
-                     <p className="text-[9px] font-bold">{formatTimeAgo(new Date(post.createdAt))}</p>
-                    </div>
-                  </div>
-            <div className="p-2">
-          {/* Only show follow button if it's not the current user's own post */}
-          {post.user?._id !== currentuserId && (
-            isFollowing[post.user?._id || " "] ? (
-              <button
-                onClick={() => unfollow(post.user?._id || " ", currentuserId)} // Call unfollow if already following
-                className="bg-gray-700 hover:bg-gray-600 px-2 py-1 rounded-lg"
-              >
-                Following
-              </button>
             ) : (
-              <button     
-                onClick={() => {follow(post.user?._id || " ", currentuserId)
-                }} // Call follow if not following
-                className="bg-blue-600 hover:bg-blue-700 px-2 py-1 rounded-lg"
-              >
-                Follow
-              </button>
-            )
-          )}
-          </div>
-               </div>
-               <Link to={`/home/post/${post._id}`} className="block underline:none px-2">
-                <p className="text-gray-300">{post.text}</p>
-                </Link>
-                {post.image && (
-                <Link  to={`/home/post/${post._id}`} className="">
-                <div className="w-full   h-aspect-square  overflow-hidden rounded-sm">
-                <img  src={post?.image}  className="w-full h-full object-cover" 
-               alt="Post image" />
-              </div>
-                </Link>
-               )}             
-               <div className="flex flex-row p-2 items-center  rounded-sm  gap-2   justify-between">
-                <div className="flex flex-row   px-2     py-1    gap-6 justify-between w-32  items-center  text-center">
-                <button className="flex items-center gap-2">
-                          <span onClick={() => likedPost(post._id,user?._id|| " ")} className="flex    gap-2 items-center cursor-pointer">
-                              <Heart size={22} 
+              <div className="flex flex-col ">
+                {post.map((post, index) => (
+                  <div
+                    key={index}
+                    className="   bg-navabar cursor-pointer border-b-[2px] border-b-maincolor w-full hover:bg-navabar hover:bg-opacity-40 text-white px-2 ">
+                    <div className="flex  flex-row justify-between p-1 items-center">
+                      <div className="flex items-center gap-3">
+                        <img
+                          src={post.user?.profileImage}
+                          className="object-cover rounded-full w-10 h-10"
+                        />
+                        <div className="text-start mr-2  ">
+                          <Link
+                            to={`/home/${post.user?.username}`}
+                            className="text-[12px] ml-1  hover:underline  font-extrabold">
+                            {post.user?.username}
+                          </Link>
+                          <p className="text-[9px] font-bold">
+                            {formatTimeAgo(new Date(post.createdAt))}
+                          </p>
+                        </div>
+                      </div>
+                   
+                    </div>
+                    <Link to={`/home/post/${post._id}`} className="block underline:none px-2">
+                      <p className="text-gray-300">{post.text}</p>
+                    </Link>
+                    {post.image && (
+                      <Link to={`/home/post/${post._id}`} className="">
+                        <div className="w-full   h-aspect-square  overflow-hidden rounded-sm">
+                          <img
+                            src={post?.image}
+                            className="w-full h-full object-cover"
+                            alt="Post image"
+                          />
+                        </div>
+                      </Link>
+                    )}
+                    <div className="flex flex-row p-2 items-center  rounded-sm  gap-2   justify-between">
+                      <div className="flex flex-row   px-2     py-1    gap-6 justify-between w-32  items-center  text-center">
+                        <button className="flex items-center gap-2">
+                          <span
+                            onClick={() => likedPost(post._id, user?._id || " ")}
+                            className="flex    gap-2 items-center cursor-pointer">
+                            <Heart
+                              size={22}
                               className={`
-                              ${liked[post._id] ? "fill-rose-500 text-rose-500" :"fill-none"}
+                              ${liked[post._id] ? "fill-rose-500 text-rose-500" : "fill-none"}
                               transition-colors duration-200 rounded-full "  `}
-                              />
+                            />
                             <h3 className="font-semibold text-[16px]">{post.likes.length}</h3>
                           </span>
                         </button>
-                 <button 
-                  onClick={()=>showcommnet(post._id)}
-                  className="flex  items-center  p-1  ">
-                  <div className="flex  p-1.5 hover:bg-blue-700 transition-colors duration-200 ease-in-out hover:bg-opacity-30  hover:text-blue-600 rounded-full items-center justify-center text-sm gap-1 cursor-pointer">
-                    <MessageSquareMore  size={22}/>
-                   </div>
-                   <h3 className="font-semibold ">{post.comments?.length}</h3> 
-                </button>
-              </div>
-                 <span onClick={()  =>{
-                   setbookmark(post._id, currentuserId)}}
-                   className={`${
-                   bookmarks.some((bookmarks) => bookmarks._id === post._id) ? "text-blue-500 fill-blue-500" : ""}flex text-sm cursor-pointer transition-colors duration-200 `}>
-                 <CiBookmarkPlus size={20} />
-               </span>
-                </div>
-                {Iscommnet[post._id] && (
-                  <div className="flex items-start gap-3 px-4 py-3 bg-maincolor bg-opacity-50 border border-gray-700 rounded-xl shadow-sm w-full">
-                     <img src={user?.profileImage}  alt="Profile" className="w-10 h-10 rounded-full object-cover"/>
-                     <div className="flex-1">
-                       <div className="bg-[#2a2a2a] flex  text-white px-4 py-2 rounded-full text-sm w-full  ">
-                       <input type="text"   value={comment[post._id] || ""} placeholder="Write a comment..." 
-                       onChange={(e)=>handlechangecommnet(post._id,e.target.value)} className="bg-transparent  w-full outline-none" />
-                       <button  onClick={()=>{
-                        setComment({ })
-                        postcomment(post._id,user?._id || " ",comment[post._id]) || " "} 
-                        }className="hover:bg-maincolor  px-2 py-1 bg-opacity-40 rounded-lg duration-300 "><Send size={20} /></button>
-                     </div>
+                        <button
+                          onClick={() => showcommnet(post._id)}
+                          className="flex  items-center  p-1  ">
+                          <div className="flex  p-1.5 hover:bg-blue-700 transition-colors duration-200 ease-in-out hover:bg-opacity-30  hover:text-blue-600 rounded-full items-center justify-center text-sm gap-1 cursor-pointer">
+                            <MessageSquareMore size={22} />
+                          </div>
+                          <h3 className="font-semibold ">{post.comments?.length}</h3>
+                        </button>
+                      </div>
+                      <span
+                        onClick={() => {
+                          setbookmark(post._id, currentuserId);
+                        }}
+                        className={`${
+                          bookmarks.some((bookmarks) => bookmarks._id === post._id)
+                            ? "text-blue-500 fill-blue-500"
+                            : ""
+                        }flex text-sm cursor-pointer transition-colors duration-200 `}>
+                        <CiBookmarkPlus size={20} />
+                      </span>
                     </div>
-               </div>
-                )}
-             </div>  
-              ))}
-            </div>
-           )}
+                    {Iscommnet[post._id] && (
+                      <div className="flex items-start gap-3 px-4 py-3 bg-maincolor bg-opacity-50 border border-gray-700 rounded-xl shadow-sm w-full">
+                        <img
+                          src={user?.profileImage}
+                          alt="Profile"
+                          className="w-10 h-10 rounded-full object-cover"
+                        />
+                        <div className="flex-1">
+                          <div className="bg-[#2a2a2a] flex  text-white px-4 py-2 rounded-full text-sm w-full  ">
+                            <input
+                              type="text"
+                              value={comment[post._id] || ""}
+                              placeholder="Write a comment..."
+                              onChange={(e) => handlechangecommnet(post._id, e.target.value)}
+                              className="bg-transparent  w-full outline-none"
+                            />
+                            <button
+                              onClick={() => {
+                                setComment({});
+                                postcomment(post._id, user?._id || " ", comment[post._id]) || " ";
+                              }}
+                              className="hover:bg-maincolor  px-2 py-1 bg-opacity-40 rounded-lg duration-300 ">
+                              <Send size={20} />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
           <div className="md:col-span-1 hidden p-3  lg:block text-center">
             <Pages />
-            </div>
+          </div>
         </div>
-        </div>
-      </section>
-    )
-}
+      </div>
+    </section>
+  );
+};
 export default Blog;

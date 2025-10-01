@@ -82,7 +82,7 @@ const Home = () => {
 
   return (
     <section className=" bg-maincolor   min-h-screen overflow-hidden py-2">
-      <div className="container   mx-auto    max-w-5xl w-full  ">
+      <div className="container   mx-auto    max-w-4xl w-full  ">
         <div className="     w-full  flex flex-col justify-start md:h-[calc(100vh-0.5rem)] overflow-y-auto scroll-hidden">
           <div className="flex flex-col ">
             {post.map((post, index) => (
@@ -118,7 +118,7 @@ const Home = () => {
                     <div className="w-full   h-aspect-square  overflow-hidden rounded-sm">
                       <img
                         src={post?.image}
-                        className="w-full h-full object-cover"
+                        className="w-full aspect-square object-cover"
                         alt="Post image"
                       />
                     </div>

@@ -115,11 +115,7 @@ if (error) {
               </p>
             </div>
           </div>
-          <div className="p-2">
-            <button className="bg-black md:px-4 md:py-1.5 px-3 py-1 flex font-dm font-semibold rounded-md text-white text-[14px] items-center">
-              Follow
-            </button>
-          </div>
+          
         </div>
         <div className="px-2">
           <p>{post.text}</p>

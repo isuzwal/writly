@@ -107,7 +107,7 @@ const Post=()=>{
           <img src={user?.profileImage} className="w-10 h-10 rounded-full object-cover" />
            <div className="flex text-white  flex-col">
             <p className="text-sm font-semibold">{user?.username}</p>
-             <p className="text-sm text-gray-700">{new Date().toLocaleDateString()}</p>
+             <p className="text-sm text-gray-400">{new Date().toLocaleDateString()}</p>
             </div>
              <button
           className="absolute top-2 right-2 text-white hover:text-white text-2xl"

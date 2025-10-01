@@ -1,6 +1,6 @@
 import {  useContext, useEffect, useState } from "react";
 import { UserContext  } from "../../UserAuth/User";
-import { NavLink ,Outlet ,useLocation } from "react-router";
+
 import { PostType } from "../../type/PostType";
 import { Heart, MessageSquareMore ,AlertCircle , Pen,Check} from "lucide-react";
 import { MdDelete } from "react-icons/md";
@@ -22,8 +22,8 @@ const Profile=()=>{
     throw new Error
   }
   const {user,setUser}=context
-  const userRouteLocation=useLocation()
-  const userNestedroute=userRouteLocation.pathname ===`/home/profile/${user?.username}`
+
+
 
   
   useEffect(() => {
@@ -295,18 +295,7 @@ const handleSaveClick = async (e:React.FormEvent) => {
       </div>
     </form>  
       {/* Posts */}
-      <div className="border-t ">
-            <div className={`flex    justify-center  gap-2  p-2 `}>
-            <div className="flex  w-full justify-evenly items-center   rounded-md text-white border-2">
-              <NavLink  to={`/home/profile/${user?.username}/following`} className={({isActive})=>isActive 
-              ?"bg-gray-600  flex-1  bg-opacity-70 text-center px-4 py-1.5 flex    justify-center text-[14px] items-center":  "flex-1 justify-center  bg-navabar bg-opacity-80   px-4 py-1.5 flex   text-[14px] items-center"}
-              >Following</NavLink>
-              <NavLink to={`/home/profile/${user?.username}/likes`} className={({isActive})=>isActive 
-              ?"bg-gray-600    bg-opacity-70 rounded-r-md text-center  px-4 py-1.5 flex  justify-center border-l-2 flex-1 border-slate-100  text-[14px] items-center":" justify-center  border-slate-100  flex-1   rounded-r-md    bg-navabar bg-opacity-80   border-l-2 px-4 py-1.5 flex  text-[14px] items-center"}
-              >Like</NavLink>
-              </div>
-          </div>
-         {userNestedroute ? (
+      <div>
         <div className="border-t border-gray-700">
          {user?.post && user.post.length > 0 ? (
             user.post.map((post: PostType) => (
@@ -352,9 +341,7 @@ const handleSaveClick = async (e:React.FormEvent) => {
      <p className="p-4 text-gray-400">Not yet Post</p>
     )}
 </div>
-    ):(
-   <Outlet />
-  )}
+   
 </div>
 </div>
     )
