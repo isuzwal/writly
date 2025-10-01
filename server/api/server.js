@@ -33,6 +33,9 @@ app.use("/api",PostRoutes)
 app.get("*", (req, res) => {
     res.status(404).json({ message: "Route not found" });
 });
-module.exports=app;
+app.listen(PORT,()=>{
+    console.log("Server is ruuning",PORT)
+})
+// module.exports=app;
 
 

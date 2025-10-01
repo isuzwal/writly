@@ -31,10 +31,11 @@ router.delete("/post/removenotification/:id", verifytoken, removenotification);
 router.delete("/post/deletepost/:postId",verifytoken,deletePost)
 router.get("/post/user/:username", verifytoken, userPost);
 
+router.get("/post/user-noauth/:username",  userPost);
 
 router.get("/post/:id", verifytoken, getPostByID);
-router.get("/post/if")
 
+router.get("/home-post", getAllposts);
 router.get("/post", verifytoken, getAllposts);
 router.post("/post/create", verifytoken, postcreate);
 
