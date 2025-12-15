@@ -12,7 +12,6 @@ function Register(){
     const [loading,setLoading]=useState<boolean>(false)
     const [error,setError]=useState<string |null>(null)
     const [Isshow,setIsShow]=useState<boolean>(false)
-    const [verificationCode ,setCode]=useState<string>()
     const [success, setSuccess]=useState<string|null>(null);
     // checking the context is define or not .
     const context=useContext(UserContext)
@@ -68,35 +67,7 @@ function Register(){
    const showEyes=()=>{
     setIsShow((prevstate)=>!prevstate)
    }
-   // for verfiaction code
-   const getverificationcode=async()=>{
-    try{
-      const response=await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/verification`,{
-        method:"POST",
-        headers:{
-          'Content-Type':'application/json',
-        },
-        body:JSON.stringify({
-           email,
-           verificationCode
-        }),
-        credentials: "include" 
-      })
-      if(!response.ok){
-        throw new Error ("Fail to verified Email")
-      }
-      const result = await response.json();
-      if (result.status === "Success") {
-        setSuccess(result.msg); 
-        setUser(result.user);
-        navigation("/login");
-      } else {
-        setError(result.msg); 
-      }
-    }catch(e){
-      console.log("Can't Verified email",e)
-    }
-   }
+   
     return (
       <section className="flex items-center justify-center min-h-screen px-4 py-8 bg-gray-50">
       <form onSubmit={register} className="w-full max-w-md bg-white shadow-md rounded-xl p-6 sm:p-10 flex flex-col gap-4">
@@ -139,20 +110,7 @@ function Register(){
           </div>
         </div>
     
-        <div className="flex   flex-col sm:flex-row items-start sm:items-center gap-2">
-          <label className="font-mono font-medium w-full">
-            Code
-            <input type="text" value={verificationCode}
-              onChange={(e) => setCode(e.target.value)}
-              placeholder="Verification Code"
-             
-              className="border px-3 py-2 rounded-md w-full placeholder:text-sm mt-1"/>
-          </label>
-          <button onClick={getverificationcode} 
-           type="button" className="w-full sm:mt-6  sm:w-auto   mt-1 px-4 py-2 border-2 rounded-md font-semibold hover:bg-slate-200 transition-all duration-300 ease-in-out"> 
-            Send
-          </button>
-        </div>
+       
         <button type="submit" className="bg-black text-white font-serif py-2 rounded-md text-center w-full">
           {loading ? (
             <span className="flex items-center justify-center gap-2">
