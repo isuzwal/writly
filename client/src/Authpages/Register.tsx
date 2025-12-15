@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { BiLoaderAlt } from 'react-icons/bi';
 import { Link } from "react-router";
 import { UserContext } from "../UserAuth/User"
-import { useNavigate } from "react-router";
+
 import { Eye ,EyeClosed,CircleAlert,CheckCircle, PenTool} from 'lucide-react';
 
 function Register(){
@@ -27,8 +27,8 @@ function Register(){
     return ()=>clearTimeout(Remove)
    }
     },[success,error])
-    // nagavation
-    const navigation=useNavigate()
+
+  
     const {setUser}=context
 // for register 
     const register=async(event:React.FormEvent)=>{
