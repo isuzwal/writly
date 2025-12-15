@@ -47,3 +47,7 @@
 - **MongoDB + Mongoose** – NoSQL database with ODM support
 - **Cloudinary** – Cloud-based image storage and transformation
 - **JWT** – Secure token-based authentication
+
+## Image<img width="4800" height="2700" alt="fb" src="https://github.com/user-attachments/assets/8034ed9d-637a-47ef-a5e4-5218874f4d9d" />
+
+
